@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sobre Nosotros - LinkApp</title>
+  <link rel="stylesheet" href="estilos.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <div class="bg-gif"></div>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            text: "#E2E8F0",
+            muted: "#94A3B8",
+            blue: "#38BDF8",
+            green: "#34D399",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="min-h-screen flex flex-col bg-bg text-text">
+  <header class="border-b border-border sticky top-0 bg-bg z-50">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-blue rounded flex items-center justify-center text-black font-bold">L</div>
+        <span class="font-bold text-white">LinkApp</span>
+      </div>
+      <a href="index.html" class="nav-link text-sm">Volver al inicio</a>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-16">
+    <section class="text-center mb-16">
+      <h1 class="title">Nuestra <span class="gradient-text">Misión</span></h1>
+      <p class="subtitle">Simplificar la forma en que interactúas con la web, un enlace a la vez.</p>
+    </section>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="feature-card">
+        <h3 class="text-blue mb-4">¿Quiénes somos?</h3>
+        <p>Somos un equipo apasionado por la productividad digital. Creemos que la web es demasiado grande para navegarla sin las herramientas adecuadas.</p>
+      </div>
+      <div class="feature-card">
+        <h3 class="text-green mb-4">Nuestra Visión</h3>
+        <p>Queremos convertirnos en el centro de comando de tu navegador, ofreciendo una experiencia limpia, rápida y sobre todo, privada.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-border text-center py-6 text-muted text-sm">
+    © 2023 LinkApp. Todos los derechos reservados.
+  </footer>
+</body>
+</html>

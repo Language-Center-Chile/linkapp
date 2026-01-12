@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Linkapp Gratis</title>
+  <link rel="stylesheet" href="free-estilos.css">
+</head>
+<div class="bg-gif"></div>
+
+<body>
+
+  <header class="header-bar">
+    <h1>Linkapp - Modo Gratis</h1>
+
+    <a href="index.html" class="btn btn-return">
+      Volver a la página principal
+    </a>
+  </header>
+
+  <section style="max-width:800px;margin:0 auto;">
+
+    <h2>¿Qué es Linkapp?</h2>
+    <p>
+      Linkapp es una herramienta donde puedes buscar enlaces, abrirlos 
+      y automáticamente se guardarán en tu historial personal. 
+      Así nunca perderás un link que hayas usado.
+    </p>
+
+    <br>
+
+    <!-- Buscador -->
+    <input 
+      type="text"
+      id="searchInput"
+      placeholder="Buscar enlaces..."
+      class="search-input"
+      style="width:100%;"
+    >
+
+    <!-- Resultados -->
+    <div id="linksList" class="search-results hidden">
+      <a href="https://www.google.com" class="link-item">Google</a>
+      <a href="https://www.youtube.com" class="link-item">YouTube</a>
+      <a href="https://github.com" class="link-item">Github</a>
+    </div>
+
+    <br><br>
+
+    <h2>Historial de enlaces usados</h2>
+
+    <ul id="historyList" class="history-list"></ul>
+
+  </section>
+
+  <script src="links-app.js"></script>
+
+  <!-- Resultados visibles -->
+  <div id="linksList" class="search-results hidden">
+    <a href="https://www.google.com" class="link-item" target="_blank">Google</a>
+    <a href="https://www.youtube.com" class="link-item" target="_blank">YouTube</a>
+    <a href="https://github.com" class="link-item" target="_blank">Github</a>
+  </div>
+
+  <br><br><br>
+<section style="max-width:800px;margin:0 auto;"></section>
+      <!-- links del historial aparecerán aquí -->
+    </ul>
+
+  </div>
+
+</section>
+
+<script src="free-search.js"></script>
+
+</body>
+</html>

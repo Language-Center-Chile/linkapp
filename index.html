@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkApp - Organiza tu mundo digital</title>
+
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <link rel="stylesheet" href="estilos.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <div class="bg-gif"></div>
+
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            text: "#E2E8F0",
+            muted: "#94A3B8",
+            blue: "#38BDF8",
+            green: "#34D399",
+            teal: "#2DD4BF",
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="min-h-screen flex flex-col bg-bg text-text">
+  
+  <header class="border-b border-border sticky top-0 bg-bg z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+
+      <div class="flex items-center gap-3">
+        <img src="logo.png" alt="logo" style="width: 100px; height: 100px;">
+
+        <span class="font-bold text-white text-xl tracking-tight">LinkApp</span>
+      </div>
+
+      <div class="hidden md:flex items-center gap-6">
+        <nav class="flex gap-4 text-sm">
+          <a href="index.html" class="nav-link">Inicio</a>
+          <a href="sobre-nosotros.html" class="nav-link">Sobre nosotros</a>
+          <a href="contacto.html" class="nav-link">Contacto</a>
+          <a href="login.html" class="nav-link font-semibold text-teal">Iniciar sesión</a>
+        </nav>
+
+  
+  </header>
+
+  <main class="flex-grow">
+
+    <section class="text-center py-24 px-6 flex flex-col items-center">
+      
+      
+
+      <h1 class="title text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
+        Organiza tu mundo digital<br>
+        <span class="gradient-text">con estilo</span>
+      </h1>
+
+      <p class="subtitle text-lg text-white max-w-2xl mb-10">
+        LinkApp centraliza tus recursos más importantes en un entorno oscuro elegante. 
+        Una plataforma intuitiva diseñada para la eficiencia y la privacidad.
+      </p>
+
+    </section>
+
+    <section class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6 mb-24">
+      <div class="feature-card p-8 bg-surface border border-border rounded-2xl hover:border-blue transition-colors">
+        <h3 class="text-xl font-bold mb-3 text-white">Organización Inteligente</h3>
+        <p class="text-muted text-sm">Estructura tus enlaces mediante carpetas inteligentes. El sistema aprende de tus hábitos para mantener todo en orden.</p>
+      </div>
+
+      <div class="feature-card p-8 bg-surface border border-border rounded-2xl hover:border-blue transition-colors">
+        <h3 class="text-xl font-bold mb-3 text-white">Acceso Universal</h3>
+        <p class="text-muted text-sm">Accede a tus colecciones desde cualquier dispositivo. Sincronización instantánea en la nube con cifrado de seguridad.</p>
+      </div>
+
+      <div class="feature-card p-8 bg-surface border border-border rounded-2xl hover:border-blue transition-colors">
+        <h3 class="text-xl font-bold mb-3 text-white">Privacidad Primero</h3>
+        <p class="text-muted text-sm">Tus datos te pertenecen. Sin rastreadores innecesarios y con un entorno diseñado para tu tranquilidad digital.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-border text-center py-10 text-muted text-sm flex flex-col items-center gap-4">
+    <div class="flex items-center gap-2 grayscale opacity-60">
+        <img src="logo.png" alt="Logo mini" class="w-5 h-5">
+        <span class="font-bold">LinkApp</span>
+    </div>
+    <p>© 2025 LinkApp. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="search.js"></script>
+</body>
+</html>
