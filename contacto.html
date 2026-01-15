@@ -6,21 +6,29 @@
   <title>Contacto - LinkApp</title>
   <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-<div class="bg-gif"></div>
 
+  <div class="bg-gif"></div>
 
   <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
-          colors: { bg: "#000000", surface: "#18181b", border: "#27272a", blue: "#38BDF8" },
+          colors: {
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            blue: "#38BDF8",
+          },
         },
       },
     };
   </script>
 </head>
+
 <body class="min-h-screen flex flex-col bg-bg text-text">
+
+  <!-- HEADER -->
   <header class="border-b border-border sticky top-0 bg-bg z-50">
     <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
       <div class="flex items-center gap-2">
@@ -31,25 +39,62 @@
     </div>
   </header>
 
-  <main class="flex-grow flex items-center justify-center px-6 py-12">
-    <div class="w-full max-w-md bg-surface p-8 rounded-2xl border border-border">
-      <h2 class="text-2xl font-bold text-white mb-6">Contáctanos</h2>
-      <form action="#" class="space-y-4">
-        <div>
-          <label class="block text-sm text-muted mb-2">Nombre</label>
-          <input type="text" class="search-input w-full" placeholder="Tu nombre">
+  <!-- MAIN -->
+  <main class="flex-grow flex items-center justify-center px-6 py-16">
+    <div class="w-full max-w-5xl bg-surface p-10 rounded-2xl border border-border grid grid-cols-1 md:grid-cols-2 gap-10">
+
+      <!-- INFO -->
+      <div class="flex flex-col justify-center">
+        <h2 class="text-3xl font-bold contact-title mb-4">Contáctanos</h2>
+        <p class="text-white mb-6">
+          ¿Tienes dudas, sugerencias o necesitas ayuda?  
+          Escríbenos y te responderemos lo antes posible.
+        </p>
+
+        <div class="space-y-4 text-sm text-white">
+          <p>📧 contacto@linkapp.com</p>
+          <p>📞 +56 9 1234 5678</p>
+          <p>📍 Chile</p>
         </div>
-        <div>
-          <label class="block text-sm text-muted mb-2">Email</label>
-          <input type="email" class="search-input w-full" placeholder="correo@ejemplo.com">
-        </div>
-        <div>
-          <label class="block text-sm text-muted mb-2">Mensaje</label>
-          <textarea class="search-input w-full h-32" placeholder="¿En qué podemos ayudarte?"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary w-full">Enviar mensaje</button>
-      </form>
+      </div>
+
+      <!-- FORM -->
+      <div>
+        <h3 class="text-xl font-semibold contact-title mb-6">Enviar mensaje</h3>
+
+        <form class="space-y-4">
+          <div>
+            <label class="block text-sm contact-title mb-2">Nombre</label>
+            <input type="text" class="search-input w-full" placeholder="Tu nombre" required>
+          </div>
+
+          <div>
+            <label class="block text-sm contact-title mb-2">Email</label>
+            <input type="email" class="search-input w-full" placeholder="correo@ejemplo.com" required>
+          </div>
+
+          <div>
+            <label class="block text-sm contact-title mb-2">Mensaje</label>
+            <textarea class="search-input w-full h-32" placeholder="¿En qué podemos ayudarte?" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-full">
+            Enviar mensaje
+          </button>
+        </form>
+      </div>
+
     </div>
   </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-border text-center py-10 text-muted text-sm flex flex-col items-center gap-4">
+    <div class="flex items-center gap-2 grayscale opacity-60">
+      <img src="logo.png" alt="Logo mini" class="w-5 h-5">
+      <span class="font-bold">LinkApp</span>
+    </div>
+    <p>© 2025 LinkApp. Todos los derechos reservados.</p>
+  </footer>
+
 </body>
 </html>
