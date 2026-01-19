@@ -268,3 +268,16 @@ span.highlight {
 footer {
   background-color: #000;
 }
+
+/* Footer icon specific styles - only affect images inside footers with the class */
+.footer-icon {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  display: inline-block;
+}
+
+.img_principal {
+  display: flex;
+  justify-content: center;
+}
