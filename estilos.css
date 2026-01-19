@@ -277,7 +277,9 @@ footer {
   display: inline-block;
 }
 
-.img_principal {
-  display: flex;
-  justify-content: center;
+.img_principal img{
+  display: flex; justify-content: center; align-items: center;
+  margin: 0 auto;
+  max-width: 15%;
+  margin-bottom: -9%;
 }
