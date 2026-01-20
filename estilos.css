@@ -283,3 +283,9 @@ footer {
   max-width: 15%;
   margin-bottom: -6%;
 }
+
+a.nav-link {
+  font-size: 25px;
+  margin: 300px;
+  margin-right: -264px;
+}
