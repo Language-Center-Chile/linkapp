@@ -26,18 +26,25 @@
       },
     };
   </script>
+
+
+<!-- <a href="index.html" class="nav-link text-sm">Volver al inicio</a> -->
 </head>
 <body class="min-h-screen flex flex-col bg-bg text-text">
   <header class="border-b border-border sticky top-0 bg-bg z-50">
-    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-blue rounded flex items-center justify-center text-black font-bold">L</div>
-        <span class="font-bold text-white">LinkApp</span>
-      </div>
-      <a href="index.html" class="nav-link text-sm">Volver al inicio</a>
-    </div>
-  </header>
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
 
+      <div class="flex items-center gap-3">
+        <img src="logo1.png" alt="logo" style="width: 58px; height: 62px;">
+      </div>
+
+      <div class="hidden md:flex items-center gap-6">
+
+          <a href="index.html" class="nav-link text-sm">Volver al inicio</a>
+        </nav>
+
+  
+  </header>
   <main class="flex-grow max-w-4xl mx-auto px-6 py-16">
     <section class="text-center mb-16">
       <h1 class="title">Nuestra <span class="gradient-text">Misión</span></h1>
@@ -56,8 +63,11 @@
     </div>
   </main>
 
-  <footer class="border-t border-border text-center py-6 text-muted text-sm">
-    © 2023 LinkApp. Todos los derechos reservados.
+  <footer class="border-t border-border text-center py-[-0,5] text-muted text-sm flex flex-col items-center gap-4">
+    <div class="flex items-center gap-2 grayscale opacity-60">
+      <img src="logo1.png" alt="Logo mini" class="footer-icon">
+    </div>
+    <p>© 2025 LinkApp. Todos los derechos reservados.</p>
   </footer>
 </body>
 </html>

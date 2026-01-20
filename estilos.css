@@ -68,7 +68,7 @@ body {
    SEARCH
 ========================= */
 .search-input {
-  width: 14rem;
+  width: 23rem;
   padding: 0.5rem 0.75rem;
   background-color: #18181b;
   border: 1px solid #27272a;
@@ -271,7 +271,7 @@ footer {
 
 /* Footer icon specific styles - only affect images inside footers with the class */
 .footer-icon {
-  width: 100px;
+  width: 52px;
   height: 100px;
   object-fit: contain;
   display: inline-block;
@@ -279,7 +279,7 @@ footer {
 
 .img_principal img{
   display: flex; justify-content: center; align-items: center;
-  margin: 0 auto;
+  margin: 18px auto;
   max-width: 15%;
   margin-bottom: -6%;
 }
