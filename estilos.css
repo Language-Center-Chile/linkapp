@@ -296,20 +296,3 @@ a.nav-link {
   margin: 950px;
   margin-right: 0;
 }
-
-header{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo-header {
-  display: flex;
-  align-items: center;
-}
-
-.logo-header img {
-  align-items: left;
-  width: 50px;
-  margin-right: 406px;
-}
