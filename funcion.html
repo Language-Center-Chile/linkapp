@@ -11,29 +11,6 @@
   <div class="bg-gif"></div>
 
 
-  <header class="border-b border-border sticky top-0 bg-bg z-50">
-  <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-    
-    <div class="flex items-center gap-4">
-      <img src="logo1.png" alt="logo" style="width: 58px; height: 62px;">
-    </div>
-
-    <div class="flex items-center gap-4">
-      <div class="text-right">
-        <p id="userNicknameDisplay" class="text-lg font-bold text-white leading-none">Cargando...</p>
-        <button onclick="logout()" class="text-[10px] text-red-400 hover:underline uppercase tracking-widest mt-1">Cerrar Sesión</button>
-      </div>
-      
-      <div class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-        <img id="userAvatarDisplay" src="" alt="Perfil" class="w-full h-full object-cover hidden">
-        <div id="avatarFallback" class="w-full h-full flex items-center justify-center bg-blue/10 text-blue text-xl font-bold">
-          ?
-        </div>
-      </div>
-    </div>
-
-  </div>
-</header>
 
 <script>
   // Esta función debe ir dentro de tu etiqueta <script> al final del archivo
@@ -166,7 +143,37 @@
     <span id="display-nick" style="font-weight: bold;"></span>
     <img id="display-foto" src="" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; object-fit: cover;">
 </div>
+<header class="border-b border-border sticky top-0 bg-bg z-50">
+  <div class="w-full px-6 h-20 flex items-center">
+    
+    <!-- LOGO PEGADO A LA IZQUIERDA -->
+    <img src="logo1.png" alt="logo" class="w-12 h-14">
 
+    <!-- USUARIO A LA DERECHA -->
+    <div class="ml-auto flex items-center gap-4">
+      <div class="text-right">
+        <p id="userNicknameDisplay" class="text-lg font-bold text-white leading-none">
+          Cargando...
+        </p>
+        <button onclick="logout()"
+          class="text-[10px] text-red-400 hover:underline uppercase tracking-widest mt-1">
+          Cerrar Sesión
+        </button>
+      </div>
+
+      <div
+        class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+        <img id="userAvatarDisplay" src="" alt="Perfil"
+          class="w-full h-full object-cover hidden">
+        <div id="avatarFallback"
+          class="w-full h-full flex items-center justify-center bg-blue/10 text-blue text-xl font-bold">
+          ?
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
   <main class="max-w-6xl mx-auto px-6 py-12 w-full">
     <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
       <div>
