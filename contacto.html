@@ -8,8 +8,6 @@
   <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <div class="bg-gif"></div>
-
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -20,22 +18,28 @@
             surface: "#18181b",
             border: "#27272a",
             blue: "#38BDF8",
+            muted: "#a1a1aa"
           },
         },
       },
     };
   </script>
 </head>
-<body class="min-h-screen flex flex-col bg-bg text-text">
+
+<body class="min-h-screen flex flex-col bg-bg text-white">
+
+  <!-- FONDO GIF -->
+  <div class="bg-gif fixed inset-0 -z-10"></div>
+
+  <!-- HEADER -->
   <header class="border-b border-border sticky top-0 bg-bg z-50">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-
-      <div class="hidden md:flex items-center gap-6">
-        <nav class="boton-volver">
-          <a href="index.html" class="nav-link">Volver al inicio</a>
-        </nav>
-
-  
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center">
+      <nav>
+        <a href="index.html" class="text-blue hover:underline">
+          ← Volver al inicio
+        </a>
+      </nav>
+    </div>
   </header>
 
   <!-- MAIN -->
@@ -44,13 +48,16 @@
 
       <!-- INFO -->
       <div class="flex flex-col justify-center">
-        <h2 class="text-3xl font-bold contact-title mb-4">Contáctanos</h2>
-        <p class="text-white mb-6">
+        <h2 class="text-3xl font-bold text-gray-300 mb-4">
+          Contáctanos
+        </h2>
+
+        <p class="text-muted mb-6">
           ¿Tienes dudas, sugerencias o necesitas ayuda?  
           Escríbenos y te responderemos lo antes posible.
         </p>
 
-        <div class="space-y-4 text-sm text-white">
+        <div class="space-y-4 text-sm text-muted">
           <p>📧 contacto@linkapp.com</p>
           <p>📞 +56 9 1234 5678</p>
           <p>📍 Chile</p>
@@ -59,25 +66,44 @@
 
       <!-- FORM -->
       <div>
-        <h3 class="text-xl font-semibold contact-title mb-6">Enviar mensaje</h3>
+        <h3 class="text-xl font-semibold text-gray-300 mb-6">
+          Enviar mensaje
+        </h3>
 
         <form class="space-y-4">
           <div>
-            <label class="block text-sm contact-title mb-2">Nombre</label>
-            <input type="text" class="search-input w-full" placeholder="Tu nombre" required>
+            <label class="block text-sm text-gray-400 mb-2">Nombre</label>
+            <input
+              type="text"
+              class="w-full bg-bg border border-border rounded-lg px-4 py-2 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue"
+              placeholder="Tu nombre"
+              required
+            >
           </div>
 
           <div>
-            <label class="block text-sm contact-title mb-2">Email</label>
-            <input type="email" class="search-input w-full" placeholder="correo@ejemplo.com" required>
+            <label class="block text-sm text-gray-400 mb-2">Email</label>
+            <input
+              type="email"
+              class="w-full bg-bg border border-border rounded-lg px-4 py-2 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue"
+              placeholder="correo@ejemplo.com"
+              required
+            >
           </div>
 
           <div>
-            <label class="block text-sm contact-title mb-2">Mensaje</label>
-            <textarea class="search-input w-full h-32" placeholder="¿En qué podemos ayudarte?" required></textarea>
+            <label class="block text-sm text-gray-400 mb-2">Mensaje</label>
+            <textarea
+              class="w-full bg-bg border border-border rounded-lg px-4 py-2 text-gray-300 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue"
+              placeholder="¿En qué podemos ayudarte?"
+              required
+            ></textarea>
           </div>
 
-          <button type="submit" class="btn btn-primary w-full">
+          <button
+            type="submit"
+            class="w-full bg-blue text-black font-semibold py-2 rounded-lg hover:opacity-90 transition"
+          >
             Enviar mensaje
           </button>
         </form>
