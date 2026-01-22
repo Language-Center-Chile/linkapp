@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro - LinkApp</title>
+  <title>Registro de Correo - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
   <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -39,8 +39,8 @@
       <img src="logo1.png" alt="logo" class="w-[50px] h-[60px]">
 
       <!-- NAV DERECHA -->
-      <nav class="ml-auto hidden md:flex items-center gap-6">
-        <a href="index.html" class="nav-link text-sm">
+      <nav class="ml-auto">
+        <a href="index.html" class="nav-link">
           Volver al inicio
         </a>
       </nav>
@@ -50,57 +50,59 @@
 
   <!-- MAIN -->
   <main class="flex-grow flex items-center justify-center px-6 py-16">
-    <div class="w-full max-w-xl bg-surface p-10 rounded-2xl border border-border">
+    <div class="w-full max-w-md bg-surface p-10 rounded-2xl border border-border">
 
-      <h1 class="text-3xl font-bold text-gray-300 mb-4 text-center">
-        Crear cuenta
-      </h1>
+      <h2 class="text-2xl font-bold text-gray-300 mb-6 text-center">
+        Registrar correo
+      </h2>
 
-      <p class="text-muted text-center mb-8">
-        Regístrate en LinkApp para guardar y gestionar tus enlaces.
-      </p>
+      <form class="space-y-5" onsubmit="validarRegistro(event)">
 
-      <form class="space-y-5">
-
-        <!-- EMAIL -->
+        <!-- CORREO -->
         <div>
           <label class="block text-sm text-gray-400 mb-2">
             Correo electrónico
           </label>
           <input
             type="email"
-            required
+            class="w-full bg-bg border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
             placeholder="correo@ejemplo.com"
-            class="w-full bg-surface border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
+            required
           >
         </div>
 
-        <!-- PASSWORD -->
+        <!-- CONTRASEÑA -->
         <div>
           <label class="block text-sm text-gray-400 mb-2">
             Contraseña
           </label>
           <input
             type="password"
+            id="password"
+            class="w-full bg-bg border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
+            placeholder="Contraseña"
             required
-            placeholder="••••••••"
-            class="w-full bg-surface border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
           >
         </div>
 
-        <!-- REPEAT PASSWORD -->
+        <!-- REPETIR CONTRASEÑA -->
         <div>
           <label class="block text-sm text-gray-400 mb-2">
             Repetir contraseña
           </label>
           <input
             type="password"
+            id="confirmPassword"
+            class="w-full bg-bg border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
+            placeholder="Repetir contraseña"
             required
-            placeholder="••••••••"
-            class="w-full bg-surface border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
           >
+          <p id="errorMsg" class="text-red-400 text-sm mt-2 hidden">
+            Las contraseñas no coinciden
+          </p>
         </div>
 
+        <!-- BOTÓN -->
         <button
           type="submit"
           class="w-full bg-blue text-black font-semibold py-2 rounded-lg hover:opacity-90 transition"
@@ -110,20 +112,37 @@
 
       </form>
 
-      <p class="text-xs text-muted text-center mt-6">
-        Al registrarte aceptas nuestros términos y políticas de privacidad.
-      </p>
-
     </div>
   </main>
 
   <!-- FOOTER -->
-  <footer class="border-t border-border text-center py-[-0,5] text-muted text-sm flex flex-col items-center gap-4">
+  <footer class="border-t border-border text-center py-6 text-muted text-sm flex flex-col items-center gap-4">
     <div class="flex items-center gap-2 grayscale opacity-60">
       <img src="logo1.png" alt="Logo mini" class="footer-icon">
     </div>
     <p>© 2025 LinkApp. Todos los derechos reservados.</p>
   </footer>
+
+  <!-- VALIDACIÓN -->
+  <script>
+    function validarRegistro(event) {
+      event.preventDefault();
+
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (password !== confirmPassword) {
+        errorMsg.classList.remove("hidden");
+        return;
+      }
+
+      errorMsg.classList.add("hidden");
+
+      // Redirigir a pantalla de éxito
+      window.location.href = "registro-exitoso.html";
+    }
+  </script>
 
 </body>
 </html>
