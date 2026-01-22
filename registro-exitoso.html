@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro exitoso - LinkApp</title>
+  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="stylesheet" href="estilos.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            blue: "#38BDF8",
+            green: "#34D399",
+            muted: "#a1a1aa"
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="min-h-screen flex flex-col bg-bg text-white">
+
+  <!-- FONDO -->
+  <div class="bg-gif fixed inset-0 -z-10"></div>
+
+  <!-- HEADER -->
+  <header class="border-b border-border sticky top-0 bg-bg z-50">
+    <div class="w-full h-20 flex items-center px-6">
+      <img src="logo1.png" alt="logo" class="w-[50px] h-[60px]">
+
+      <nav class="ml-auto">
+        <a href="index.html" class="nav-link text-sm">
+          Ir al inicio
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="flex-grow flex items-center justify-center px-6 py-16">
+    <div class="bg-surface border border-border rounded-2xl p-12 max-w-md w-full text-center">
+
+      <div class="text-green text-5xl mb-4">✔</div>
+
+      <h1 class="text-3xl font-bold text-gray-300 mb-4">
+        ¡Registro exitoso!
+      </h1>
+
+      <p class="text-muted mb-8">
+        Tu correo fue registrado correctamente en LinkApp.
+      </p>
+
+      <a
+        href="index.html"
+        class="inline-block bg-blue text-black font-semibold px-6 py-2 rounded-lg hover:opacity-90 transition"
+      >
+        Volver al inicio
+      </a>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-border text-center py-[-0,5] text-muted text-sm flex flex-col items-center gap-4">
+    <img src="logo1.png" alt="Logo mini" class="footer-icon grayscale opacity-60">
+    <p>© 2025 LinkApp. Todos los derechos reservados.</p>
+  </footer>
+
+</body>
+</html>
