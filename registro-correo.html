@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de Correo - LinkApp</title>
+  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="stylesheet" href="estilos.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            blue: "#38BDF8",
+            muted: "#a1a1aa"
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="min-h-screen flex flex-col bg-bg text-white">
+
+  <!-- FONDO GIF -->
+  <div class="bg-gif fixed inset-0 -z-10"></div>
+
+  <!-- HEADER -->
+  <header class="border-b border-border sticky top-0 bg-bg z-50">
+    <div class="w-full h-20 flex items-center px-6">
+
+      <!-- LOGO IZQUIERDA -->
+      <img src="logo1.png" alt="logo" class="w-12 h-14">
+
+      <!-- NAV DERECHA -->
+      <nav class="ml-auto hidden md:flex items-center gap-6">
+        <a href="index.html" class="nav-link text-sm">
+          Volver al inicio
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="flex-grow flex items-center justify-center px-6 py-16">
+    <div class="w-full max-w-xl bg-surface p-10 rounded-2xl border border-border">
+
+      <h1 class="text-3xl font-bold text-gray-300 mb-4 text-center">
+        Registra tu correo
+      </h1>
+
+      <p class="text-muted text-center mb-8">
+        Recibe novedades, mejoras y anuncios importantes de LinkApp directamente en tu correo.
+      </p>
+
+      <form class="space-y-6">
+
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">
+            Correo electrónico
+          </label>
+          <input
+            type="email"
+            required
+            placeholder="correo@ejemplo.com"
+            class="w-full bg-bg border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
+          >
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-blue text-black font-semibold py-2 rounded-lg hover:opacity-90 transition"
+        >
+          Registrarme
+        </button>
+
+      </form>
+
+      <p class="text-xs text-muted text-center mt-6">
+        No enviamos spam. Puedes darte de baja cuando quieras.
+      </p>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-border text-center py-[-0,5] text-muted text-sm flex flex-col items-center gap-4">
+    <div class="flex items-center gap-2 grayscale opacity-60">
+      <img src="logo1.png" alt="Logo mini" class="footer-icon">
+    </div>
+    <p>© 2025 LinkApp. Todos los derechos reservados.</p>
+  </footer>
+
+</body>
+</html>
