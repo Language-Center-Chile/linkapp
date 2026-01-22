@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>Suscripción - LinkApp</title>
+  <link rel="icon" href="logo1.png">
+  <link rel="stylesheet" href="estilos.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-bg text-white min-h-screen">
+
+  <!-- Fondo -->
+  <div class="bg-gif fixed inset-0 -z-10"></div>
+
+  <!-- Header -->
+  <header class="flex items-center justify-between px-8 py-4 border-b border-border">
+    <h1 class="text-xl font-bold text-blue">LinkApp</h1>
+    <a href="registro-perfil.html" class="text-muted hover:text-white">
+      Volver al perfil
+    </a>
+  </header>
+
+  <!-- Contenido -->
+  <main class="max-w-6xl mx-auto px-6 py-16">
+    
+    <h2 class="text-4xl font-bold text-center mb-4">
+      Elige tu plan
+    </h2>
+    <p class="text-muted text-center mb-12">
+      Potencia tu perfil y gestiona tus links como un profesional
+    </p>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <!-- Plan Gratis -->
+      <div class="bg-surface border border-border rounded-2xl p-8 text-center">
+        <h3 class="text-2xl font-bold mb-2">Gratis</h3>
+        <p class="text-muted mb-6">Para comenzar</p>
+
+        <p class="text-4xl font-bold mb-6">$0</p>
+
+        <ul class="space-y-3 text-sm text-gray-300 mb-8">
+          <li>✔ Perfil básico</li>
+          <li>✔ Hasta 5 links</li>
+          <li>✔ Acceso público</li>
+          <li>✖ Estadísticas</li>
+          <li>✖ Personalización</li>
+        </ul>
+
+        <button onclick="seleccionarPlan('Gratis')"
+          class="w-full py-2 rounded-lg border border-border hover:bg-border">
+          Usar plan gratis
+        </button>
+      </div>
+
+      <!-- Plan Básico -->
+      <div class="bg-surface border-2 border-blue rounded-2xl p-8 text-center scale-105">
+        <h3 class="text-2xl font-bold mb-2 text-blue">Básico</h3>
+        <p class="text-muted mb-6">Para creadores</p>
+
+        <p class="text-4xl font-bold mb-6">$4.990<span class="text-sm text-muted">/mes</span></p>
+
+        <ul class="space-y-3 text-sm text-gray-300 mb-8">
+          <li>✔ Links ilimitados</li>
+          <li>✔ Estadísticas básicas</li>
+          <li>✔ Personalización de colores</li>
+          <li>✔ Soporte estándar</li>
+        </ul>
+
+        <button onclick="seleccionarPlan('Basico')"
+          class="w-full py-2 rounded-lg bg-blue text-black font-bold">
+          Elegir plan
+        </button>
+      </div>
+
+      <!-- Plan Pro -->
+      <div class="bg-surface border border-border rounded-2xl p-8 text-center">
+        <h3 class="text-2xl font-bold mb-2 text-purple-400">Pro</h3>
+        <p class="text-muted mb-6">Para marcas y negocios</p>
+
+        <p class="text-4xl font-bold mb-6">$9.990<span class="text-sm text-muted">/mes</span></p>
+
+        <ul class="space-y-3 text-sm text-gray-300 mb-8">
+          <li>✔ Todo lo del plan Básico</li>
+          <li>✔ Dominio personalizado</li>
+          <li>✔ Analíticas avanzadas</li>
+          <li>✔ Prioridad en soporte</li>
+        </ul>
+
+        <button onclick="seleccionarPlan('Pro')"
+          class="w-full py-2 rounded-lg bg-purple-500 text-black font-bold">
+          Elegir plan
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Script -->
+  <script>
+    function seleccionarPlan(plan) {
+      localStorage.setItem("planLinkApp", plan);
+      alert("Plan seleccionado: " + plan);
+      // Futuro: redirigir a pago o activar plan
+    }
+  </script>
+
+</body>
+</html>
