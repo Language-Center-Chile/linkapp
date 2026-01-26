@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalizar Perfil - LinkApp</title>
+  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="stylesheet" href="estilos.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            blue: "#38BDF8",
+            text: "#E2E8F0",
+            muted: "#94A3B8"
+          }
+        }
+      }
+    };
+
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+
+<body class="min-h-screen bg-bg text-text flex flex-col">
+
+<header class="border-b border-border sticky top-0 bg-bg z-50">
+  <div class="w-full h-20 flex items-center px-6">
+    <img src="logo1.png" class="w-12 h-14">
+    <nav class="ml-auto">
+      <a href="funcion.html" class="text-muted hover:text-blue text-sm">← Volver</a>
+    </nav>
+  </div>
+</header>
+
+<main class="flex-grow flex items-center justify-center px-6 py-12">
+  <div class="w-full max-w-xl bg-surface border border-border rounded-2xl p-8 shadow-2xl">
+
+    <h1 class="text-2xl font-bold mb-6">Personalizar Perfil</h1>
+
+    <!-- FOTO PERFIL -->
+    <div class="flex flex-col items-center mb-6">
+      <div class="w-28 h-28 rounded-full border-2 border-border overflow-hidden mb-3 bg-bg flex items-center justify-center">
+        <img id="previewAvatar" class="w-full h-full object-cover hidden">
+        <span id="avatarFallback" class="text-3xl text-muted">?</span>
+      </div>
+
+      <input type="file" id="avatarInput" accept="image/*"
+        class="text-xs text-muted file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue file:text-black file:font-bold hover:file:opacity-90">
+    </div>
+
+    <!-- NICKNAME -->
+    <div class="mb-6">
+      <label class="block text-xs text-muted mb-2 uppercase font-bold">Nickname</label>
+      <input type="text" id="nicknameInput"
+        class="w-full bg-bg border border-border text-white p-3 rounded-lg focus:border-blue outline-none"
+        placeholder="Tu nombre visible">
+    </div>
+
+    <button onclick="guardarPerfil()"
+      class="w-full py-3 bg-blue text-black font-bold rounded-lg hover:opacity-90 transition">
+      Guardar Cambios
+    </button>
+
+    <p id="saveMsg" class="text-green-400 text-sm mt-4 hidden">✔ Perfil actualizado</p>
+
+  </div>
+</main>
+
+<script>
+const avatarInput = document.getElementById('avatarInput');
+const previewAvatar = document.getElementById('previewAvatar');
+const avatarFallback = document.getElementById('avatarFallback');
+const nicknameInput = document.getElementById('nicknameInput');
+const saveMsg = document.getElementById('saveMsg');
+
+/* Cargar datos guardados */
+window.addEventListener('load', () => {
+  const savedNick = localStorage.getItem('userNickname');
+  const savedAvatar = localStorage.getItem('userAvatar');
+
+  if (savedNick) {
+    nicknameInput.value = savedNick;
+    avatarFallback.textContent = savedNick.charAt(0).toUpperCase();
+  }
+
+  if (savedAvatar) {
+    previewAvatar.src = savedAvatar;
+    previewAvatar.classList.remove('hidden');
+    avatarFallback.classList.add('hidden');
+  }
+});
+
+/* Vista previa imagen */
+avatarInput.addEventListener('change', function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    previewAvatar.src = e.target.result;
+    previewAvatar.classList.remove('hidden');
+    avatarFallback.classList.add('hidden');
+    localStorage.setItem('userAvatar', e.target.result);
+  };
+  reader.readAsDataURL(file);
+});
+
+/* Guardar nickname */
+function guardarPerfil() {
+  const nick = nicknameInput.value.trim();
+  if (nick.length < 2) {
+    alert("El nickname debe tener al menos 2 caracteres");
+    return;
+  }
+
+  localStorage.setItem('userNickname', nick);
+  avatarFallback.textContent = nick.charAt(0).toUpperCase();
+
+  saveMsg.classList.remove('hidden');
+  setTimeout(() => saveMsg.classList.add('hidden'), 2000);
+}
+</script>
+
+</body>
+</html>
