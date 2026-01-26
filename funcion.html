@@ -40,56 +40,41 @@
 <body class="min-h-screen flex flex-col bg-bg text-text">
 
 <header class="border-b border-border sticky top-0 bg-bg z-50">
-  <div class="w-full px-6 h-20 flex items-center">
-    
+  <div class="w-full h-20 flex items-center px-6 gap-8">
+
+    <!-- LOGO IZQUIERDA -->
     <img src="logo1.png" alt="logo" class="w-12 h-14">
 
-    <div class="ml-auto flex items-center gap-4 relative">
-      
-      <div class="text-right">
-        <p id="userNicknameDisplay" class="text-lg font-bold text-white leading-none">Cargando...</p>
-        <button onclick="logout()" class="text-[10px] text-red-400 hover:underline uppercase tracking-widest mt-1">
-          Cerrar Sesión
-        </button>
+    <!-- NAV DERECHA -->
+    <nav class="hidden md:flex items-center gap-6 text-sm ml-auto">
+      <a href="funcion.html" class="nav-link">Inicio</a>
+      <a href="#" class="nav-link">Favoritos</a>
+      <a href="#" class="nav-link">Recientes</a>
+      <a href="suscripcion.html" class="nav-link">Planes</a>
+      <a href="#" class="nav-link">Ayuda</a>
+    </nav>
+
+    <!-- BOTÓN + LINK -->
+    <button onclick="agregarEnlaceRapido()" class="btn btn-primary px-4 py-2 text-sm ml-6">
+      + Link
+    </button>
+
+    <!-- USUARIO -->
+    <div class="relative ml-4">
+      <div onclick="toggleUserMenu()" class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden cursor-pointer">
+        <img id="userAvatarDisplay" src="" class="w-full h-full object-cover hidden">
+        <div id="avatarFallback" class="w-full h-full flex items-center justify-center bg-blue/10 text-blue text-xl font-bold">?</div>
       </div>
 
-      <!-- AVATAR + MENU -->
-      <div class="relative">
-        <button onclick="toggleUserMenu()" 
-          class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-          
-          <img id="userAvatarDisplay" src="" alt="Perfil"
-            class="w-full h-full object-cover hidden">
-          
-          <div id="avatarFallback"
-            class="w-full h-full flex items-center justify-center bg-blue/10 text-blue text-xl font-bold">
-            ?
-          </div>
-        </button>
-
-        <div id="userDropdown"
-          class="hidden absolute right-0 mt-3 w-56 bg-surface border border-border rounded-xl shadow-xl overflow-hidden z-50 text-sm">
-
-          <div class="px-4 py-3 border-b border-border">
-            <p class="text-xs text-muted">Conectado como</p>
-            <p id="userNicknameMenu" class="font-bold text-white truncate">Usuario</p>
-          </div>
-
-          <a href="registro-perfil.html" class="block px-4 py-2 text-muted hover:bg-border hover:text-white transition">
-            👤 Ver perfil
-          </a>
-
-          <a href="suscripcion.html" class="block px-4 py-2 text-muted hover:bg-border hover:text-white transition">
-            💳 Suscripción
-          </a>
-
-          <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/10 transition">
-            🚪 Cerrar sesión
-          </button>
-        </div>
+      <div id="userMenu" class="hidden absolute right-0 mt-3 w-48 bg-surface border border-border rounded-lg shadow-lg py-2 text-sm">
+        <p class="px-4 py-2 text-muted">👤 <span id="userNicknameDisplay">Usuario</span></p>
+        <hr class="border-border my-1">
+        <a href="#" class="block px-4 py-2 hover:bg-bg">Configuración</a>
+        <a href="suscripcion.html" class="block px-4 py-2 hover:bg-bg">Mi plan</a>
+        <button onclick="logout()" class="w-full text-left px-4 py-2 hover:bg-bg text-red-400">Cerrar sesión</button>
       </div>
-
     </div>
+
   </div>
 </header>
 
@@ -290,6 +275,38 @@ function renderCarpetas() {
 }
 
 renderCarpetas();
+</script>
+<script>
+function toggleUserMenu() {
+  document.getElementById('userMenu').classList.toggle('hidden');
+}
+
+window.addEventListener('click', function(e){
+  const menu = document.getElementById('userMenu');
+  if (!e.target.closest('.relative')) menu.classList.add('hidden');
+});
+
+window.addEventListener('load', function() {
+  const nick = localStorage.getItem('userNickname') || 'Usuario';
+  const avatar = localStorage.getItem('userAvatar');
+  document.getElementById('userNicknameDisplay').textContent = nick;
+
+  const avatarImg = document.getElementById('userAvatarDisplay');
+  const fallback = document.getElementById('avatarFallback');
+
+  if (avatar) {
+    avatarImg.src = avatar;
+    avatarImg.classList.remove('hidden');
+    fallback.classList.add('hidden');
+  } else {
+    fallback.textContent = nick.charAt(0).toUpperCase();
+  }
+});
+
+function logout() {
+  localStorage.removeItem('isLoggedIn');
+  window.location.href = 'login.html';
+}
 </script>
 
 </body>
