@@ -6,23 +6,51 @@
   <link rel="icon" href="logo1.png">
   <link rel="stylesheet" href="estilos.css">
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            text: "#E2E8F0",
+            muted: "#94A3B8",
+            blue: "#38BDF8",
+            purple: "#a855f7"
+          },
+        },
+      },
+    };
+  </script>
 </head>
 
-<body class="bg-bg text-white min-h-screen">
+<body class="bg-bg text-text min-h-screen flex flex-col">
 
-  <!-- Fondo -->
+  <!-- Fondo animado -->
   <div class="bg-gif fixed inset-0 -z-10"></div>
 
-  <!-- Header -->
-  <header class="flex items-center justify-between px-8 py-4 border-b border-border">
-    <h1 class="text-xl font-bold text-blue">LinkApp</h1>
-    <a href="registro-perfil.html" class="text-muted hover:text-white">
-      Volver al perfil
-    </a>
+  <!-- HEADER NUEVO -->
+  <header class="border-b border-border sticky top-0 bg-bg z-50">
+    <div class="w-full h-20 flex items-center px-6">
+
+      <!-- LOGO PEGADO A LA IZQUIERDA REAL -->
+      <img src="logo1.png" alt="logo" class="w-12 h-14">
+
+      <!-- NAV PEGADO A LA DERECHA REAL -->
+      <nav class="ml-auto">
+        <a href="index.html" class="nav-link">
+          Volver al inicio
+        </a>
+      </nav>
+
+    </div>
   </header>
 
-  <!-- Contenido -->
-  <main class="max-w-6xl mx-auto px-6 py-16">
+  <!-- CONTENIDO -->
+  <main class="flex-grow max-w-6xl mx-auto px-6 py-16">
     
     <h2 class="text-4xl font-bold text-center mb-4">
       Elige tu plan
@@ -33,7 +61,7 @@
 
     <div class="grid md:grid-cols-3 gap-8">
 
-      <!-- Plan Gratis -->
+      <!-- PLAN GRATIS -->
       <div class="bg-surface border border-border rounded-2xl p-8 text-center">
         <h3 class="text-2xl font-bold mb-2">Gratis</h3>
         <p class="text-muted mb-6">Para comenzar</p>
@@ -54,7 +82,7 @@
         </button>
       </div>
 
-      <!-- Plan Básico -->
+      <!-- PLAN BÁSICO -->
       <div class="bg-surface border-2 border-blue rounded-2xl p-8 text-center scale-105">
         <h3 class="text-2xl font-bold mb-2 text-blue">Básico</h3>
         <p class="text-muted mb-6">Para creadores</p>
@@ -74,9 +102,9 @@
         </button>
       </div>
 
-      <!-- Plan Pro -->
+      <!-- PLAN PRO -->
       <div class="bg-surface border border-border rounded-2xl p-8 text-center">
-        <h3 class="text-2xl font-bold mb-2 text-purple-400">Pro</h3>
+        <h3 class="text-2xl font-bold mb-2 text-purple">Pro</h3>
         <p class="text-muted mb-6">Para marcas y negocios</p>
 
         <p class="text-4xl font-bold mb-6">$9.990<span class="text-sm text-muted">/mes</span></p>
@@ -89,7 +117,7 @@
         </ul>
 
         <button onclick="seleccionarPlan('Pro')"
-          class="w-full py-2 rounded-lg bg-purple-500 text-black font-bold">
+          class="w-full py-2 rounded-lg bg-purple text-black font-bold">
           Elegir plan
         </button>
       </div>
@@ -97,12 +125,16 @@
     </div>
   </main>
 
-  <!-- Script -->
+  <!-- FOOTER -->
+  <footer class="border-t border-border text-center py-6 text-muted text-sm">
+    © 2026 LinkApp. Todos los derechos reservados.
+  </footer>
+
+  <!-- SCRIPT -->
   <script>
     function seleccionarPlan(plan) {
       localStorage.setItem("planLinkApp", plan);
       alert("Plan seleccionado: " + plan);
-      // Futuro: redirigir a pago o activar plan
     }
   </script>
 
