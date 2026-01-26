@@ -55,7 +55,7 @@
 
       <!-- AVATAR + MENU -->
       <div class="relative">
-        <button onclick="toggleUserMenu()" 
+        <button id="userMenuButton" onclick="toggleUserMenu()" 
           class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden shadow-[0_0_15px_rgba(56,189,248,0.2)]">
           
           <img id="userAvatarDisplay" src="" alt="Perfil"
@@ -133,11 +133,11 @@ window.addEventListener('load', function() {
   const avatarImg = document.getElementById('userAvatarDisplay');
   const fallback = document.getElementById('avatarFallback');
 
-  if (avatar) {
+  if (avatar && avatarImg && fallback) {
     avatarImg.src = avatar;
     avatarImg.classList.remove('hidden');
     fallback.classList.add('hidden');
-  } else {
+  } else if (fallback) {
     fallback.textContent = nick.charAt(0).toUpperCase();
   }
 });
@@ -147,8 +147,11 @@ function toggleUserMenu() {
 }
 
 window.addEventListener("click", function(e) {
-  if (!e.target.closest("#userDropdown") && !e.target.closest("button[onclick='toggleUserMenu()']")) {
-    document.getElementById("userDropdown").classList.add("hidden");
+  const menu = document.getElementById("userDropdown");
+  const button = document.getElementById("userMenuButton");
+
+  if (!menu.contains(e.target) && !button.contains(e.target)) {
+    menu.classList.add("hidden");
   }
 });
 
@@ -291,7 +294,6 @@ function renderCarpetas() {
 
 renderCarpetas();
 </script>
-
 
 </body>
 </html>
