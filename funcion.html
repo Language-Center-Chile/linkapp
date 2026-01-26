@@ -10,34 +10,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <div class="bg-gif"></div>
 
-
-
-<script>
-  // Esta función debe ir dentro de tu etiqueta <script> al final del archivo
-  window.addEventListener('load', function() {
-    const nick = localStorage.getItem('userNickname') || 'Usuario';
-    const avatar = localStorage.getItem('userAvatar');
-    
-    document.getElementById('userNicknameDisplay').textContent = nick;
-    
-    const avatarImg = document.getElementById('userAvatarDisplay');
-    const fallback = document.getElementById('avatarFallback');
-    
-    if (avatar) {
-      avatarImg.src = avatar;
-      avatarImg.classList.remove('hidden');
-      fallback.classList.add('hidden');
-    } else {
-      fallback.textContent = nick.charAt(0).toUpperCase();
-    }
-  });
-
-  function logout() { 
-    localStorage.removeItem('isLoggedIn'); 
-    window.location.href = 'login.html'; 
-  }
-</script>
-
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -61,311 +33,263 @@
   </script>
 
   <style>
-    /* ===== MODAL COMPARTIR ===== */
-    .share-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .share-box {
-      background: #020617;
-      padding: 20px;
-      border-radius: 16px;
-      width: 280px;
-      border: 1px solid #1e293b;
-      text-align: center;
-    }
-
-    .share-title {
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    .share-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .share-btn {
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: bold;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: transform .15s ease;
-    }
-
-    .share-btn:hover {
-      transform: scale(1.05);
-    }
-
-    .share-btn.whatsapp {
-      background: linear-gradient(135deg, #25D366, #128C7E);
-    }
-
-    .share-btn.facebook {
-      background: linear-gradient(135deg, #1877f2, #0f3c7a);
-    }
-
-    .share-btn.telegram {
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-    }
-
-    .share-btn.copy {
-      background: linear-gradient(135deg, #64748b, #334155);
-    }
-
-    .share-cancel {
-      margin-top: 14px;
-      background: none;
-      border: none;
-      color: #94a3b8;
-      font-size: 12px;
-      cursor: pointer;
-    }
+    .hidden { display: none; }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text">
-  <div id="user-display" style="position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 10px; font-family: sans-serif;">
-    <span id="display-nick" style="font-weight: bold;"></span>
-    <img id="display-foto" src="" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; object-fit: cover;">
-</div>
+
 <header class="border-b border-border sticky top-0 bg-bg z-50">
   <div class="w-full px-6 h-20 flex items-center">
     
-    <!-- LOGO PEGADO A LA IZQUIERDA -->
     <img src="logo1.png" alt="logo" class="w-12 h-14">
 
-    <!-- USUARIO A LA DERECHA -->
-    <div class="ml-auto flex items-center gap-4">
+    <div class="ml-auto flex items-center gap-4 relative">
+      
       <div class="text-right">
-        <p id="userNicknameDisplay" class="text-lg font-bold text-white leading-none">
-          Cargando...
-        </p>
-        <button onclick="logout()"
-          class="text-[10px] text-red-400 hover:underline uppercase tracking-widest mt-1">
+        <p id="userNicknameDisplay" class="text-lg font-bold text-white leading-none">Cargando...</p>
+        <button onclick="logout()" class="text-[10px] text-red-400 hover:underline uppercase tracking-widest mt-1">
           Cerrar Sesión
         </button>
       </div>
 
-      <div
-        class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-        <img id="userAvatarDisplay" src="" alt="Perfil"
-          class="w-full h-full object-cover hidden">
-        <div id="avatarFallback"
-          class="w-full h-full flex items-center justify-center bg-blue/10 text-blue text-xl font-bold">
-          ?
-        </div>
-      </div>
-    </div>
+      <!-- AVATAR + MENU -->
+      <div class="relative">
+        <button onclick="toggleUserMenu()" 
+          class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+          
+          <img id="userAvatarDisplay" src="" alt="Perfil"
+            class="w-full h-full object-cover hidden">
+          
+          <div id="avatarFallback"
+            class="w-full h-full flex items-center justify-center bg-blue/10 text-blue text-xl font-bold">
+            ?
+          </div>
+        </button>
 
-  </div>
-</header>
-  <main class="max-w-6xl mx-auto px-6 py-12 w-full">
-    <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-      <div>
-        <h1 class="text-3xl font-bold">Mis <span class="gradient-text">Colecciones</span></h1>
-        <p class="text-muted text-sm">Organiza, busca y comparte tus carpetas de enlaces.</p>
-      </div>
-      <button onclick="nuevaCarpeta()" class="btn btn-primary px-6 py-2">+ Crear Carpeta</button>
-    </div>
+        <div id="userDropdown"
+          class="hidden absolute right-0 mt-3 w-56 bg-surface border border-border rounded-xl shadow-xl overflow-hidden z-50 text-sm">
 
-    <div id="folderGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-  </main>
-
-  <!-- MODAL COMPARTIR -->
-  <div id="shareModal" class="share-overlay hidden">
-    <div class="share-box">
-      <h3 class="share-title">Compartir carpeta</h3>
-
-      <div class="share-grid">
-        <button class="share-btn whatsapp" onclick="shareWhatsApp()">WhatsApp</button>
-        <button class="share-btn facebook" onclick="shareFacebook()">Facebook</button>
-        <button class="share-btn telegram" onclick="shareTelegram()">Telegram</button>
-        <button class="share-btn copy" onclick="copyShare()">Copiar</button>
-      </div>
-
-      <button class="share-cancel" onclick="cerrarShare()">Cancelar</button>
-    </div>
-  </div>
-
-  <script>
-    function logout() {
-      localStorage.removeItem('isLoggedIn');
-      window.location.href = 'login.html';
-    }
-
-    let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
-    let textoCompartir = "";
-
-    function guardarYRenderizar() {
-      localStorage.setItem('carpetas', JSON.stringify(carpetas));
-      renderCarpetas();
-    }
-
-    function filtrarLinks(input, folderIndex) {
-      const filtro = input.value.toLowerCase();
-      const listaLinks = document.getElementById(`links-container-${folderIndex}`);
-      const items = listaLinks.getElementsByClassName('link-wrapper');
-
-      Array.from(items).forEach(item => {
-        const texto = item.getAttribute('data-url').toLowerCase();
-        item.style.display = texto.includes(filtro) ? 'flex' : 'none';
-      });
-    }
-
-// --- FUNCIÓN DE COMPARTIR ACTUALIZADA ---
-    function abrirCompartir(index) {
-      const carpeta = carpetas[index];
-      
-      // Recuperamos el nickname del localStorage
-      const nickname = localStorage.getItem('userNickname') || localStorage.getItem('linkapp_nick') || 'Un usuario';
-      
-      // Construimos el mensaje con el emoji de carpeta al inicio y tu mensaje personalizado
-      textoCompartir = 
-        `El usuario ${nickname} compartió ésta carpeta de enlaces usando LinkApp\n\n` +
-        `📁 Carpeta: ${carpeta.nombre}\n` +
-        `---------------------------\n` +
-        carpeta.links.map((l, i) => `${i + 1}. ${l}`).join('\n');
-
-      // Abrimos el modal con las opciones de redes sociales
-      document.getElementById("shareModal").classList.remove("hidden");
-    }
-
-    function cerrarShare() {
-      document.getElementById("shareModal").classList.add("hidden");
-    }
-
-    function shareWhatsApp() {
-      window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`);
-      cerrarShare();
-    }
-
-    function shareFacebook() {
-      window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textoCompartir)}`);
-      cerrarShare();
-    }
-
-    function shareTelegram() {
-      window.open(`https://t.me/share/url?text=${encodeURIComponent(textoCompartir)}`);
-      cerrarShare();
-    }
-
-    function copyShare() {
-      navigator.clipboard.writeText(textoCompartir);
-      alert("Copiado ✔");
-      cerrarShare();
-    }
-
-    function renderCarpetas() {
-      const grid = document.getElementById('folderGrid');
-
-      if (carpetas.length === 0) {
-        grid.innerHTML = `
-          <p class="col-span-full text-center text-muted py-10 border-2 border-dashed border-border rounded-xl">
-            No tienes carpetas aún.
-          </p>`;
-        return;
-      }
-
-      grid.innerHTML = carpetas.map((folder, fIndex) => `
-        <div class="feature-card border border-border bg-surface rounded-xl p-5 flex flex-col h-full">
-          <div class="flex justify-between items-start mb-4">
-            <div>
-              <h3 class="text-lg font-bold text-blue">${folder.nombre}</h3>
-              <span class="text-[10px] text-muted uppercase tracking-widest">${folder.links.length} enlaces</span>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="abrirCompartir(${fIndex})">📤</button>
-              <button onclick="eliminarCarpeta(${fIndex})" class="text-red-500">🗑</button>
-            </div>
+          <div class="px-4 py-3 border-b border-border">
+            <p class="text-xs text-muted">Conectado como</p>
+            <p id="userNicknameMenu" class="font-bold text-white truncate">Usuario</p>
           </div>
 
-          <input type="text" oninput="filtrarLinks(this, ${fIndex})"
-            placeholder="Buscar en esta carpeta..."
-            class="w-full bg-bg border border-border text-[11px] p-2 rounded mb-3">
+          <a href="registro-perfil.html" class="block px-4 py-2 text-muted hover:bg-border hover:text-white transition">
+            👤 Ver perfil
+          </a>
 
-          <div id="links-container-${fIndex}" class="space-y-2 mb-4 flex-grow overflow-y-auto max-h-48 pr-1">
-            ${folder.links.map((link, lIndex) => `
-              <div class="link-wrapper flex justify-between items-center bg-bg/40 p-2 rounded text-xs"
-                data-url="${link}">
-                <a href="${link}" target="_blank" class="truncate max-w-[85%] text-muted hover:text-white">
-                  ${link}
-                </a>
-                <button onclick="eliminarEnlace(${fIndex}, ${lIndex})" class="text-red-400">✕</button>
-              </div>
-            `).join('')}
-          </div>
+          <a href="suscripcion.html" class="block px-4 py-2 text-muted hover:bg-border hover:text-white transition">
+            💳 Suscripción
+          </a>
 
-          <button onclick="agregarEnlace(${fIndex})"
-            class="w-full py-2 bg-blue/10 text-blue border border-blue/20 rounded-md font-bold text-xs">
-            + Añadir Link
+          <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/10 transition">
+            🚪 Cerrar sesión
           </button>
         </div>
-      `).join('');
-    }
+      </div>
 
-    function nuevaCarpeta() {
-      const n = prompt("Nombre de la nueva colección:");
-      if (n) {
-        carpetas.push({ nombre: n, links: [] });
-        guardarYRenderizar();
-      }
-    }
+    </div>
+  </div>
+</header>
 
-    function eliminarCarpeta(i) {
-      if (confirm("¿Eliminar carpeta definitivamente?")) {
-        carpetas.splice(i, 1);
-        guardarYRenderizar();
-      }
-    }
+<main class="max-w-6xl mx-auto px-6 py-12 w-full">
+  <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+    <div>
+      <h1 class="text-3xl font-bold">Mis <span class="gradient-text">Colecciones</span></h1>
+      <p class="text-muted text-sm">Organiza, busca y comparte tus carpetas de enlaces.</p>
+    </div>
+    <button onclick="nuevaCarpeta()" class="btn btn-primary px-6 py-2">+ Crear Carpeta</button>
+  </div>
 
-    function agregarEnlace(i) {
-      const l = prompt("Pega la URL del enlace:");
-      if (l) {
-        carpetas[i].links.push(l.startsWith('http') ? l : `https://${l}`);
-        guardarYRenderizar();
-      }
-    }
+  <div id="folderGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</main>
 
-    function eliminarEnlace(fi, li) {
-      carpetas[fi].links.splice(li, 1);
-      guardarYRenderizar();
-    }
+<!-- MODAL COMPARTIR -->
+<div id="shareModal" class="share-overlay hidden">
+  <div class="share-box">
+    <h3 class="share-title">Compartir carpeta</h3>
 
-    renderCarpetas();
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const nickGuardado = localStorage.getItem('linkapp_nick');
-        const fotoGuardada = localStorage.getItem('linkapp_foto');
+    <div class="share-grid">
+      <button class="share-btn whatsapp" onclick="shareWhatsApp()">WhatsApp</button>
+      <button class="share-btn facebook" onclick="shareFacebook()">Facebook</button>
+      <button class="share-btn telegram" onclick="shareTelegram()">Telegram</button>
+      <button class="share-btn copy" onclick="copyShare()">Copiar</button>
+    </div>
 
-        if (nickGuardado) {
-            document.getElementById('display-nick').textContent = nickGuardado;
-        } else {
-            document.getElementById('display-nick').textContent = "Invitado";
-        }
+    <button class="share-cancel" onclick="cerrarShare()">Cancelar</button>
+  </div>
+</div>
 
-        if (fotoGuardada) {
-            document.getElementById('display-foto').src = fotoGuardada;
-        } else {
-            // Imagen por defecto si no hay foto
-            document.getElementById('display-foto').src = "https://via.placeholder.com/40";
-        }
-    });
+<script>
+/* ================= USUARIO ================= */
+window.addEventListener('load', function() {
+  const nick = localStorage.getItem('userNickname') || 'Usuario';
+  const avatar = localStorage.getItem('userAvatar');
+
+  document.getElementById('userNicknameDisplay').textContent = nick;
+  document.getElementById('userNicknameMenu').textContent = nick;
+
+  const avatarImg = document.getElementById('userAvatarDisplay');
+  const fallback = document.getElementById('avatarFallback');
+
+  if (avatar) {
+    avatarImg.src = avatar;
+    avatarImg.classList.remove('hidden');
+    fallback.classList.add('hidden');
+  } else {
+    fallback.textContent = nick.charAt(0).toUpperCase();
+  }
+});
+
+function toggleUserMenu() {
+  document.getElementById("userDropdown").classList.toggle("hidden");
+}
+
+window.addEventListener("click", function(e) {
+  if (!e.target.closest("#userDropdown") && !e.target.closest("button[onclick='toggleUserMenu()']")) {
+    document.getElementById("userDropdown").classList.add("hidden");
+  }
+});
+
+function logout() {
+  localStorage.removeItem('isLoggedIn');
+  window.location.href = 'login.html';
+}
+
+/* ================= SISTEMA DE CARPETAS ================= */
+let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
+let textoCompartir = "";
+
+function guardarYRenderizar() {
+  localStorage.setItem('carpetas', JSON.stringify(carpetas));
+  renderCarpetas();
+}
+
+function nuevaCarpeta() {
+  const n = prompt("Nombre de la nueva colección:");
+  if (n) {
+    carpetas.push({ nombre: n, links: [] });
+    guardarYRenderizar();
+  }
+}
+
+function eliminarCarpeta(i) {
+  if (confirm("¿Eliminar carpeta definitivamente?")) {
+    carpetas.splice(i, 1);
+    guardarYRenderizar();
+  }
+}
+
+function agregarEnlace(i) {
+  const l = prompt("Pega la URL del enlace:");
+  if (l) {
+    carpetas[i].links.push(l.startsWith('http') ? l : `https://${l}`);
+    guardarYRenderizar();
+  }
+}
+
+function eliminarEnlace(fi, li) {
+  carpetas[fi].links.splice(li, 1);
+  guardarYRenderizar();
+}
+
+function filtrarLinks(input, folderIndex) {
+  const filtro = input.value.toLowerCase();
+  const listaLinks = document.getElementById(`links-container-${folderIndex}`);
+  const items = listaLinks.getElementsByClassName('link-wrapper');
+
+  Array.from(items).forEach(item => {
+    const texto = item.getAttribute('data-url').toLowerCase();
+    item.style.display = texto.includes(filtro) ? 'flex' : 'none';
+  });
+}
+
+/* ================= COMPARTIR ================= */
+function abrirCompartir(index) {
+  const carpeta = carpetas[index];
+  const nickname = localStorage.getItem('userNickname') || 'Un usuario';
+
+  textoCompartir =
+    `El usuario ${nickname} compartió ésta carpeta de enlaces usando LinkApp\n\n` +
+    `📁 Carpeta: ${carpeta.nombre}\n` +
+    `---------------------------\n` +
+    carpeta.links.map((l, i) => `${i + 1}. ${l}`).join('\n');
+
+  document.getElementById("shareModal").classList.remove("hidden");
+}
+
+function cerrarShare() {
+  document.getElementById("shareModal").classList.add("hidden");
+}
+
+function shareWhatsApp() {
+  window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`);
+  cerrarShare();
+}
+
+function shareFacebook() {
+  window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textoCompartir)}`);
+  cerrarShare();
+}
+
+function shareTelegram() {
+  window.open(`https://t.me/share/url?text=${encodeURIComponent(textoCompartir)}`);
+  cerrarShare();
+}
+
+function copyShare() {
+  navigator.clipboard.writeText(textoCompartir);
+  alert("Copiado ✔");
+  cerrarShare();
+}
+
+/* ================= RENDER ================= */
+function renderCarpetas() {
+  const grid = document.getElementById('folderGrid');
+
+  if (carpetas.length === 0) {
+    grid.innerHTML = `<p class="col-span-full text-center text-muted py-10 border-2 border-dashed border-border rounded-xl">
+      No tienes carpetas aún.</p>`;
+    return;
+  }
+
+  grid.innerHTML = carpetas.map((folder, fIndex) => `
+    <div class="feature-card border border-border bg-surface rounded-xl p-5 flex flex-col h-full">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h3 class="text-lg font-bold text-blue">${folder.nombre}</h3>
+          <span class="text-[10px] text-muted uppercase tracking-widest">${folder.links.length} enlaces</span>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="abrirCompartir(${fIndex})">📤</button>
+          <button onclick="eliminarCarpeta(${fIndex})" class="text-red-500">🗑</button>
+        </div>
+      </div>
+
+      <input type="text" oninput="filtrarLinks(this, ${fIndex})"
+        placeholder="Buscar en esta carpeta..."
+        class="w-full bg-bg border border-border text-[11px] p-2 rounded mb-3">
+
+      <div id="links-container-${fIndex}" class="space-y-2 mb-4 flex-grow overflow-y-auto max-h-48 pr-1">
+        ${folder.links.map((link, lIndex) => `
+          <div class="link-wrapper flex justify-between items-center bg-bg/40 p-2 rounded text-xs"
+            data-url="${link}">
+            <a href="${link}" target="_blank" class="truncate max-w-[85%] text-muted hover:text-white">${link}</a>
+            <button onclick="eliminarEnlace(${fIndex}, ${lIndex})" class="text-red-400">✕</button>
+          </div>
+        `).join('')}
+      </div>
+
+      <button onclick="agregarEnlace(${fIndex})"
+        class="w-full py-2 bg-blue/10 text-blue border border-blue/20 rounded-md font-bold text-xs">
+        + Añadir Link
+      </button>
+    </div>
+  `).join('');
+}
+
+renderCarpetas();
 </script>
 
 </body>
