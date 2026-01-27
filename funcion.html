@@ -1,72 +1,14 @@
 <!DOCTYPE html>
 <html lang="es" class="dark">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personalizar Perfil - LinkApp</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestor LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
-  <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            bg: "#000000",
-            surface: "#18181b",
-            border: "#27272a",
-            blue: "#38BDF8",
-            text: "#E2E8F0",
-            muted: "#94A3B8"
-          }
-        }
-      }
-    };
-
-    if (localStorage.getItem('isLoggedIn') !== 'true') {
-      window.location.href = 'login.html';
-    }
-  </script>
-</head>
-
-<body class="min-h-screen bg-bg text-text flex flex-col">
-
-<header class="border-b border-border sticky top-0 bg-bg z-50">
-  <div class="w-full h-20 flex items-center px-6">
-    <img src="logo1.png" class="w-12 h-14">
-    <nav class="ml-auto">
-      <a href="funcion.html" class="text-muted hover:text-blue text-sm">← Volver</a>
-    </nav>
-  </div>
-</header>
-
-<script>
-  // Esta función debe ir dentro de tu etiqueta <script> al final del archivo
-  window.addEventListener('load', function() {
-    const nick = localStorage.getItem('userNickname') || 'Usuario';
-    const avatar = localStorage.getItem('userAvatar');
-    
-    document.getElementById('userNicknameDisplay').textContent = nick;
-    
-    const avatarImg = document.getElementById('userAvatarDisplay');
-    const fallback = document.getElementById('avatarFallback');
-    
-    if (avatar) {
-      avatarImg.src = avatar;
-      avatarImg.classList.remove('hidden');
-      fallback.classList.add('hidden');
-    } else {
-      fallback.textContent = nick.charAt(0).toUpperCase();
-    }
-  });
-
-  function logout() { 
-    localStorage.removeItem('isLoggedIn'); 
-    window.location.href = 'login.html'; 
-  }
-</script>
+  <div class="bg-gif"></div>
 
   <script>
     tailwind.config = {
@@ -91,144 +33,180 @@
   </script>
 
   <style>
-    /* ===== MODAL COMPARTIR ===== */
-    .share-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .share-box {
-      background: #020617;
-      padding: 20px;
-      border-radius: 16px;
-      width: 280px;
-      border: 1px solid #1e293b;
-      text-align: center;
-    }
-
-    .share-title {
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    .share-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .share-btn {
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: bold;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: transform .15s ease;
-    }
-
-    .share-btn:hover {
-      transform: scale(1.05);
-    }
-
-    .share-btn.whatsapp {
-      background: linear-gradient(135deg, #25D366, #128C7E);
-    }
-
-    .share-btn.facebook {
-      background: linear-gradient(135deg, #1877f2, #0f3c7a);
-    }
-
-    .share-btn.telegram {
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-    }
-
-    .share-btn.copy {
-      background: linear-gradient(135deg, #64748b, #334155);
-    }
-
-    .share-cancel {
-      margin-top: 14px;
-      background: none;
-      border: none;
-      color: #94a3b8;
-      font-size: 12px;
-      cursor: pointer;
-    }
+    .hidden { display: none; }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text">
-  <div id="user-display" style="position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 10px; font-family: sans-serif;">
-    <span id="display-nick" style="font-weight: bold;"></span>
-    <img id="display-foto" src="" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; object-fit: cover;">
-</div>
 
-  <main class="max-w-6xl mx-auto px-6 py-12 w-full">
-    <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-      <div>
-        <h1 class="text-3xl font-bold">Mis <span class="gradient-text">Colecciones</span></h1>
-        <p class="text-muted text-sm">Organiza, busca y comparte tus carpetas de enlaces.</p>
-      </div>
-      <button onclick="nuevaCarpeta()" class="btn btn-primary px-6 py-2">+ Crear Carpeta</button>
-    </div>
+<header class="border-b border-border sticky top-0 bg-bg z-50">
+  <div class="w-full px-6 h-20 flex items-center">
+    
+    <img src="logo1.png" alt="logo" class="w-12 h-14">
 
-    <div id="folderGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-  </main>
-
-  <!-- MODAL COMPARTIR -->
-  <div id="shareModal" class="share-overlay hidden">
-    <div class="share-box">
-      <h3 class="share-title">Compartir carpeta</h3>
-
-      <div class="share-grid">
-        <button class="share-btn whatsapp" onclick="shareWhatsApp()">WhatsApp</button>
-        <button class="share-btn facebook" onclick="shareFacebook()">Facebook</button>
-        <button class="share-btn telegram" onclick="shareTelegram()">Telegram</button>
-        <button class="share-btn copy" onclick="copyShare()">Copiar</button>
+    <div class="ml-auto flex items-center gap-4 relative">
+      
+      <div class="text-right">
+        <p id="userNicknameDisplay" class="text-lg font-bold text-white leading-none">Cargando...</p>
+        <button onclick="logout()" class="text-[10px] text-red-400 hover:underline uppercase tracking-widest mt-1">
+          Cerrar Sesión
+        </button>
       </div>
 
-      <button class="share-cancel" onclick="cerrarShare()">Cancelar</button>
+      <!-- AVATAR + MENU -->
+      <div class="relative">
+        <button onclick="toggleUserMenu()" 
+          class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+          
+          <img id="userAvatarDisplay" src="" alt="Perfil"
+            class="w-full h-full object-cover hidden">
+          
+          <div id="avatarFallback"
+            class="w-full h-full flex items-center justify-center bg-blue/10 text-blue text-xl font-bold">
+            ?
+          </div>
+        </button>
+
+        <div id="userDropdown"
+          class="hidden absolute right-0 mt-3 w-56 bg-surface border border-border rounded-xl shadow-xl overflow-hidden z-50 text-sm">
+
+          <div class="px-4 py-3 border-b border-border">
+            <p class="text-xs text-muted">Conectado como</p>
+            <p id="userNicknameMenu" class="font-bold text-white truncate">Usuario</p>
+          </div>
+
+          <a href="registro-perfil.html" class="block px-4 py-2 text-muted hover:bg-border hover:text-white transition">
+            👤 Ver perfil
+          </a>
+
+          <a href="suscripcion.html" class="block px-4 py-2 text-muted hover:bg-border hover:text-white transition">
+            💳 Suscripción
+          </a>
+
+          <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/10 transition">
+            🚪 Cerrar sesión
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
+</header>
 
-  <script>
-    function logout() {
-      localStorage.removeItem('isLoggedIn');
-      window.location.href = 'login.html';
-    }
+<main class="max-w-6xl mx-auto px-6 py-12 w-full">
+  <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+    <div>
+      <h1 class="text-3xl font-bold">Mis <span class="gradient-text">Colecciones</span></h1>
+      <p class="text-muted text-sm">Organiza, busca y comparte tus carpetas de enlaces.</p>
+    </div>
+    <button onclick="nuevaCarpeta()" class="btn btn-primary px-6 py-2">+ Crear Carpeta</button>
+  </div>
 
-    let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
-    let textoCompartir = "";
+  <div id="folderGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</main>
 
-    function guardarYRenderizar() {
-      localStorage.setItem('carpetas', JSON.stringify(carpetas));
-      renderCarpetas();
-    }
+<!-- MODAL COMPARTIR -->
+<div id="shareModal" class="share-overlay hidden">
+  <div class="share-box">
+    <h3 class="share-title">Compartir carpeta</h3>
 
-    function filtrarLinks(input, folderIndex) {
-      const filtro = input.value.toLowerCase();
-      const listaLinks = document.getElementById(`links-container-${folderIndex}`);
-      const items = listaLinks.getElementsByClassName('link-wrapper');
+    <div class="share-grid">
+      <button class="share-btn whatsapp" onclick="shareWhatsApp()">WhatsApp</button>
+      <button class="share-btn facebook" onclick="shareFacebook()">Facebook</button>
+      <button class="share-btn telegram" onclick="shareTelegram()">Telegram</button>
+      <button class="share-btn copy" onclick="copyShare()">Copiar</button>
+    </div>
 
-      Array.from(items).forEach(item => {
-        const texto = item.getAttribute('data-url').toLowerCase();
-        item.style.display = texto.includes(filtro) ? 'flex' : 'none';
-      });
-    }
+    <button class="share-cancel" onclick="cerrarShare()">Cancelar</button>
+  </div>
+</div>
 
-// --- FUNCIÓN DE COMPARTIR ACTUALIZADA ---
-    function abrirCompartir(index) {
+<script>
+/* ================= USUARIO ================= */
+window.addEventListener('load', function() {
+  const nick = localStorage.getItem('userNickname') || 'Usuario';
+  const avatar = localStorage.getItem('userAvatar');
+
+  document.getElementById('userNicknameDisplay').textContent = nick;
+  document.getElementById('userNicknameMenu').textContent = nick;
+
+  const avatarImg = document.getElementById('userAvatarDisplay');
+  const fallback = document.getElementById('avatarFallback');
+
+  if (avatar) {
+    avatarImg.src = avatar;
+    avatarImg.classList.remove('hidden');
+    fallback.classList.add('hidden');
+  } else {
+    fallback.textContent = nick.charAt(0).toUpperCase();
+  }
+});
+
+function toggleUserMenu() {
+  document.getElementById("userDropdown").classList.toggle("hidden");
+}
+
+window.addEventListener("click", function(e) {
+  if (!e.target.closest("#userDropdown") && !e.target.closest("button[onclick='toggleUserMenu()']")) {
+    document.getElementById("userDropdown").classList.add("hidden");
+  }
+});
+
+function logout() {
+  localStorage.removeItem('isLoggedIn');
+  window.location.href = 'login.html';
+}
+
+/* ================= SISTEMA DE CARPETAS ================= */
+let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
+let textoCompartir = "";
+
+function guardarYRenderizar() {
+  localStorage.setItem('carpetas', JSON.stringify(carpetas));
+  renderCarpetas();
+}
+
+function nuevaCarpeta() {
+  const n = prompt("Nombre de la nueva colección:");
+  if (n) {
+    carpetas.push({ nombre: n, links: [] });
+    guardarYRenderizar();
+  }
+}
+
+function eliminarCarpeta(i) {
+  if (confirm("¿Eliminar carpeta definitivamente?")) {
+    carpetas.splice(i, 1);
+    guardarYRenderizar();
+  }
+}
+
+function agregarEnlace(i) {
+  const l = prompt("Pega la URL del enlace:");
+  if (l) {
+    carpetas[i].links.push(l.startsWith('http') ? l : `https://${l}`);
+    guardarYRenderizar();
+  }
+}
+
+function eliminarEnlace(fi, li) {
+  carpetas[fi].links.splice(li, 1);
+  guardarYRenderizar();
+}
+
+function filtrarLinks(input, folderIndex) {
+  const filtro = input.value.toLowerCase();
+  const listaLinks = document.getElementById(`links-container-${folderIndex}`);
+  const items = listaLinks.getElementsByClassName('link-wrapper');
+
+  Array.from(items).forEach(item => {
+    const texto = item.getAttribute('data-url').toLowerCase();
+    item.style.display = texto.includes(filtro) ? 'flex' : 'none';
+  });
+}
+
+/* ================= COMPARTIR ================= */
+function abrirCompartir(index) {
       const carpeta = carpetas[index];
       
       // Recuperamos el nickname del localStorage
