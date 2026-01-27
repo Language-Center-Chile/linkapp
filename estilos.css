@@ -367,3 +367,35 @@ a.nav-link {
   color: #E2E8F0;
   text-decoration: underline;
 }
+
+/* Efecto de texto degradado */
+.gradient-text {
+  background: linear-gradient(90deg, #38BDF8, #818CF8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animación de entrada para el contenedor */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Estilo personalizado para el input de archivo */
+#avatarInput {
+  display: none; /* Ocultamos el feo input por defecto */
+}
+
+.custom-file-upload {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  border-color: #38BDF8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}

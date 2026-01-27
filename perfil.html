@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Personalizar Perfil - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
-  <link rel="stylesheet" href="estilos.css">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -29,106 +28,166 @@
       window.location.href = 'login.html';
     }
   </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #38BDF8, #818CF8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #avatarInput { display: none; }
+
+    .avatar-glow {
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .avatar-glow:hover {
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+      border-color: #38BDF8;
+    }
+  </style>
 </head>
 
 <body class="min-h-screen bg-bg text-text flex flex-col">
 
-<header class="border-b border-border sticky top-0 bg-bg z-50">
-  <div class="w-full h-20 flex items-center px-6">
-    <img src="logo1.png" class="w-12 h-14">
-    <nav class="ml-auto">
-      <a href="funcion.html" class="text-muted hover:text-blue text-sm">← Volver</a>
+<header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
+  <div class="w-full h-20 flex items-center justify-between px-6">
+    <img src="logo1.png" class="w-10 h-12 object-contain" alt="Logo">
+    
+    <nav>
+      <a href="funcion.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-full text-muted hover:text-blue hover:border-blue/50 transition-all text-sm font-bold bg-surface/50">
+        <span>←</span> Volver al Gestor
+      </a>
     </nav>
   </div>
 </header>
 
 <main class="flex-grow flex items-center justify-center px-6 py-12">
-  <div class="w-full max-w-xl bg-surface border border-border rounded-2xl p-8 shadow-2xl">
+  <div class="w-full max-w-md bg-surface border border-border rounded-[2.5rem] p-10 shadow-2xl animate-fade-in">
 
-    <h1 class="text-2xl font-bold mb-6">Personalizar Perfil</h1>
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-black gradient-text tracking-tight">Mi Perfil</h1>
+      <p class="text-muted text-sm mt-3 font-medium">Gestiona tu identidad visual en LinkApp</p>
+    </div>
 
-    <!-- FOTO PERFIL -->
-    <div class="flex flex-col items-center mb-6">
-      <div class="w-28 h-28 rounded-full border-2 border-border overflow-hidden mb-3 bg-bg flex items-center justify-center">
-        <img id="previewAvatar" class="w-full h-full object-cover hidden">
-        <span id="avatarFallback" class="text-3xl text-muted">?</span>
+    <div class="flex flex-col items-center mb-10">
+      <div class="relative group">
+        <label for="avatarInput" class="cursor-pointer block">
+          <div class="w-32 h-32 rounded-full border-4 border-border overflow-hidden bg-bg flex items-center justify-center avatar-glow relative">
+            <img id="previewAvatar" class="w-full h-full object-cover hidden">
+            <span id="avatarFallback" class="text-4xl font-bold text-blue">?</span>
+            
+            <div class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span class="text-[10px] text-white font-bold uppercase tracking-widest">Cambiar</span>
+            </div>
+          </div>
+        </label>
+        <div class="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-[4px] border-surface rounded-full shadow-lg"></div>
       </div>
-
-      <input type="file" id="avatarInput" accept="image/*"
-        class="text-xs text-muted file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue file:text-black file:font-bold hover:file:opacity-90">
+      
+      <input type="file" id="avatarInput" accept="image/*">
+      <p class="mt-4 text-[10px] text-muted uppercase tracking-[0.2em] font-bold">Imagen de perfil</p>
     </div>
 
-    <!-- NICKNAME -->
-    <div class="mb-6">
-      <label class="block text-xs text-muted mb-2 uppercase font-bold">Nickname</label>
-      <input type="text" id="nicknameInput"
-        class="w-full bg-bg border border-border text-white p-3 rounded-lg focus:border-blue outline-none"
-        placeholder="Tu nombre visible">
+    <div class="mb-10">
+      <label class="block text-[10px] text-muted mb-3 uppercase font-black tracking-[0.15em] ml-1">Nickname Público</label>
+      <div class="relative group">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors text-lg font-bold">@</span>
+        <input type="text" id="nicknameInput"
+          class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl focus:ring-2 focus:ring-blue/20 focus:border-blue outline-none transition-all placeholder:text-muted/50"
+          placeholder="tu_nombre">
+      </div>
     </div>
 
-    <button onclick="guardarPerfil()"
-      class="w-full py-3 bg-blue text-black font-bold rounded-lg hover:opacity-90 transition">
-      Guardar Cambios
-    </button>
+    <div class="space-y-4">
+      <button onclick="guardarPerfil()"
+        class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 flex items-center justify-center gap-2">
+        <span>GUARDAR CAMBIOS</span>
+      </button>
 
-    <p id="saveMsg" class="text-green-400 text-sm mt-4 hidden">✔ Perfil actualizado</p>
+      <div id="saveMsg" class="flex items-center justify-center gap-2 text-green-400 text-sm opacity-0 transition-all duration-500 translate-y-2">
+        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> 
+        Perfil actualizado correctamente
+      </div>
+    </div>
 
   </div>
 </main>
 
 <script>
-const avatarInput = document.getElementById('avatarInput');
-const previewAvatar = document.getElementById('previewAvatar');
-const avatarFallback = document.getElementById('avatarFallback');
-const nicknameInput = document.getElementById('nicknameInput');
-const saveMsg = document.getElementById('saveMsg');
+  const avatarInput = document.getElementById('avatarInput');
+  const previewAvatar = document.getElementById('previewAvatar');
+  const avatarFallback = document.getElementById('avatarFallback');
+  const nicknameInput = document.getElementById('nicknameInput');
+  const saveMsg = document.getElementById('saveMsg');
 
-/* Cargar datos guardados */
-window.addEventListener('load', () => {
-  const savedNick = localStorage.getItem('userNickname');
-  const savedAvatar = localStorage.getItem('userAvatar');
+  window.addEventListener('load', () => {
+    const savedNick = localStorage.getItem('userNickname');
+    const savedAvatar = localStorage.getItem('userAvatar');
 
-  if (savedNick) {
-    nicknameInput.value = savedNick;
-    avatarFallback.textContent = savedNick.charAt(0).toUpperCase();
+    if (savedNick) {
+      nicknameInput.value = savedNick;
+      avatarFallback.textContent = savedNick.charAt(0).toUpperCase();
+    }
+
+    if (savedAvatar) {
+      previewAvatar.src = savedAvatar;
+      previewAvatar.classList.remove('hidden');
+      avatarFallback.classList.add('hidden');
+    }
+  });
+
+  avatarInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      previewAvatar.src = e.target.result;
+      previewAvatar.classList.remove('hidden');
+      avatarFallback.classList.add('hidden');
+      localStorage.setItem('userAvatar', e.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function guardarPerfil() {
+    const nick = nicknameInput.value.trim();
+    if (nick.length < 2) {
+      alert("⚠️ El nickname es demasiado corto.");
+      return;
+    }
+
+    localStorage.setItem('userNickname', nick);
+    if (previewAvatar.classList.contains('hidden')) {
+      avatarFallback.textContent = nick.charAt(0).toUpperCase();
+    }
+
+    saveMsg.classList.remove('opacity-0', 'translate-y-2');
+    saveMsg.classList.add('opacity-100', 'translate-y-0');
+
+    setTimeout(() => {
+      saveMsg.classList.add('opacity-0', 'translate-y-2');
+      saveMsg.classList.remove('opacity-100', 'translate-y-0');
+    }, 3000);
   }
-
-  if (savedAvatar) {
-    previewAvatar.src = savedAvatar;
-    previewAvatar.classList.remove('hidden');
-    avatarFallback.classList.add('hidden');
-  }
-});
-
-/* Vista previa imagen */
-avatarInput.addEventListener('change', function () {
-  const file = this.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    previewAvatar.src = e.target.result;
-    previewAvatar.classList.remove('hidden');
-    avatarFallback.classList.add('hidden');
-    localStorage.setItem('userAvatar', e.target.result);
-  };
-  reader.readAsDataURL(file);
-});
-
-/* Guardar nickname */
-function guardarPerfil() {
-  const nick = nicknameInput.value.trim();
-  if (nick.length < 2) {
-    alert("El nickname debe tener al menos 2 caracteres");
-    return;
-  }
-
-  localStorage.setItem('userNickname', nick);
-  avatarFallback.textContent = nick.charAt(0).toUpperCase();
-
-  saveMsg.classList.remove('hidden');
-  setTimeout(() => saveMsg.classList.add('hidden'), 2000);
-}
 </script>
 
 </body>
