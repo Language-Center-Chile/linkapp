@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html lang="es" class="dark">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestor LinkApp</title>
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="stylesheet" href="estilos.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalizar Perfil - LinkApp</title>
+  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="stylesheet" href="estilos.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <div class="bg-gif"></div>
 
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            blue: "#38BDF8",
+            text: "#E2E8F0",
+            muted: "#94A3B8"
+          }
+        }
+      }
+    };
 
-  <header class="border-b border-border sticky top-0 bg-bg z-50">
-  <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-    
-    <div class="flex items-center gap-4">
-      <img src="logo.png" alt="logo" style="width: 100px; height: 100px;">
-      <span class="font-bold text-white text-2xl tracking-tight">LinkApp</span>
-    </div>
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
 
-    <div class="flex items-center gap-4">
-      <div class="text-right">
-        <p id="userNicknameDisplay" class="text-lg font-bold text-white leading-none">Cargando...</p>
-        <button onclick="logout()" class="text-[10px] text-red-400 hover:underline uppercase tracking-widest mt-1">Cerrar Sesión</button>
-      </div>
-      
-      <div class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-        <img id="userAvatarDisplay" src="" alt="Perfil" class="w-full h-full object-cover hidden">
-        <div id="avatarFallback" class="w-full h-full flex items-center justify-center bg-blue/10 text-blue text-xl font-bold">
-          ?
-        </div>
-      </div>
-    </div>
+<body class="min-h-screen bg-bg text-text flex flex-col">
 
+<header class="border-b border-border sticky top-0 bg-bg z-50">
+  <div class="w-full h-20 flex items-center px-6">
+    <img src="logo1.png" class="w-12 h-14">
+    <nav class="ml-auto">
+      <a href="funcion.html" class="text-muted hover:text-blue text-sm">← Volver</a>
+    </nav>
   </div>
 </header>
 
