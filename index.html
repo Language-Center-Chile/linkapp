@@ -6,12 +6,7 @@
   <title>LinkApp - Organiza tu mundo digital</title>
 
   <link rel="icon" type="image/png" href="logo1.png">
-
-  <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <div class="bg-gif"></div>
-
 
   <script>
     tailwind.config = {
@@ -25,84 +20,105 @@
             text: "#E2E8F0",
             muted: "#94A3B8",
             blue: "#38BDF8",
-            green: "#34D399",
             teal: "#2DD4BF",
           },
         },
       },
     };
   </script>
-
-  <link rel="stylesheet" href="styles.css">
+  
+  <link rel="stylesheet" href="estilos.css" />
+  <style>
+    .gradient-text {
+      background: linear-gradient(90deg, #38BDF8, #2DD4BF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
 </head>
 
-<body class="min-h-screen flex flex-col bg-bg text-text">
-  
-  <header class="border-b border-border sticky top-0 bg-bg z-50">
-  <div class="w-full px-6 h-20 flex items-center justify-between">
+<body class="min-h-screen flex flex-col bg-bg text-text relative">
+  <div class="bg-gif fixed inset-0 -z-10"></div>
 
-    <!-- LOGO TOTALMENTE A LA IZQUIERDA -->
-    <div class="flex items-center">
-      <img src="logo1.png" alt="logo" class="w-12 h-14">
+  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter">LinkApp</span>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+        <div class="flex gap-6 border-r border-border pr-6">
+          <a href="index.html" class="hover:text-blue transition-colors">Inicio</a>
+          <a href="sobre-nosotros.html" class="hover:text-blue transition-colors">Nosotros</a>
+          <a href="contacto.html" class="hover:text-blue transition-colors">Contacto</a>
+        </div>
+        <div class="flex gap-4 items-center">
+          <a href="login.html" class="text-muted hover:text-white transition-colors">Login</a>
+          <a href="registro-correo.html" class="px-4 py-2 bg-blue/10 text-blue border border-blue/20 rounded-lg font-bold hover:bg-blue hover:text-black transition-all">
+            Empezar Gratis
+          </a>
+        </div>
+      </nav>
+      
+      <button class="md:hidden text-white">☰</button>
     </div>
+  </header>
 
-    <!-- NAV -->
-    <nav class="hidden md:flex gap-4 text-sm">
-      <a href="index.html" class="nav-link">Inicio</a>
-      <a href="sobre-nosotros.html" class="nav-link">Sobre nosotros</a>
-      <a href="contacto.html" class="nav-link">Contacto</a>
-      <a href="suscripcion.html" class="nav-link font-semibold text-teal">Suscripción</a>
-      <a href="login.html" class="nav-link font-semibold text-teal">Iniciar sesión</a>
-      <a href="registro-correo.html" class="nav-link font-semibold text-teal">Registro de correo</a>
-    </nav>
-
-  </div>
-</header>
-  <div class="img_principal">
-    <img src="logo1.png" alt="LinkApp Logo" class="w-60 h-60 mx-auto mb-4 drop-shadow-[0_0_10px_rgba(56,189,248,0.3)] object-contain">
-  </div>
   <main class="flex-grow">
+    <section class="text-center pt-20 pb-16 px-6 flex flex-col items-center">
+      <div class="mb-8 animate-pulse">
+        <img src="logo1.png" alt="LinkApp Logo" class="w-40 h-40 drop-shadow-[0_0_25px_rgba(56,189,248,0.4)] object-contain">
+      </div>
 
-    <section class="text-center py-24 px-6 flex flex-col items-center">
-      
-      
-
-      <h1 class="title text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
+      <h1 class="text-5xl md:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
         Organiza tu mundo digital<br>
         <span class="gradient-text">con estilo</span>
       </h1>
 
-      <p class="subtitle text-lg text-white max-w-2xl mb-10">
+      <p class="text-lg text-muted max-w-2xl mb-10 leading-relaxed">
         LinkApp centraliza tus recursos más importantes en un entorno oscuro elegante. 
-        Una plataforma intuitiva diseñada para la eficiencia y la privacidad.
+        Diseñado para la eficiencia, la privacidad y el minimalismo.
       </p>
 
+      <div class="flex gap-4">
+        <a href="registro-correo.html" class="px-8 py-4 bg-blue text-black font-black rounded-xl hover:scale-105 transition-transform shadow-lg shadow-blue/20">
+          Crear mi cuenta
+        </a>
+      </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6 mb-24">
-      <div class="feature-card p-8 bg-surface border border-border rounded-2xl hover:border-blue transition-colors">
+    <section class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8 mb-24">
+      <div class="group p-8 bg-surface border border-border rounded-3xl hover:border-blue/50 transition-all duration-300 hover:-translate-y-2">
+        <div class="text-blue text-3xl mb-4">📂</div>
         <h3 class="text-xl font-bold mb-3 text-white">Organización Inteligente</h3>
-        <p class="text-muted text-sm">Estructura tus enlaces mediante carpetas a las cuales puedas acceder facilmente en cualquier momento.</p>
+        <p class="text-muted text-sm leading-relaxed">Estructura tus enlaces mediante carpetas personalizadas accesibles en un clic.</p>
       </div>
 
-      <div class="feature-card p-8 bg-surface border border-border rounded-2xl hover:border-blue transition-colors">
+      <div class="group p-8 bg-surface border border-border rounded-3xl hover:border-blue/50 transition-all duration-300 hover:-translate-y-2">
+        <div class="text-blue text-3xl mb-4">🌍</div>
         <h3 class="text-xl font-bold mb-3 text-white">Acceso Universal</h3>
-        <p class="text-muted text-sm">Accede a tus colecciones desde cualquier dispositivo. Envia tus enlaces favoritos a tus amigos, comparte tus gustos musicales o peliculas y disfruta de una experiencia comoda para compartir y conocer otros puntos de vista.</p>
+        <p class="text-muted text-sm leading-relaxed">Sincroniza tus colecciones y comparte tus gustos musicales o películas con tus amigos de forma rápida.</p>
       </div>
 
-      <div class="feature-card p-8 bg-surface border border-border rounded-2xl hover:border-blue transition-colors">
+      <div class="group p-8 bg-surface border border-border rounded-3xl hover:border-blue/50 transition-all duration-300 hover:-translate-y-2">
+        <div class="text-blue text-3xl mb-4">🔒</div>
         <h3 class="text-xl font-bold mb-3 text-white">Privacidad Primero</h3>
-        <p class="text-muted text-sm">Tus datos te pertenecen. Sin rastreadores innecesarios y con un entorno diseñado para tu tranquilidad digital. Sientete comodo en tu espacio personal sin necesidad de preocupaciones.</p>
+        <p class="text-muted text-sm leading-relaxed">Sin rastreadores. Tus datos te pertenecen. Un espacio seguro para tu tranquilidad digital.</p>
       </div>
     </section>
-
   </main>
 
-  <footer class="border-t border-border text-center py-[-0,5] text-muted text-sm flex flex-col items-center gap-4">
-    <div class="flex items-center gap-2 grayscale opacity-60">
-      <img src="logo1.png" alt="Logo mini" class="footer-icon">
+  <footer class="border-t border-border py-12 px-6 bg-surface/30">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
+      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
+      <div class="flex gap-8 text-xs text-muted uppercase tracking-widest font-bold">
+        <a href="#" class="hover:text-blue">Privacidad</a>
+        <a href="#" class="hover:text-blue">Términos</a>
+        <a href="#" class="hover:text-blue">Soporte</a>
+      </div>
+      <p class="text-muted/60 text-xs">© 2026 LinkApp. Todos los derechos reservados.</p>
     </div>
-    <p>© 2026 LinkApp. Todos los derechos reservados.</p>
   </footer>
 
   <script src="search.js"></script>
