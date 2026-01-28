@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contacto - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
-  <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -18,99 +17,127 @@
             surface: "#18181b",
             border: "#27272a",
             blue: "#38BDF8",
-            muted: "#a1a1aa"
+            teal: "#2DD4BF",
+            muted: "#94A3B8"
           },
         },
       },
     };
   </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #38BDF8, #2DD4BF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    input, textarea {
+      transition: all 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #38BDF8 !important;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+    }
+  </style>
 </head>
 
-<body class="min-h-screen flex flex-col bg-bg text-white">
+<body class="min-h-screen flex flex-col bg-bg text-text relative">
+  <div class="bg-gif fixed inset-0 -z-10 opacity-20"></div>
 
-  <!-- FONDO GIF -->
-  <div class="bg-gif fixed inset-0 -z-10"></div>
+  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
+      </div>
 
-  <!-- HEADER -->
-  <header class="border-b border-border sticky top-0 bg-bg z-50">
-  <div class="w-full h-20 flex items-center px-6">
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+        <div class="flex gap-6 border-r border-border pr-6">
+          <a href="index.html" class="text-muted hover:text-blue transition-colors">Inicio</a>
+          <a href="sobre-nosotros.html" class="text-muted hover:text-blue transition-colors">Nosotros</a>
+          <a href="contacto.html" class="text-white font-bold">Contacto</a>
+        </div>
+        <div class="flex gap-4 items-center">
+          <a href="index.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-muted hover:text-blue hover:border-blue/50 transition-all text-xs font-bold bg-surface/50">
+            <span>←</span> Volver al Inicio
+          </a>
+        </div>
+      </nav>
+      
+      <button class="md:hidden text-white">☰</button>
+    </div>
+  </header>
 
-    <!-- LOGO PEGADO A LA IZQUIERDA REAL -->
-    <img src="logo1.png" alt="logo" class="w-12 h-14">
+  <main class="flex-grow flex items-center justify-center px-6 py-12 animate-fade-in">
+    <div class="w-full max-w-5xl bg-surface border border-border rounded-[2.5rem] overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-2">
 
-    <!-- NAV PEGADO A LA DERECHA REAL -->
-    <nav class="ml-auto">
-      <a href="index.html" class="nav-link">
-        Volver al inicio
-      </a>
-    </nav>
-
-  </div>
-</header>
-
-  <!-- MAIN -->
-  <main class="flex-grow flex items-center justify-center px-6 py-16">
-    <div class="w-full max-w-5xl bg-surface p-10 rounded-2xl border border-border grid grid-cols-1 md:grid-cols-2 gap-10">
-
-      <!-- INFO -->
-      <div class="flex flex-col justify-center">
-        <h2 class="text-3xl font-bold text-gray-300 mb-4">
-          Contáctanos
+      <div class="p-10 md:p-14 bg-gradient-to-br from-surface to-bg flex flex-col justify-center">
+        <h2 class="text-4xl font-black mb-6 leading-tight text-white">
+          Hablemos de tu <br><span class="gradient-text">Productividad</span>
         </h2>
 
-        <p class="text-muted mb-6">
-          ¿Tienes dudas, sugerencias o necesitas ayuda?  
-          Escríbenos y te responderemos lo antes posible.
+        <p class="text-muted mb-10 leading-relaxed">
+          ¿Tienes dudas, sugerencias o simplemente quieres saludarnos? 
+          Nuestro equipo está listo para escucharte y mejorar tu experiencia en LinkApp.
         </p>
 
-        <div class="space-y-4 text-sm text-muted">
-          <p>📧 contacto@linkapp.com</p>
-          <p>📞 +56 9 1234 5678</p>
-          <p>📍 Chile</p>
+        <div class="space-y-6">
+          <div class="flex items-center gap-4 group">
+            <div class="w-10 h-10 rounded-full bg-blue/10 flex items-center justify-center text-blue group-hover:scale-110 transition-transform">📧</div>
+            <span class="text-sm font-medium">contacto@linkapp.com</span>
+          </div>
+          <div class="flex items-center gap-4 group">
+            <div class="w-10 h-10 rounded-full bg-teal/10 flex items-center justify-center text-teal group-hover:scale-110 transition-transform">📞</div>
+            <span class="text-sm font-medium">+56 9 1234 5678</span>
+          </div>
+          <div class="flex items-center gap-4 group">
+            <div class="w-10 h-10 rounded-full bg-blue/10 flex items-center justify-center text-blue group-hover:scale-110 transition-transform">📍</div>
+            <span class="text-sm font-medium">Santiago, Chile</span>
+          </div>
         </div>
       </div>
 
-      <!-- FORM -->
-      <div>
-        <h3 class="text-xl font-semibold text-gray-300 mb-6">
-          Enviar mensaje
-        </h3>
+      <div class="p-10 md:p-14 bg-surface/50 border-l border-border">
+        <h3 class="text-xl font-bold text-white mb-8">Enviar un mensaje directo</h3>
 
-        <form class="space-y-4">
+        <form class="space-y-5">
           <div>
-            <label class="block text-sm text-gray-400 mb-2">Nombre</label>
-            <input
-              type="text"
-              class="w-full bg-surface border border-border rounded-lg px-4 py-2 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue"
-              placeholder="Tu nombre"
-              required
-            >
+            <label class="block text-[10px] text-muted mb-2 uppercase font-black tracking-widest ml-1">Nombre Completo</label>
+            <input type="text" 
+              class="w-full bg-bg/50 border border-border rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-blue/20"
+              placeholder="Ej: Augusto Soto" required>
           </div>
 
           <div>
-            <label class="block text-sm text-gray-400 mb-2">Email</label>
-            <input
-              type="email"
-              class="w-full bg-surface border border-border rounded-lg px-4 py-2 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue"
-              placeholder="correo@ejemplo.com"
-              required
-            >
+            <label class="block text-[10px] text-muted mb-2 uppercase font-black tracking-widest ml-1">Correo Electrónico</label>
+            <input type="email" 
+              class="w-full bg-bg/50 border border-border rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-blue/20"
+              placeholder="correo@ejemplo.com" required>
           </div>
 
           <div>
-            <label class="block text-sm text-gray-400 mb-2">Mensaje</label>
-            <textarea
-              class="w-full bg-surface border border-border rounded-lg px-4 py-2 text-gray-300 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue"
-              placeholder="¿En qué podemos ayudarte?"
-              required
-            ></textarea>
+            <label class="block text-[10px] text-muted mb-2 uppercase font-black tracking-widest ml-1">Tu Mensaje</label>
+            <textarea 
+              class="w-full bg-bg/50 border border-border rounded-xl px-4 py-3 text-white h-32 resize-none outline-none focus:ring-2 focus:ring-blue/20"
+              placeholder="Cuéntanos en qué podemos ayudarte..." required></textarea>
           </div>
 
-          <button
-            type="submit"
-            class="w-full bg-blue text-black font-semibold py-2 rounded-lg hover:opacity-90 transition"
-          >
-            Enviar mensaje
+          <button type="submit"
+            class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20">
+            ENVIAR MENSAJE
           </button>
         </form>
       </div>
@@ -118,12 +145,16 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-border text-center py-[-0,5] text-muted text-sm flex flex-col items-center gap-4">
-    <div class="flex items-center gap-2 grayscale opacity-60">
-      <img src="logo1.png" alt="Logo mini" class="footer-icon">
+  <footer class="border-t border-border py-12 px-6 bg-surface/30">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
+      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
+      <div class="flex gap-8 text-xs text-muted uppercase tracking-widest font-bold">
+        <a href="#" class="hover:text-blue">Privacidad</a>
+        <a href="#" class="hover:text-blue">Términos</a>
+        <a href="#" class="hover:text-blue">Soporte</a>
+      </div>
+      <p class="text-muted/60 text-xs font-medium">© 2026 LinkApp. Todos los derechos reservados.</p>
     </div>
-    <p>© 2026 LinkApp. Todos los derechos reservados.</p>
   </footer>
 
 </body>
