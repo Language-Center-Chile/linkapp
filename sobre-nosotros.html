@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sobre Nosotros - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
-  <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <div class="bg-gif"></div>
 
   <script>
     tailwind.config = {
@@ -21,55 +19,143 @@
             text: "#E2E8F0",
             muted: "#94A3B8",
             blue: "#38BDF8",
-            green: "#34D399",
+            teal: "#2DD4BF",
           },
         },
       },
     };
   </script>
 
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #38BDF8, #2DD4BF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-<!-- <a href="index.html" class="nav-link text-sm">Volver al inicio</a> -->
+    .animate-fade-in {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .team-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .team-card:hover {
+      border-color: #38BDF8;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.2);
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col bg-bg text-text">
-  <header class="border-b border-border sticky top-0 bg-bg z-50">
-  <div class="w-full h-20 flex items-center px-6">
 
-    <!-- LOGO IZQUIERDA REAL -->
-    <img src="logo1.png" alt="logo" class="w-12 h-14">
+<body class="min-h-screen flex flex-col bg-bg text-text relative">
+  <div class="bg-gif fixed inset-0 -z-10 opacity-20"></div>
 
-    <!-- NAV DERECHA REAL -->
-    <nav class="ml-auto hidden md:flex items-center gap-6">
-      <a href="index.html" class="nav-link text-sm">
-        Volver al inicio
-      </a>
-    </nav>
+  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
+      </div>
 
-  </div>
-</header>
-  <main class="flex-grow max-w-4xl mx-auto px-6 py-16">
-    <section class="text-center mb-16">
-      <h1 class="title">Nuestra <span class="gradient-text">Misión</span></h1>
-      <p class="subtitle">Simplificar la forma en que interactúas con la web, un enlace a la vez.</p>
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+        <div class="flex gap-6 border-r border-border pr-6">
+          <a href="index.html" class="text-muted hover:text-blue transition-colors">Inicio</a>
+          <a href="sobre-nosotros.html" class="text-white font-bold">Nosotros</a>
+          <a href="contacto.html" class="text-muted hover:text-blue transition-colors">Contacto</a>
+        </div>
+        <div class="flex gap-4 items-center">
+          <a href="index.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-muted hover:text-blue hover:border-blue/50 transition-all text-xs font-bold bg-surface/50">
+            <span>←</span> Volver al Inicio
+          </a>
+        </div>
+      </nav>
+      
+      <button class="md:hidden text-white">☰</button>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-6xl mx-auto px-6 py-16 animate-fade-in">
+    
+    <section class="text-center mb-20">
+      <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight">Nuestra <span class="gradient-text">Misión</span></h1>
+      <p class="text-muted text-lg max-w-2xl mx-auto leading-relaxed">
+        Simplificar la forma en que interactúas con la web, un enlace a la vez. Creamos herramientas para los que valoran el orden y la estética.
+      </p>
     </section>
 
-    <div class="grid md:grid-cols-2 gap-8">
-      <div class="feature-card">
-        <h3 class="text-blue mb-4">¿Quiénes somos?</h3>
-        <p>Somos LinkTeam, un equipo especializado en la creacion de paginas web con nuestro principal sitio LinkApp. Tenemos una filosofia libre de trabajo basada en la libertad de tareas e ideas, trabajamos en equipo para solucionar rapidamente los problemas del sitio web y escuchamos abiertamente las ideas de nuestros usuarios.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-24">
+      <div class="p-8 bg-surface border border-border rounded-[2rem] hover:border-blue/30 transition-colors">
+        <h3 class="text-blue text-2xl font-bold mb-4 flex items-center gap-2">
+          <span>🚀</span> ¿Quiénes somos?
+        </h3>
+        <p class="text-muted leading-relaxed">
+          Somos <strong>LinkTeam</strong>, un equipo apasionado por el desarrollo web. LinkApp nace de nuestra filosofía de trabajo basada en la libertad creativa y la resolución rápida de problemas, escuchando siempre a nuestra comunidad.
+        </p>
       </div>
-      <div class="feature-card">
-        <h3 class="text-green mb-4">Nuestra Visión</h3>
-        <p>Queremos convertirnos en el centro de comando de tu navegador, ofreciendo una experiencia limpia, rápida y sobre todo, privada.</p>
+      <div class="p-8 bg-surface border border-border rounded-[2rem] hover:border-teal/30 transition-colors">
+        <h3 class="text-teal text-2xl font-bold mb-4 flex items-center gap-2">
+          <span>👁️</span> Nuestra Visión
+        </h3>
+        <p class="text-muted leading-relaxed">
+          Queremos convertirnos en el centro de comando de tu navegador, ofreciendo una experiencia limpia, rápida y, sobre todo, privada. Tu productividad merece un entorno libre de distracciones.
+        </p>
       </div>
     </div>
+
+    <section>
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-black uppercase tracking-widest text-white">El <span class="text-blue">Equipo</span></h2>
+        <div class="h-1.5 w-16 bg-gradient-to-r from-blue to-teal mx-auto mt-4 rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="team-card p-8 bg-surface border border-border rounded-3xl text-center">
+          <div class="w-20 h-20 bg-blue/10 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl border border-blue/20">👨‍💻</div>
+          <h4 class="font-bold text-white text-lg leading-tight">Augusto Soto</h4>
+          <p class="text-blue text-[10px] font-black uppercase tracking-widest mt-2">Frontend & Backend</p>
+        </div>
+
+        <div class="team-card p-8 bg-surface border border-border rounded-3xl text-center">
+          <div class="w-20 h-20 bg-blue/10 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl border border-blue/20">💻</div>
+          <h4 class="font-bold text-white text-lg leading-tight">Matias Lara</h4>
+          <p class="text-blue text-[10px] font-black uppercase tracking-widest mt-2">Frontend Developer</p>
+        </div>
+
+        <div class="team-card p-8 bg-surface border border-border rounded-3xl text-center">
+          <div class="w-20 h-20 bg-teal/10 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl border border-teal/20">🎨</div>
+          <h4 class="font-bold text-white text-lg leading-tight">Joaquín Navia</h4>
+          <p class="text-teal text-[10px] font-black uppercase tracking-widest mt-2">Diseño UI/UX</p>
+        </div>
+
+        <div class="team-card p-8 bg-surface border border-border rounded-3xl text-center">
+          <div class="w-20 h-20 bg-teal/10 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl border border-teal/20">✨</div>
+          <h4 class="font-bold text-white text-lg leading-tight">Valentina San Martín</h4>
+          <p class="text-teal text-[10px] font-black uppercase tracking-widest mt-2">Diseño Creativo</p>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer class="border-t border-border text-center py-[-0,5] text-muted text-sm flex flex-col items-center gap-4">
-    <div class="flex items-center gap-2 grayscale opacity-60">
-      <img src="logo1.png" alt="Logo mini" class="footer-icon">
+  <footer class="border-t border-border py-12 px-6 bg-surface/30">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
+      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
+      <div class="flex gap-8 text-xs text-muted uppercase tracking-widest font-bold">
+        <a href="#" class="hover:text-blue">Privacidad</a>
+        <a href="#" class="hover:text-blue">Términos</a>
+        <a href="#" class="hover:text-blue">Soporte</a>
+      </div>
+      <p class="text-muted/60 text-xs font-medium">© 2026 LinkApp. Todos los derechos reservados.</p>
     </div>
-    <p>© 2026 LinkApp. Todos los derechos reservados.</p>
   </footer>
+
 </body>
 </html>
