@@ -4,11 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestor LinkApp</title>
+  <title>Gestor - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
-  <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <div class="bg-gif"></div>
 
   <script>
     tailwind.config = {
@@ -20,6 +18,7 @@
             surface: "#18181b",
             border: "#27272a",
             blue: "#38BDF8",
+            teal: "#2DD4BF",
             text: "#E2E8F0",
             muted: "#94A3B8"
           }
@@ -33,219 +32,181 @@
   </script>
 
   <style>
+    body { font-family: 'Inter', sans-serif; }
     .hidden { display: none; }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #38BDF8, #2DD4BF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .folder-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      background-color: rgba(24, 24, 27, 0.7);
+    }
+
+    .folder-card:hover {
+      border-color: #38BDF8;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Scrollbar minimalista */
+    .custom-scroll::-webkit-scrollbar { width: 4px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #38BDF8; }
+
+    /* Modal Share */
+    .share-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(4px); display: flex; align-items: center;
+      justify-content: center; z-index: 100;
+    }
+    .share-box {
+      background: #18181b; border: 1px solid #27272a;
+      padding: 2rem; border-radius: 2rem; width: 100%; max-width: 400px;
+    }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col bg-bg text-text">
+<body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
+  <div class="bg-gif fixed inset-0 -z-10 opacity-20"></div>
 
-<header class="border-b border-border sticky top-0 bg-bg z-50">
-  <div class="w-full px-6 h-20 flex items-center">
-    
-    <img src="logo1.png" alt="logo" class="w-12 h-14">
-
-    <div class="ml-auto flex items-center gap-4 relative">
-      
-      <div class="text-right">
-        <p id="userNicknameDisplay" class="text-lg font-bold text-white leading-none">Cargando...</p>
-        <button onclick="logout()" class="text-[10px] text-red-400 hover:underline uppercase tracking-widest mt-1">
-          Cerrar Sesión
-        </button>
+  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
       </div>
 
-      <!-- AVATAR + MENU -->
-      <div class="relative">
-        <button onclick="toggleUserMenu()" 
-          class="w-14 h-14 rounded-full border-2 border-border bg-surface overflow-hidden shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-          
-          <img id="userAvatarDisplay" src="" alt="Perfil"
-            class="w-full h-full object-cover hidden">
-          
-          <div id="avatarFallback"
-            class="w-full h-full flex items-center justify-center bg-blue/10 text-blue text-xl font-bold">
-            ?
-          </div>
-        </button>
-
-        <div id="userDropdown"
-          class="hidden absolute right-0 mt-3 w-56 bg-surface border border-border rounded-xl shadow-xl overflow-hidden z-50 text-sm">
-
-          <div class="px-4 py-3 border-b border-border">
-            <p class="text-xs text-muted">Conectado como</p>
-            <p id="userNicknameMenu" class="font-bold text-white truncate">Usuario</p>
-          </div>
-
-          <a href="perfil.html" class="block px-4 py-2 text-muted hover:bg-border hover:text-white transition">
-            👤 Ver perfil
-          </a>
-
-          <a href="suscripcion.html" class="block px-4 py-2 text-muted hover:bg-border hover:text-white transition">
-            💳 Suscripción
-          </a>
-
-          <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/10 transition">
-            🚪 Cerrar sesión
+      <div class="flex items-center gap-5">
+        <div class="text-right hidden sm:block">
+          <p id="userNicknameDisplay" class="text-sm font-black text-white leading-none">Usuario</p>
+          <button onclick="logout()" class="text-[9px] text-red-400 hover:text-red-300 uppercase tracking-widest mt-1 font-bold">
+            Desconectar
           </button>
         </div>
+
+        <div class="relative">
+          <button onclick="toggleUserMenu()" 
+            class="w-12 h-12 rounded-full border-2 border-border bg-surface overflow-hidden hover:border-blue transition-all shadow-lg active:scale-95">
+            <img id="userAvatarDisplay" src="" alt="Perfil" class="w-full h-full object-cover hidden">
+            <div id="avatarFallback" class="w-full h-full flex items-center justify-center bg-blue/10 text-blue font-bold">?</div>
+          </button>
+
+          <div id="userDropdown" class="hidden absolute right-0 mt-3 w-56 bg-surface border border-border rounded-2xl shadow-2xl overflow-hidden z-50 animate-fade-in">
+            <div class="px-4 py-4 border-b border-border bg-bg/20">
+              <p class="text-[10px] text-muted uppercase font-black tracking-widest">Cuenta</p>
+              <p id="userNicknameMenu" class="font-bold text-white truncate">Usuario</p>
+            </div>
+            <div class="p-2">
+              <a href="registro-perfil.html" class="flex items-center gap-3 px-3 py-2 text-sm text-muted hover:bg-bg hover:text-blue rounded-xl transition">
+                <span>👤</span> Editar Perfil
+              </a>
+              <button onclick="logout()" class="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-xl transition">
+                <span>🚪</span> Cerrar sesión
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-12 w-full flex-grow">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+      <div>
+        <h1 class="text-4xl font-black tracking-tight text-white mb-2">Mis <span class="gradient-text">Colecciones</span></h1>
+        <p class="text-muted text-sm font-medium">Gestiona y comparte tus espacios de trabajo digitales.</p>
+      </div>
+      <button onclick="nuevaCarpeta()" 
+        class="px-8 py-3 bg-blue hover:bg-blue/90 text-black font-black rounded-xl transition-all shadow-lg shadow-blue/20 active:scale-95 uppercase tracking-widest text-xs">
+        + Nueva Carpeta
+      </button>
+    </div>
+
+    <div id="folderGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      </div>
+  </main>
+
+  <div id="shareModal" class="share-overlay hidden">
+    <div class="share-box animate-success">
+      <h3 class="text-xl font-black text-white mb-6 text-center tracking-tight">Compartir <span class="text-blue">Carpeta</span></h3>
+
+      <div class="grid grid-cols-2 gap-3 mb-8">
+        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-green-500/50 transition-colors" onclick="shareWhatsApp()">
+          <span class="text-2xl">📱</span> <span class="text-[10px] font-bold uppercase tracking-widest">WhatsApp</span>
+        </button>
+        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-blue-500/50 transition-colors" onclick="shareFacebook()">
+          <span class="text-2xl">🔵</span> <span class="text-[10px] font-bold uppercase tracking-widest">Facebook</span>
+        </button>
+        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-sky-500/50 transition-colors" onclick="shareTelegram()">
+          <span class="text-2xl">✈️</span> <span class="text-[10px] font-bold uppercase tracking-widest">Telegram</span>
+        </button>
+        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-white/50 transition-colors" onclick="copyShare()">
+          <span class="text-2xl">🔗</span> <span class="text-[10px] font-bold uppercase tracking-widest">Copiar</span>
+        </button>
       </div>
 
+      <button class="w-full py-3 text-muted text-xs font-black uppercase tracking-widest hover:text-white transition" onclick="cerrarShare()">
+        Cerrar ventana
+      </button>
     </div>
   </div>
-</header>
 
-<main class="max-w-6xl mx-auto px-6 py-12 w-full">
-  <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-    <div>
-      <h1 class="text-3xl font-bold">Mis <span class="gradient-text">Colecciones</span></h1>
-      <p class="text-muted text-sm">Organiza, busca y comparte tus carpetas de enlaces.</p>
+  <footer class="border-t border-border py-10 bg-surface/30">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col items-center gap-4">
+      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40">
+      <p class="text-muted/40 text-[10px] uppercase tracking-[0.3em] font-medium">© 2026 LinkApp Environment</p>
     </div>
-    <button onclick="nuevaCarpeta()" class="btn btn-primary px-6 py-2">+ Crear Carpeta</button>
-  </div>
+  </footer>
 
-  <div id="folderGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-</main>
+  <script>
+    /* ================= LÓGICA DE USUARIO ================= */
+    window.addEventListener('load', function() {
+      const nick = localStorage.getItem('userNickname') || 'Usuario';
+      const avatar = localStorage.getItem('userAvatar');
 
-<!-- MODAL COMPARTIR -->
-<div id="shareModal" class="share-overlay hidden">
-  <div class="share-box">
-    <h3 class="share-title">Compartir carpeta</h3>
+      document.getElementById('userNicknameDisplay').textContent = nick;
+      document.getElementById('userNicknameMenu').textContent = nick;
 
-    <div class="share-grid">
-      <button class="share-btn whatsapp" onclick="shareWhatsApp()">WhatsApp</button>
-      <button class="share-btn facebook" onclick="shareFacebook()">Facebook</button>
-      <button class="share-btn telegram" onclick="shareTelegram()">Telegram</button>
-      <button class="share-btn copy" onclick="copyShare()">Copiar</button>
-    </div>
+      const avatarImg = document.getElementById('userAvatarDisplay');
+      const fallback = document.getElementById('avatarFallback');
 
-    <button class="share-cancel" onclick="cerrarShare()">Cancelar</button>
-  </div>
-</div>
+      if (avatar) {
+        avatarImg.src = avatar;
+        avatarImg.classList.remove('hidden');
+        fallback.classList.add('hidden');
+      } else {
+        fallback.textContent = nick.charAt(0).toUpperCase();
+      }
+    });
 
-<script>
-/* ================= USUARIO ================= */
-window.addEventListener('load', function() {
-  const nick = localStorage.getItem('userNickname') || 'Usuario';
-  const avatar = localStorage.getItem('userAvatar');
-
-  document.getElementById('userNicknameDisplay').textContent = nick;
-  document.getElementById('userNicknameMenu').textContent = nick;
-
-  const avatarImg = document.getElementById('userAvatarDisplay');
-  const fallback = document.getElementById('avatarFallback');
-
-  if (avatar) {
-    avatarImg.src = avatar;
-    avatarImg.classList.remove('hidden');
-    fallback.classList.add('hidden');
-  } else {
-    fallback.textContent = nick.charAt(0).toUpperCase();
-  }
-});
-
-function toggleUserMenu() {
-  document.getElementById("userDropdown").classList.toggle("hidden");
-}
-
-window.addEventListener("click", function(e) {
-  if (!e.target.closest("#userDropdown") && !e.target.closest("button[onclick='toggleUserMenu()']")) {
-    document.getElementById("userDropdown").classList.add("hidden");
-  }
-});
-
-function logout() {
-  localStorage.removeItem('isLoggedIn');
-  window.location.href = 'login.html';
-}
-
-/* ================= SISTEMA DE CARPETAS ================= */
-let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
-let textoCompartir = "";
-
-function guardarYRenderizar() {
-  localStorage.setItem('carpetas', JSON.stringify(carpetas));
-  renderCarpetas();
-}
-
-function nuevaCarpeta() {
-  const n = prompt("Nombre de la nueva colección:");
-  if (n) {
-    carpetas.push({ nombre: n, links: [] });
-    guardarYRenderizar();
-  }
-}
-
-function eliminarCarpeta(i) {
-  if (confirm("¿Eliminar carpeta definitivamente?")) {
-    carpetas.splice(i, 1);
-    guardarYRenderizar();
-  }
-}
-
-function agregarEnlace(i) {
-  const l = prompt("Pega la URL del enlace:");
-  if (l) {
-    carpetas[i].links.push(l.startsWith('http') ? l : `https://${l}`);
-    guardarYRenderizar();
-  }
-}
-
-function eliminarEnlace(fi, li) {
-  carpetas[fi].links.splice(li, 1);
-  guardarYRenderizar();
-}
-
-function filtrarLinks(input, folderIndex) {
-  const filtro = input.value.toLowerCase();
-  const listaLinks = document.getElementById(`links-container-${folderIndex}`);
-  const items = listaLinks.getElementsByClassName('link-wrapper');
-
-  Array.from(items).forEach(item => {
-    const texto = item.getAttribute('data-url').toLowerCase();
-    item.style.display = texto.includes(filtro) ? 'flex' : 'none';
-  });
-}
-
-/* ================= COMPARTIR ================= */
-function abrirCompartir(index) {
-      const carpeta = carpetas[index];
-      
-      // Recuperamos el nickname del localStorage
-      const nickname = localStorage.getItem('userNickname') || localStorage.getItem('linkapp_nick') || 'Un usuario';
-      
-      // Construimos el mensaje con el emoji de carpeta al inicio y tu mensaje personalizado
-      textoCompartir = 
-        `El usuario ${nickname} compartió ésta carpeta de enlaces usando LinkApp\n\n` +
-        `📁 Carpeta: ${carpeta.nombre}\n` +
-        `---------------------------\n` +
-        carpeta.links.map((l, i) => `${i + 1}. ${l}`).join('\n');
-
-      // Abrimos el modal con las opciones de redes sociales
-      document.getElementById("shareModal").classList.remove("hidden");
+    function toggleUserMenu() {
+      document.getElementById("userDropdown").classList.toggle("hidden");
     }
 
-    function cerrarShare() {
-      document.getElementById("shareModal").classList.add("hidden");
+    window.addEventListener("click", function(e) {
+      if (!e.target.closest("#userDropdown") && !e.target.closest("button[onclick='toggleUserMenu()']")) {
+        document.getElementById("userDropdown").classList.add("hidden");
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      window.location.href = 'login.html';
     }
 
-    function shareWhatsApp() {
-      window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`);
-      cerrarShare();
-    }
+    /* ================= SISTEMA DE CARPETAS (LÓGICA INTACTA) ================= */
+    let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
+    let textoCompartir = "";
 
-    function shareFacebook() {
-      window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textoCompartir)}`);
-      cerrarShare();
-    }
-
-    function shareTelegram() {
-      window.open(`https://t.me/share/url?text=${encodeURIComponent(textoCompartir)}`);
-      cerrarShare();
-    }
-
-    function copyShare() {
-      navigator.clipboard.writeText(textoCompartir);
-      alert("Copiado ✔");
-      cerrarShare();
+    function guardarYRenderizar() {
+      localStorage.setItem('carpetas', JSON.stringify(carpetas));
+      renderCarpetas();
     }
 
     function renderCarpetas() {
@@ -253,49 +214,56 @@ function abrirCompartir(index) {
 
       if (carpetas.length === 0) {
         grid.innerHTML = `
-          <p class="col-span-full text-center text-muted py-10 border-2 border-dashed border-border rounded-xl">
-            No tienes carpetas aún.
-          </p>`;
+          <div class="col-span-full flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-[2.5rem] bg-surface/20">
+            <span class="text-4xl mb-4 opacity-20">📁</span>
+            <p class="text-muted font-bold uppercase tracking-widest text-xs">Tu biblioteca está vacía</p>
+          </div>`;
         return;
       }
 
       grid.innerHTML = carpetas.map((folder, fIndex) => `
-        <div class="feature-card border border-border bg-surface rounded-xl p-5 flex flex-col h-full">
-          <div class="flex justify-between items-start mb-4">
+        <div class="folder-card border border-border rounded-[2rem] p-6 flex flex-col h-full overflow-hidden">
+          <div class="flex justify-between items-start mb-6">
             <div>
-              <h3 class="text-lg font-bold text-blue">${folder.nombre}</h3>
-              <span class="text-[10px] text-muted uppercase tracking-widest">${folder.links.length} enlaces</span>
+              <h3 class="text-xl font-black text-white leading-tight mb-1">${folder.nombre}</h3>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue animate-pulse"></span>
+                <span class="text-[10px] text-muted uppercase font-black tracking-tighter">${folder.links.length} Elementos</span>
+              </div>
             </div>
             <div class="flex gap-2">
-              <button onclick="abrirCompartir(${fIndex})">📤</button>
-              <button onclick="eliminarCarpeta(${fIndex})" class="text-red-500">🗑</button>
+              <button onclick="abrirCompartir(${fIndex})" class="w-8 h-8 flex items-center justify-center bg-surface border border-border rounded-lg hover:border-blue transition-colors text-xs">📤</button>
+              <button onclick="eliminarCarpeta(${fIndex})" class="w-8 h-8 flex items-center justify-center bg-surface border border-border rounded-lg hover:border-red-500 transition-colors text-xs text-red-400">🗑</button>
             </div>
           </div>
 
-          <input type="text" oninput="filtrarLinks(this, ${fIndex})"
-            placeholder="Buscar en esta carpeta..."
-            class="w-full bg-bg border border-border text-[11px] p-2 rounded mb-3">
+          <div class="relative mb-4">
+            <input type="text" oninput="filtrarLinks(this, ${fIndex})"
+              placeholder="Buscar enlace..."
+              class="w-full bg-bg/50 border border-border text-[11px] p-3 rounded-xl focus:border-blue/50 outline-none transition-all placeholder:text-muted/30">
+          </div>
 
-          <div id="links-container-${fIndex}" class="space-y-2 mb-4 flex-grow overflow-y-auto max-h-48 pr-1">
+          <div id="links-container-${fIndex}" class="space-y-2 mb-6 flex-grow overflow-y-auto max-h-56 pr-2 custom-scroll">
             ${folder.links.map((link, lIndex) => `
-              <div class="link-wrapper flex justify-between items-center bg-bg/40 p-2 rounded text-xs"
+              <div class="link-wrapper flex justify-between items-center bg-bg/40 border border-border/50 p-3 rounded-xl group hover:bg-bg transition-colors"
                 data-url="${link}">
-                <a href="${link}" target="_blank" class="truncate max-w-[85%] text-muted hover:text-white">
-                  ${link}
+                <a href="${link}" target="_blank" class="truncate text-[11px] font-medium text-muted group-hover:text-blue transition-colors max-w-[80%]">
+                  ${link.replace('https://', '').replace('http://', '')}
                 </a>
-                <button onclick="eliminarEnlace(${fIndex}, ${lIndex})" class="text-red-400">✕</button>
+                <button onclick="eliminarEnlace(${fIndex}, ${lIndex})" class="text-red-400/50 hover:text-red-400 text-[10px] transition-colors">✕</button>
               </div>
             `).join('')}
           </div>
 
           <button onclick="agregarEnlace(${fIndex})"
-            class="w-full py-2 bg-blue/10 text-blue border border-blue/20 rounded-md font-bold text-xs">
-            + Añadir Link
+            class="w-full py-3 bg-blue/5 hover:bg-blue/10 text-blue border border-blue/10 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">
+            + Añadir Enlace
           </button>
         </div>
       `).join('');
     }
 
+    /* ================= FUNCIONES DE CARPETA ================= */
     function nuevaCarpeta() {
       const n = prompt("Nombre de la nueva colección:");
       if (n) {
@@ -324,27 +292,57 @@ function abrirCompartir(index) {
       guardarYRenderizar();
     }
 
+    function filtrarLinks(input, folderIndex) {
+      const filtro = input.value.toLowerCase();
+      const listaLinks = document.getElementById(`links-container-${folderIndex}`);
+      const items = listaLinks.getElementsByClassName('link-wrapper');
+
+      Array.from(items).forEach(item => {
+        const texto = item.getAttribute('data-url').toLowerCase();
+        item.style.display = texto.includes(filtro) ? 'flex' : 'none';
+      });
+    }
+
+    /* ================= COMPARTIR ================= */
+    function abrirCompartir(index) {
+      const carpeta = carpetas[index];
+      const nickname = localStorage.getItem('userNickname') || 'Un usuario';
+      
+      textoCompartir = 
+        `El usuario ${nickname} compartió esta carpeta de enlaces usando LinkApp\n\n` +
+        `📁 Carpeta: ${carpeta.nombre}\n` +
+        `---------------------------\n` +
+        carpeta.links.map((l, i) => `${i + 1}. ${l}`).join('\n');
+
+      document.getElementById("shareModal").classList.remove("hidden");
+    }
+
+    function cerrarShare() {
+      document.getElementById("shareModal").classList.add("hidden");
+    }
+
+    function shareWhatsApp() {
+      window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`);
+      cerrarShare();
+    }
+
+    function shareFacebook() {
+      window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textoCompartir)}`);
+      cerrarShare();
+    }
+
+    function shareTelegram() {
+      window.open(`https://t.me/share/url?text=${encodeURIComponent(textoCompartir)}`);
+      cerrarShare();
+    }
+
+    function copyShare() {
+      navigator.clipboard.writeText(textoCompartir);
+      alert("Copiado al portapapeles ✔");
+      cerrarShare();
+    }
+
     renderCarpetas();
   </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const nickGuardado = localStorage.getItem('linkapp_nick');
-        const fotoGuardada = localStorage.getItem('linkapp_foto');
-
-        if (nickGuardado) {
-            document.getElementById('display-nick').textContent = nickGuardado;
-        } else {
-            document.getElementById('display-nick').textContent = "Invitado";
-        }
-
-        if (fotoGuardada) {
-            document.getElementById('display-foto').src = fotoGuardada;
-        } else {
-            // Imagen por defecto si no hay foto
-            document.getElementById('display-foto').src = "https://via.placeholder.com/40";
-        }
-    });
-</script>
-
 </body>
 </html>
