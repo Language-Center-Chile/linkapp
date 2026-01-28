@@ -399,3 +399,50 @@ a.nav-link {
   border-color: #38BDF8;
   box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
 }
+
+.bg-gif {
+    background: #000000;
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
+}
+
+.bg-gif::before, .bg-gif::after {
+    content: "";
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15; /* Controla la intensidad aquí */
+    z-index: -1;
+    animation: moveGradient 20s infinite alternate;
+}
+
+/* Esfera Azul */
+.bg-gif::before {
+    background: #38BDF8;
+    top: -200px;
+    left: -200px;
+}
+
+/* Esfera Teal */
+.bg-gif::after {
+    background: #2DD4BF;
+    bottom: -200px;
+    right: -200px;
+    animation-delay: -10s;
+}
+
+@keyframes moveGradient {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(100px, 200px) scale(1.2);
+    }
+    100% {
+        transform: translate(-50px, -100px) scale(1);
+    }
+}
