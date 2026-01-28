@@ -48,39 +48,46 @@
       backdrop-filter: blur(10px);
       background-color: rgba(24, 24, 27, 0.8);
     }
-
-    input:focus {
-      border-color: #38BDF8 !important;
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
-    }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text relative overflow-hidden">
-  <div class="bg-gif fixed inset-0 -z-10 opacity-30 scale-110"></div>
+  <div class="bg-gif fixed inset-0 -z-10 opacity-30"></div>
 
-  <header class="w-full border-b border-border bg-bg/50 backdrop-blur-md">
+  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <img src="logo1.png" alt="logo" class="w-10 h-12">
         <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
       </div>
-      <a href="index.html" class="text-xs font-bold text-muted hover:text-blue transition-colors uppercase tracking-widest">
-        Volver al inicio
-      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+        <div class="flex gap-6 border-r border-border pr-6 text-muted">
+          <a href="index.html" class="hover:text-blue transition-colors">Inicio</a>
+          <a href="sobre-nosotros.html" class="hover:text-blue transition-colors">Nosotros</a>
+          <a href="contacto.html" class="hover:text-blue transition-colors">Contacto</a>
+        </div>
+        <div class="flex gap-4 items-center">
+          <a href="index.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-muted hover:text-blue hover:border-blue/50 transition-all text-xs font-bold bg-surface/50">
+            <span>←</span> Volver al Inicio
+          </a>
+        </div>
+      </nav>
+      
+      <button class="md:hidden text-white">☰</button>
     </div>
   </header>
 
-  <main class="flex-grow flex items-center justify-center px-6">
+  <main class="flex-grow flex items-center justify-center px-6 py-12">
     <div class="w-full max-w-md login-card p-10 rounded-[2.5rem] border border-border shadow-2xl animate-fade-in">
       
       <div class="text-center mb-10">
-        <div class="mb-6 relative inline-block">
-          <img src="logo1.png" alt="LinkApp Logo" class="w-24 h-28 mx-auto drop-shadow-[0_0_20px_rgba(56,189,248,0.4)] object-contain">
+        <div class="mb-6">
+          <img src="logo1.png" alt="LinkApp Logo" class="w-20 h-24 mx-auto drop-shadow-[0_0_20px_rgba(56,189,248,0.4)] object-contain">
         </div>
         
-        <h2 class="text-3xl font-black text-white tracking-tight">Bienvenido <span class="gradient-text">de nuevo</span></h2>
-        <p class="text-muted text-sm mt-3 font-medium">Ingresa tus credenciales para continuar</p>
+        <h2 class="text-3xl font-black text-white tracking-tight">Acceder</h2>
+        <p class="text-muted text-sm mt-3 font-medium">Gestiona tu mundo digital</p>
       </div>
       
       <form id="loginForm" class="space-y-6">
@@ -89,8 +96,8 @@
           <div class="relative group">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors">👤</span>
             <input type="text" id="username" 
-              class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all placeholder:text-muted/30" 
-              placeholder="nombre_usuario" required>
+              class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all focus:border-blue/50" 
+              placeholder="tu_usuario" required>
           </div>
         </div>
         
@@ -99,41 +106,36 @@
           <div class="relative group">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors">🔑</span>
             <input type="password" id="password" 
-              class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all placeholder:text-muted/30" 
+              class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all focus:border-blue/50" 
               placeholder="••••••••" required>
           </div>
         </div>
 
         <button type="submit" 
           class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 mt-4 uppercase tracking-widest text-sm">
-          Iniciar Sesión
+          ENTRAR AHORA
         </button>
       </form>
 
       <div class="mt-8 text-center">
         <p class="text-sm text-muted">
-          ¿No tienes una cuenta? 
-          <a href="registro-correo.html" class="text-blue font-bold hover:underline">Regístrate</a>
+          ¿Nuevo en LinkApp? 
+          <a href="registro-correo.html" class="text-blue font-bold hover:underline">Crea una cuenta</a>
         </p>
       </div>
     </div>
   </main>
 
-  <footer class="py-8 text-center">
+  <footer class="border-t border-border py-8 text-center bg-surface/30">
     <p class="text-muted/40 text-[10px] uppercase tracking-[0.3em]">© 2026 LinkApp Digital Environment</p>
   </footer>
 
   <script>
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      
-      const username = document.getElementById('username').value;
-      
-      // Guardamos el estado de la sesión
+      const user = document.getElementById('username').value;
       localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userNickname', username); // Para que aparezca en el perfil
-      
-      // Animación de salida opcional (puedes añadirla luego)
+      localStorage.setItem('userNickname', user);
       window.location.href = 'registro-perfil.html';
     });
   </script>

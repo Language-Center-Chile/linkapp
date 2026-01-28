@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro de Correo - LinkApp</title>
+  <title>Registro - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
-  <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -18,112 +17,138 @@
             surface: "#18181b",
             border: "#27272a",
             blue: "#38BDF8",
-            muted: "#a1a1aa"
+            teal: "#2DD4BF",
+            text: "#E2E8F0",
+            muted: "#94A3B8"
           },
         },
       },
     };
   </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #38BDF8, #2DD4BF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .glass-card {
+      backdrop-filter: blur(10px);
+      background-color: rgba(24, 24, 27, 0.8);
+    }
+  </style>
 </head>
 
-<body class="min-h-screen flex flex-col bg-bg text-white">
+<body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
+  <div class="bg-gif fixed inset-0 -z-10 opacity-30"></div>
 
-  <!-- FONDO GIF -->
-  <div class="bg-gif fixed inset-0 -z-10"></div>
+  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
+      </div>
 
-  <!-- HEADER -->
-  <header class="border-b border-border sticky top-0 bg-bg z-50">
-    <div class="w-full h-20 flex items-center px-6">
-
-      <!-- LOGO IZQUIERDA -->
-      <img src="logo1.png" alt="logo" class="w-[50px] h-[60px]">
-
-      <!-- NAV DERECHA -->
-      <nav class="ml-auto">
-        <a href="index.html" class="nav-link">
-          Volver al inicio
-        </a>
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+        <div class="flex gap-6 border-r border-border pr-6 text-muted">
+          <a href="index.html" class="hover:text-blue transition-colors">Inicio</a>
+          <a href="sobre-nosotros.html" class="hover:text-blue transition-colors">Nosotros</a>
+          <a href="contacto.html" class="hover:text-blue transition-colors">Contacto</a>
+        </div>
+        <div class="flex gap-4 items-center">
+          <a href="index.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-muted hover:text-blue hover:border-blue/50 transition-all text-xs font-bold bg-surface/50">
+            <span>←</span> Volver al Inicio
+          </a>
+        </div>
       </nav>
-
+      
+      <button class="md:hidden text-white">☰</button>
     </div>
   </header>
 
-  <!-- MAIN -->
-  <main class="flex-grow flex items-center justify-center px-6 py-16">
-    <div class="w-full max-w-md bg-surface p-10 rounded-2xl border border-border">
+  <main class="flex-grow flex items-center justify-center px-6 py-12 animate-fade-in">
+    <div class="w-full max-w-md glass-card p-10 rounded-[2.5rem] border border-border shadow-2xl">
 
-      <h2 class="text-2xl font-bold text-gray-300 mb-6 text-center">
-        Registrar correo
-      </h2>
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-black text-white tracking-tight">Únete a <span class="gradient-text">Nosotros</span></h2>
+        <p class="text-muted text-sm mt-3 font-medium">Crea tu cuenta y empieza a organizar</p>
+      </div>
 
       <form class="space-y-5" onsubmit="validarRegistro(event)">
 
-        <!-- CORREO -->
         <div>
-          <label class="block text-sm text-gray-400 mb-2">
-            Correo electrónico
-          </label>
+          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Correo Electrónico</label>
           <input
             type="email"
-            class="w-full bg-surface border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
+            class="w-full bg-bg/50 border border-border rounded-2xl px-4 py-4 text-white placeholder:text-muted/30 outline-none transition-all focus:border-blue/50"
             placeholder="correo@ejemplo.com"
             required
           >
         </div>
 
-        <!-- CONTRASEÑA -->
         <div>
-          <label class="block text-sm text-gray-400 mb-2">
-            Contraseña
-          </label>
+          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Contraseña</label>
           <input
             type="password"
             id="password"
-            class="w-full bg-surface border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
-            placeholder="Contraseña"
+            class="w-full bg-bg/50 border border-border rounded-2xl px-4 py-4 text-white placeholder:text-muted/30 outline-none transition-all focus:border-blue/50"
+            placeholder="••••••••"
             required
           >
         </div>
 
-        <!-- REPETIR CONTRASEÑA -->
         <div>
-          <label class="block text-sm text-gray-400 mb-2">
-            Repetir contraseña
-          </label>
+          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Confirmar Contraseña</label>
           <input
             type="password"
             id="confirmPassword"
-            class="w-full bg-surface border border-border rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue"
-            placeholder="Repetir contraseña"
+            class="w-full bg-bg/50 border border-border rounded-2xl px-4 py-4 text-white placeholder:text-muted/30 outline-none transition-all focus:border-blue/50"
+            placeholder="••••••••"
             required
           >
-          <p id="errorMsg" class="text-red-400 text-sm mt-2 hidden">
-            Las contraseñas no coinciden
+          <p id="errorMsg" class="text-red-400 text-[11px] font-bold mt-3 ml-1 hidden flex items-center gap-1">
+             ⚠️ Las contraseñas no coinciden
           </p>
         </div>
 
-        <!-- BOTÓN -->
         <button
           type="submit"
-          class="w-full bg-blue text-black font-semibold py-2 rounded-lg hover:opacity-90 transition"
+          class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 mt-4 uppercase tracking-widest text-sm"
         >
-          Registrarme
+          REGISTRAR CUENTA
         </button>
 
       </form>
 
+      <div class="mt-8 text-center">
+        <p class="text-sm text-muted font-medium">
+          ¿Ya tienes cuenta? 
+          <a href="login.html" class="text-blue font-bold hover:underline">Inicia sesión</a>
+        </p>
+      </div>
+
     </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-border text-center py-[-0,5] text-muted text-sm flex flex-col items-center gap-4">
-    <div class="flex items-center gap-2 grayscale opacity-60">
-      <img src="logo1.png" alt="Logo mini" class="footer-icon">
+  <footer class="border-t border-border py-12 px-6 bg-surface/30 mt-auto">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
+      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
+      <p class="text-muted/60 text-[10px] uppercase tracking-[0.3em] font-medium">© 2026 LinkApp Digital Environment</p>
     </div>
-    <p>© 2026 LinkApp. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- VALIDACIÓN -->
   <script>
     function validarRegistro(event) {
       event.preventDefault();
@@ -134,6 +159,8 @@
 
       if (password !== confirmPassword) {
         errorMsg.classList.remove("hidden");
+        // Pequeño efecto de vibración en el error
+        errorMsg.classList.add("animate-pulse");
         return;
       }
 
