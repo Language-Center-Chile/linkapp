@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro exitoso - LinkApp</title>
+  <title>Registro Exitoso - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
-  <link rel="stylesheet" href="estilos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -18,61 +17,103 @@
             surface: "#18181b",
             border: "#27272a",
             blue: "#38BDF8",
+            teal: "#2DD4BF",
             green: "#34D399",
-            muted: "#a1a1aa"
+            text: "#E2E8F0",
+            muted: "#94A3B8"
           },
         },
       },
     };
   </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #34D399, #38BDF8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .animate-success {
+      animation: successPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes successPop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .success-glow {
+      box-shadow: 0 0 40px rgba(52, 211, 153, 0.15);
+    }
+  </style>
 </head>
 
-<body class="min-h-screen flex flex-col bg-bg text-white">
+<body class="min-h-screen flex flex-col bg-bg text-text relative overflow-hidden">
+  <div class="bg-gif fixed inset-0 -z-10 opacity-30"></div>
 
-  <!-- FONDO -->
-  <div class="bg-gif fixed inset-0 -z-10"></div>
+  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
+      </div>
 
-  <!-- HEADER -->
-  <header class="border-b border-border sticky top-0 bg-bg z-50">
-    <div class="w-full h-20 flex items-center px-6">
-      <img src="logo1.png" alt="logo" class="w-[50px] h-[60px]">
-
-      <nav class="ml-auto">
-        <a href="index.html" class="nav-link text-sm">
-          Ir al inicio
-        </a>
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+        <div class="flex gap-6 border-r border-border pr-6 text-muted">
+          <a href="index.html" class="hover:text-blue transition-colors">Inicio</a>
+          <a href="sobre-nosotros.html" class="hover:text-blue transition-colors">Nosotros</a>
+          <a href="contacto.html" class="hover:text-blue transition-colors">Contacto</a>
+        </div>
+        <div class="flex gap-4 items-center">
+          <a href="index.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-muted hover:text-blue hover:border-blue/50 transition-all text-xs font-bold bg-surface/50">
+            <span>←</span> Ir al Inicio
+          </a>
+        </div>
       </nav>
+      
+      <button class="md:hidden text-white">☰</button>
     </div>
   </header>
 
-  <!-- MAIN -->
-  <main class="flex-grow flex items-center justify-center px-6 py-16">
-    <div class="bg-surface border border-border rounded-2xl p-12 max-w-md w-full text-center">
+  <main class="flex-grow flex items-center justify-center px-6 py-12">
+    <div class="bg-surface border border-border rounded-[2.5rem] p-12 max-w-md w-full text-center shadow-2xl animate-success relative overflow-hidden">
+      
+      <div class="absolute -top-10 -right-10 w-32 h-32 bg-green/5 rounded-full blur-3xl"></div>
 
-      <div class="text-green text-5xl mb-4">✔</div>
+      <div class="w-20 h-20 bg-green/10 rounded-full flex items-center justify-center mx-auto mb-8 success-glow border border-green/20">
+        <span class="text-green text-4xl">✓</span>
+      </div>
 
-      <h1 class="text-3xl font-bold text-gray-300 mb-4">
-        ¡Registro exitoso!
+      <h1 class="text-3xl font-black text-white mb-4 tracking-tight">
+        ¡Registro <span class="gradient-text">Exitoso</span>!
       </h1>
 
-      <p class="text-muted mb-8">
-        Tu correo fue registrado correctamente en LinkApp.
+      <p class="text-muted mb-10 leading-relaxed font-medium">
+        Tu cuenta ha sido creada correctamente. Ahora puedes empezar a organizar tus enlaces con el mejor estilo.
       </p>
 
-      <a
-        href="funcion.html"
-        class="inline-block bg-blue text-black font-semibold px-6 py-2 rounded-lg hover:opacity-90 transition"
-      >
-        Prueba LinkApp ahora
-      </a>
+      <div class="space-y-4">
+        <a href="funcion.html"
+          class="block w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 uppercase tracking-widest text-sm">
+          EMPEZAR AHORA
+        </a>
+        
+        <p class="text-[10px] text-muted uppercase tracking-widest font-bold">
+          Redirigiendo al gestor...
+        </p>
+      </div>
 
     </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-border text-center py-[-0,5] text-muted text-sm flex flex-col items-center gap-4">
-    <img src="logo1.png" alt="Logo mini" class="footer-icon grayscale opacity-60">
-    <p>© 2026 LinkApp. Todos los derechos reservados.</p>
+  <footer class="border-t border-border py-12 px-6 bg-surface/30">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
+      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
+      <p class="text-muted/60 text-[10px] uppercase tracking-[0.3em] font-medium">© 2026 LinkApp Digital Environment</p>
+    </div>
   </footer>
 
 </body>
