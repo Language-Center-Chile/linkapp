@@ -2,14 +2,10 @@
 <html lang="es" class="dark">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
-  <div class="bg-gif"></div>
-  <link rel="icon" type="image/png" href="logo.png">
-
-  <link rel="stylesheet" href="estilos.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <div class="bg-gif"></div>
 
   <script>
     tailwind.config = {
@@ -21,6 +17,7 @@
             surface: "#18181b",
             border: "#27272a",
             blue: "#38BDF8",
+            teal: "#2DD4BF",
             text: "#E2E8F0",
             muted: "#94A3B8",
           },
@@ -28,47 +25,115 @@
       },
     };
   </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #38BDF8, #2DD4BF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-card {
+      backdrop-filter: blur(10px);
+      background-color: rgba(24, 24, 27, 0.8);
+    }
+
+    input:focus {
+      border-color: #38BDF8 !important;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+    }
+  </style>
 </head>
-<body class="min-h-screen flex items-center justify-center bg-bg text-text">
-  <div class="w-full max-w-md bg-surface p-8 rounded-2xl border border-border shadow-2xl">
-    
-    <div class="text-center mb-8">
-      <img src="logo1.png" alt="LinkApp Logo" class="w-60 h-60 mx-auto mb-4 drop-shadow-[0_0_10px_rgba(56,189,248,0.3)] object-contain">
-      
-      <h2 class="text-2xl font-bold text-white">Acceder a LinkApp</h2>
-      <p class="text-muted text-sm mt-2">Ingresa tus credenciales para continuar</p>
+
+<body class="min-h-screen flex flex-col bg-bg text-text relative overflow-hidden">
+  <div class="bg-gif fixed inset-0 -z-10 opacity-30 scale-110"></div>
+
+  <header class="w-full border-b border-border bg-bg/50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
+      </div>
+      <a href="index.html" class="text-xs font-bold text-muted hover:text-blue transition-colors uppercase tracking-widest">
+        Volver al inicio
+      </a>
     </div>
-    
-    <form id="loginForm" class="space-y-4">
-      <div>
-        <label class="block text-xs text-muted mb-1 ml-1 uppercase font-bold">Usuario</label>
-        <input type="text" id="username" class="search-input w-full bg-bg border-border text-white p-3 rounded-lg focus:border-blue outline-none transition-all" placeholder="Tu nombre de usuario" required>
+  </header>
+
+  <main class="flex-grow flex items-center justify-center px-6">
+    <div class="w-full max-w-md login-card p-10 rounded-[2.5rem] border border-border shadow-2xl animate-fade-in">
+      
+      <div class="text-center mb-10">
+        <div class="mb-6 relative inline-block">
+          <img src="logo1.png" alt="LinkApp Logo" class="w-24 h-28 mx-auto drop-shadow-[0_0_20px_rgba(56,189,248,0.4)] object-contain">
+        </div>
+        
+        <h2 class="text-3xl font-black text-white tracking-tight">Bienvenido <span class="gradient-text">de nuevo</span></h2>
+        <p class="text-muted text-sm mt-3 font-medium">Ingresa tus credenciales para continuar</p>
       </div>
       
-      <div>
-        <label class="block text-xs text-muted mb-1 ml-1 uppercase font-bold">Contraseña</label>
-        <input type="password" id="password" class="search-input w-full bg-bg border-border text-white p-3 rounded-lg focus:border-blue outline-none transition-all" placeholder="••••••••" required>
+      <form id="loginForm" class="space-y-6">
+        <div>
+          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Nombre de Usuario</label>
+          <div class="relative group">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors">👤</span>
+            <input type="text" id="username" 
+              class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all placeholder:text-muted/30" 
+              placeholder="nombre_usuario" required>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Contraseña</label>
+          <div class="relative group">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors">🔑</span>
+            <input type="password" id="password" 
+              class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all placeholder:text-muted/30" 
+              placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <button type="submit" 
+          class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 mt-4 uppercase tracking-widest text-sm">
+          Iniciar Sesión
+        </button>
+      </form>
+
+      <div class="mt-8 text-center">
+        <p class="text-sm text-muted">
+          ¿No tienes una cuenta? 
+          <a href="registro-correo.html" class="text-blue font-bold hover:underline">Regístrate</a>
+        </p>
       </div>
-
-      <button type="submit" class="btn btn-primary w-full py-3 bg-blue text-black font-bold rounded-lg hover:opacity-90 hover:scale-[1.01] active:scale-95 transition-all mt-4">
-        Iniciar Sesión
-      </button>
-    </form>
-
-    <div class="mt-6 text-center">
-      <a href="index.html" class="text-xs text-muted hover:text-blue transition-colors">← Volver al inicio</a>
     </div>
-  </div>
+  </main>
+
+  <footer class="py-8 text-center">
+    <p class="text-muted/40 text-[10px] uppercase tracking-[0.3em]">© 2026 LinkApp Digital Environment</p>
+  </footer>
 
   <script>
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       
+      const username = document.getElementById('username').value;
+      
       // Guardamos el estado de la sesión
       localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('username', document.getElementById('username').value);
+      localStorage.setItem('userNickname', username); // Para que aparezca en el perfil
       
-      // Redirección a funciones.html (ajustado de funcion.html a funciones.html según lo anterior)
+      // Animación de salida opcional (puedes añadirla luego)
       window.location.href = 'registro-perfil.html';
     });
   </script>
