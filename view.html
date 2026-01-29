@@ -1,190 +1,99 @@
 <!DOCTYPE html>
 <html lang="es" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ver Colección - LinkApp</title>
-  <link rel="icon" type="image/png" href="logo1.png">
-  <link rel="stylesheet" href="estilos.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carpeta Compartida - LinkApp</title>
+    
+    <link rel="stylesheet" href="estilos.css?v=1.2">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            bg: "#000000",
-            surface: "#18181b",
-            border: "#27272a",
-            blue: "#38BDF8",
-            teal: "#2DD4BF",
-            text: "#E2E8F0",
-            muted: "#94A3B8"
-          }
-        }
-      }
-    };
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        bg: "#000000", surface: "#18181b", border: "#27272a",
+                        blue: "#38BDF8", teal: "#2DD4BF", text: "#E2E8F0"
+                    }
+                }
+            }
+        };
 
-    // CONFIGURACIÓN DE SUPABASE (Reemplaza con tus llaves)
-    const supabaseUrl = 'TU_URL_DE_SUPABASE';
-    const supabaseKey = 'TU_LLAVE_ANONIMA';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-  </script>
-
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .gradient-text {
-      background: linear-gradient(90deg, #38BDF8, #2DD4BF);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .share-card {
-      backdrop-filter: blur(16px);
-      background-color: rgba(24, 24, 27, 0.8);
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-    .link-item {
-      transition: all 0.3s ease;
-      background: rgba(0,0,0,0.3);
-    }
-    .link-item:hover {
-      background: rgba(56, 189, 248, 0.1);
-      border-color: rgba(56, 189, 248, 0.4);
-      transform: translateX(5px);
-    }
-    /* Spinner de carga */
-    .loader {
-      border: 3px solid rgba(56, 189, 248, 0.1);
-      border-top: 3px solid #38BDF8;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-  </style>
+        // CONEXIÓN (Usa las mismas llaves que en funcion.html)
+        let supabaseClient;
+        try {
+            const supabaseUrl = 'TU_URL_AQUÍ';
+            const supabaseKey = 'TU_KEY_AQUÍ';
+            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        } catch (e) { console.error(e); }
+    </script>
 </head>
 
-<body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
-  
-  <div class="bg-mesh"></div>
+<body class="min-h-screen bg-bg text-text relative overflow-x-hidden">
+    <div class="bg-mesh"></div>
 
-  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <img src="logo1.png" alt="logo" class="w-10 h-12">
-        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
-      </div>
-      <a href="index.html" class="px-5 py-2 bg-blue text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-transform">
-        Crear mi propia lista
-      </a>
-    </div>
-  </header>
-
-  <main class="flex-grow flex items-center justify-center px-6 py-12">
-    
-    <div id="loading" class="flex flex-col items-center gap-4">
-      <div class="loader"></div>
-      <p class="text-muted text-xs font-black uppercase tracking-widest">Obteniendo colección...</p>
-    </div>
-
-    <div id="content" class="hidden w-full max-w-2xl animate-fade-in">
-      
-      <div class="share-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
-        
-        <div class="flex items-center gap-3 mb-8">
-          <div class="w-12 h-12 rounded-full bg-blue/20 flex items-center justify-center text-blue font-black text-xl border border-blue/30" id="userInitial">
-            ?
-          </div>
-          <div>
-            <p class="text-[10px] text-muted font-black uppercase tracking-[0.2em]">Compartido por</p>
-            <p class="text-white font-bold" id="userName">Cargando...</p>
-          </div>
+    <main class="max-w-3xl mx-auto px-6 py-20">
+        <div class="text-center mb-12">
+            <img src="logo1.png" alt="Logo" class="w-12 h-16 mx-auto mb-6">
+            <h1 id="folderTitle" class="text-4xl font-black text-white mb-2">Cargando carpeta...</h1>
+            <p id="creatorName" class="text-muted text-sm uppercase tracking-widest font-bold"></p>
         </div>
 
-        <div class="mb-10">
-          <h1 class="text-4xl font-black text-white leading-tight mb-2" id="folderTitle">Nombre de Carpeta</h1>
-          <div class="h-1 w-20 bg-blue rounded-full"></div>
-        </div>
-
-        <div id="linksList" class="space-y-4">
-          </div>
-
-        <div class="mt-12 pt-8 border-t border-border flex flex-col items-center gap-4">
-          <p class="text-muted text-[10px] font-black uppercase tracking-widest">¿Te gusta esta colección?</p>
-          <button onclick="window.location.href='registro.html'" class="w-full py-4 bg-surface border border-border rounded-2xl text-white font-bold hover:border-blue transition-all flex items-center justify-center gap-3">
-            <span>🚀</span> Únete a LinkApp gratis
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div id="error" class="hidden text-center">
-      <h2 class="text-4xl mb-4">⚠️</h2>
-      <p class="text-white font-bold">No pudimos encontrar esta carpeta.</p>
-      <a href="index.html" class="text-blue text-sm mt-4 inline-block underline">Ir al inicio</a>
-    </div>
-
-  </main>
-
-  <footer class="py-10 text-center">
-    <p class="text-muted/40 text-[10px] uppercase tracking-[0.3em]">Power by LinkApp Infrastructure</p>
-  </footer>
-
-  <script>
-    async function loadSharedFolder() {
-      // 1. Obtener ID de la URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const folderId = urlParams.get('id');
-
-      if (!folderId) {
-        showError();
-        return;
-      }
-
-      try {
-        // 2. Consultar Supabase
-        const { data, error } = await supabase
-          .from('carpetas')
-          .select('*')
-          .eq('id', folderId)
-          .single();
-
-        if (error || !data) throw error;
-
-        // 3. Renderizar Datos
-        document.getElementById('userName').textContent = data.user_nickname;
-        document.getElementById('userInitial').textContent = data.user_nickname.charAt(0).toUpperCase();
-        document.getElementById('folderTitle').textContent = data.nombre;
-        
-        const listContainer = document.getElementById('linksList');
-        listContainer.innerHTML = data.links.map(link => `
-          <a href="${link}" target="_blank" class="link-item block w-full p-5 border border-border rounded-2xl text-muted font-medium hover:text-white transition-all">
-            <div class="flex justify-between items-center">
-              <span class="truncate pr-4">${link.replace('https://','').replace('http://','')}</span>
-              <span class="text-blue text-lg">→</span>
+        <div id="linksContainer" class="grid gap-4">
             </div>
-          </a>
-        `).join('');
 
-        // 4. Mostrar contenido
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('content').classList.remove('hidden');
+        <div class="mt-16 text-center">
+            <a href="index.html" class="text-xs font-black uppercase tracking-[0.3em] text-muted hover:text-blue transition">
+                Creado con LinkApp
+            </a>
+        </div>
+    </main>
 
-      } catch (err) {
-        console.error("Error cargando carpeta:", err);
-        showError();
-      }
-    }
+    <script>
+        // Lógica para leer la base de datos
+        const params = new URLSearchParams(window.location.search);
+        const folderId = params.get('id');
 
-    function showError() {
-      document.getElementById('loading').classList.add('hidden');
-      document.getElementById('error').classList.remove('hidden');
-    }
+        async function cargarCarpeta() {
+            if (!folderId) {
+                document.getElementById('folderTitle').textContent = "Enlace no válido";
+                return;
+            }
 
-    window.onload = loadSharedFolder;
-  </script>
+            try {
+                const { data, error } = await supabaseClient
+                    .from('carpetas')
+                    .select('*')
+                    .eq('id', folderId)
+                    .single();
+
+                if (error || !data) throw error;
+
+                // Llenar los datos
+                document.getElementById('folderTitle').innerHTML = `Colección: <span class="gradient-text">${data.nombre}</span>`;
+                document.getElementById('creatorName').textContent = `Compartido por: ${data.user_nickname}`;
+
+                const container = document.getElementById('linksContainer');
+                container.innerHTML = data.links.map(link => `
+                    <a href="${link}" target="_blank" 
+                       class="folder-card p-6 rounded-2xl border border-border flex justify-between items-center group hover:border-blue transition-all">
+                        <span class="text-sm font-medium text-muted group-hover:text-white truncate pr-4">
+                            ${link.replace('https://', '').replace('http://', '')}
+                        </span>
+                        <span class="text-blue opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+                    </a>
+                `).join('');
+
+            } catch (err) {
+                document.getElementById('folderTitle').textContent = "Carpeta no encontrada";
+                console.error(err);
+            }
+        }
+
+        cargarCarpeta();
+    </script>
 </body>
 </html>
