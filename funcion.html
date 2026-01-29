@@ -26,51 +26,11 @@
         }
       }
     };
-  
     if (localStorage.getItem('isLoggedIn') !== 'true') {
       window.location.href = 'login.html';
     }
   </script>
 
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .hidden { display: none; }
-    
-    .gradient-text {
-      background: linear-gradient(90deg, #38BDF8, #2DD4BF);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .folder-card {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
-      background-color: rgba(24, 24, 27, 0.7);
-    }
-
-    .folder-card:hover {
-      border-color: #38BDF8;
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.15);
-    }
-
-    /* Scrollbar minimalista */
-    .custom-scroll::-webkit-scrollbar { width: 4px; }
-    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
-    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #38BDF8; }
-
-    /* Modal Share */
-    .share-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(4px); display: flex; align-items: center;
-      justify-content: center; z-index: 100;
-    }
-    .share-box {
-      background: #18181b; border: 1px solid #27272a;
-      padding: 2rem; border-radius: 2rem; width: 100%; max-width: 400px;
-    }
-  </style>
   
 </head>
 
