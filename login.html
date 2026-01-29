@@ -6,6 +6,7 @@
   <title>Login - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="estilos.css">
   <script>
     tailwind.config = {
@@ -24,6 +25,11 @@
         },
       },
     };
+
+    // Configuración de Supabase
+    const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
 
   <style>
@@ -92,12 +98,12 @@
       
       <form id="loginForm" class="space-y-6">
         <div>
-          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Nombre de Usuario</label>
+          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Correo Electrónico</label>
           <div class="relative group">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors">👤</span>
-            <input type="text" id="username" 
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors">📧</span>
+            <input type="email" id="email" 
               class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all focus:border-blue/50" 
-              placeholder="tu_usuario" required>
+              placeholder="tu@correo.com" required>
           </div>
         </div>
         
@@ -111,7 +117,9 @@
           </div>
         </div>
 
-        <button type="submit" 
+        <p id="errorMessage" class="text-red-400 text-[11px] font-bold mt-2 ml-1 hidden text-center"></p>
+
+        <button type="submit" id="loginBtn"
           class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 mt-4 uppercase tracking-widest text-sm">
           ENTRAR AHORA
         </button>
@@ -131,12 +139,40 @@
   </footer>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const user = document.getElementById('username').value;
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userNickname', user);
-      window.location.href = 'registro-perfil.html';
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorDisplay = document.getElementById('errorMessage');
+      const loginBtn = document.getElementById('loginBtn');
+
+      // Estado de carga
+      errorDisplay.classList.add('hidden');
+      loginBtn.disabled = true;
+      loginBtn.textContent = "VERIFICANDO...";
+      loginBtn.style.opacity = "0.7";
+
+      try {
+        // LOGIN REAL CON SUPABASE
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) throw error;
+
+        // Si el login es exitoso, redirigimos
+        // Nota: Supabase ya maneja la sesión, no necesitas setear 'isLoggedIn' manualmente
+        window.location.href = 'funcion.html';
+
+      } catch (error) {
+        errorDisplay.textContent = "❌ " + error.message;
+        errorDisplay.classList.remove('hidden');
+        loginBtn.disabled = false;
+        loginBtn.textContent = "ENTRAR AHORA";
+        loginBtn.style.opacity = "1";
+      }
     });
   </script>
 </body>
