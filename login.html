@@ -162,9 +162,12 @@
 
         if (error) throw error;
 
-        // Si el login es exitoso, redirigimos
-        // Nota: Supabase ya maneja la sesión, no necesitas setear 'isLoggedIn' manualmente
-        window.location.href = 'funcion.html';
+        // Guardamos información básica para el siguiente paso (registro-perfil)
+        localStorage.setItem('temp_user_id', data.user.id);
+        localStorage.setItem('temp_email', data.user.email);
+
+        // REDIRECCIÓN SOLICITADA
+        window.location.href = 'registro-perfil.html';
 
       } catch (error) {
         errorDisplay.textContent = "❌ " + error.message;

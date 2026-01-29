@@ -2,12 +2,8 @@
 <html lang="es" class="dark">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mis Colecciones - LinkApp</title>
   <link rel="stylesheet" href="estilos.css?v=1.2">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
     tailwind.config = {
@@ -21,10 +17,19 @@
         }
       }
     };
+  </script>
 
-    const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    let supabaseClient;
+    try {
+      const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
+      supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+      console.log("Conexión establecida con supabaseClient");
+    } catch (error) {
+      console.error("Error al inicializar:", error);
+    }
   </script>
 </head>
 
@@ -40,33 +45,25 @@
 
       <div class="flex items-center gap-5">
         <div class="text-right hidden sm:block">
-          <p id="userNicknameDisplay" class="text-sm font-black text-white leading-none italic uppercase">Cargando...</p>
+          <p id="userNicknameDisplay" class="text-sm font-black text-white leading-none">Usuario</p>
           <button onclick="logout()" class="text-[9px] text-red-400 hover:text-red-300 uppercase tracking-widest mt-1 font-bold">
             Desconectar
           </button>
         </div>
 
         <div class="relative">
-          <input type="file" id="avatarInput" class="hidden" accept="image/*" onchange="cambiarAvatar(event)">
-          
           <button onclick="toggleUserMenu()" 
-            class="w-12 h-12 rounded-full border-2 border-border bg-surface overflow-hidden hover:border-blue transition-all shadow-lg active:scale-95 group relative">
+            class="w-12 h-12 rounded-full border-2 border-border bg-surface overflow-hidden hover:border-blue transition-all shadow-lg active:scale-95">
             <img id="userAvatarDisplay" src="" alt="Perfil" class="w-full h-full object-cover hidden">
             <div id="avatarFallback" class="w-full h-full flex items-center justify-center bg-blue/10 text-blue font-bold">?</div>
-            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <span class="text-[8px] font-bold">EDITAR</span>
-            </div>
           </button>
 
           <div id="userDropdown" class="hidden absolute right-0 mt-3 w-56 bg-surface border border-border rounded-2xl shadow-2xl overflow-hidden z-50 animate-fade-in">
-            <div class="px-4 py-4 border-b border-border bg-bg/20 text-center">
-              <p class="text-[10px] text-muted uppercase font-black tracking-widest mb-2">Cuenta</p>
-              <p id="userNicknameMenu" class="font-bold text-white truncate italic">Cargando...</p>
+            <div class="px-4 py-4 border-b border-border bg-bg/20">
+              <p class="text-[10px] text-muted uppercase font-black tracking-widest">Cuenta</p>
+              <p id="userNicknameMenu" class="font-bold text-white truncate">Usuario</p>
             </div>
             <div class="p-2">
-              <button onclick="document.getElementById('avatarInput').click()" class="w-full flex items-center gap-3 px-3 py-2 text-sm text-muted hover:bg-bg hover:text-blue rounded-xl transition">
-                <span>📸</span> Cambiar Foto
-              </button>
               <a href="perfil.html" class="flex items-center gap-3 px-3 py-2 text-sm text-muted hover:bg-bg hover:text-blue rounded-xl transition">
                 <span>👤</span> Editar Perfil
               </a>
@@ -99,24 +96,24 @@
     <div id="folderGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
   </main>
 
-  <div id="shareModal" class="share-overlay hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[100] flex items-center justify-center p-6">
-    <div class="share-box bg-surface border border-border p-8 rounded-[2.5rem] w-full max-w-sm">
-      <h3 class="text-xl font-black text-white mb-6 text-center tracking-tight uppercase">Compartir <span class="text-blue">Carpeta</span></h3>
+  <div id="shareModal" class="share-overlay hidden">
+    <div class="share-box animate-success">
+      <h3 class="text-xl font-black text-white mb-6 text-center tracking-tight">Compartir <span class="text-blue">Carpeta</span></h3>
       <div class="grid grid-cols-2 gap-3 mb-8">
-        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-blue transition-all" onclick="shareWhatsApp()">
+        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-green-500/50 transition-colors" onclick="shareWhatsApp()">
           <span class="text-2xl">📱</span> <span class="text-[10px] font-bold uppercase tracking-widest">WhatsApp</span>
         </button>
-        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-blue transition-all" onclick="shareFacebook()">
+        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-blue-500/50 transition-colors" onclick="shareFacebook()">
           <span class="text-2xl">🔵</span> <span class="text-[10px] font-bold uppercase tracking-widest">Facebook</span>
         </button>
-        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-blue transition-all" onclick="shareTelegram()">
+        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-sky-500/50 transition-colors" onclick="shareTelegram()">
           <span class="text-2xl">✈️</span> <span class="text-[10px] font-bold uppercase tracking-widest">Telegram</span>
         </button>
-        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-blue transition-all" onclick="copyShare()">
+        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-white/50 transition-colors" onclick="copyShare()">
           <span class="text-2xl">🔗</span> <span class="text-[10px] font-bold uppercase tracking-widest">Copiar</span>
         </button>
       </div>
-      <button class="w-full py-3 text-muted text-[10px] font-black uppercase tracking-widest hover:text-white transition" onclick="cerrarShare()">
+      <button class="w-full py-3 text-muted text-xs font-black uppercase tracking-widest hover:text-white transition" onclick="cerrarShare()">
         Cerrar ventana
       </button>
     </div>
@@ -130,80 +127,42 @@
   </footer>
 
   <script>
-    let currentUser = null;
-    let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
-    let textoCompartir = "";
-
-    window.addEventListener('load', async function() {
-      const { data: { user }, error } = await supabaseClient.auth.getUser();
-
-      if (error || !user) {
-        window.location.href = 'login.html';
-        return;
-      }
-
-      currentUser = user;
-      
-      // PRIORIDAD 1: Nickname del LocalStorage (recién ingresado en registro-perfil)
-      // PRIORIDAD 2: Nickname de metadata de Supabase
-      const savedNick = localStorage.getItem('userNickname') || user.user_metadata.nickname || user.email.split('@')[0];
-      
-      document.getElementById('userNicknameDisplay').textContent = savedNick;
-      document.getElementById('userNicknameMenu').textContent = savedNick;
-      
-      actualizarInterfazAvatar();
-      renderCarpetas();
-    });
-
-    function actualizarInterfazAvatar() {
+    /* ================= LÓGICA DE USUARIO ================= */
+    window.addEventListener('load', function() {
+      const nick = localStorage.getItem('userNickname') || 'Usuario';
+      const avatar = localStorage.getItem('userAvatar');
+      document.getElementById('userNicknameDisplay').textContent = nick;
+      document.getElementById('userNicknameMenu').textContent = nick;
       const avatarImg = document.getElementById('userAvatarDisplay');
       const fallback = document.getElementById('avatarFallback');
-      const savedAvatar = localStorage.getItem('userAvatar') || currentUser.user_metadata.avatar_url;
-
-      if (savedAvatar) {
-        avatarImg.src = savedAvatar;
+      if (avatar) {
+        avatarImg.src = avatar;
         avatarImg.classList.remove('hidden');
         fallback.classList.add('hidden');
       } else {
-        const nick = document.getElementById('userNicknameDisplay').textContent;
         fallback.textContent = nick.charAt(0).toUpperCase();
-        avatarImg.classList.add('hidden');
-        fallback.classList.remove('hidden');
       }
-    }
-
-    async function cambiarAvatar(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-          const base64Image = e.target.result;
-          
-          // Guardar localmente para respuesta inmediata
-          localStorage.setItem('userAvatar', base64Image);
-          
-          // Opcional: Intentar guardar en metadata de Supabase
-          await supabaseClient.auth.updateUser({
-            data: { avatar_url: base64Image }
-          });
-
-          actualizarInterfazAvatar();
-        };
-        reader.readAsDataURL(file);
-      }
-    }
+    });
 
     function toggleUserMenu() {
       document.getElementById("userDropdown").classList.toggle("hidden");
     }
 
-    async function logout() {
-      await supabaseClient.auth.signOut();
-      localStorage.clear();
+    window.addEventListener("click", function(e) {
+      if (!e.target.closest("#userDropdown") && !e.target.closest("button[onclick='toggleUserMenu()']")) {
+        document.getElementById("userDropdown").classList.add("hidden");
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
       window.location.href = 'login.html';
     }
 
-    /* ================= SISTEMA DE CARPETAS (CORREGIDO) ================= */
+    /* ================= SISTEMA DE CARPETAS ================= */
+    let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
+    let textoCompartir = "";
+
     function guardarYRenderizar() {
       localStorage.setItem('carpetas', JSON.stringify(carpetas));
       renderCarpetas();
@@ -211,26 +170,23 @@
 
     function renderCarpetas() {
       const grid = document.getElementById('folderGrid');
-      grid.innerHTML = ''; // Limpiar grid
-
       if (carpetas.length === 0) {
-        grid.innerHTML = `<div class="col-span-full flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-[2.5rem] bg-surface/20">
+        grid.innerHTML = `
+          <div class="col-span-full flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-[2.5rem] bg-surface/20">
             <span class="text-4xl mb-4 opacity-20">📁</span>
             <p class="text-muted font-bold uppercase tracking-widest text-xs">Tu biblioteca está vacía</p>
           </div>`;
         return;
       }
 
-      carpetas.forEach((folder, fIndex) => {
-        const card = document.createElement('div');
-        card.className = "folder-card border border-border rounded-[2rem] p-6 flex flex-col h-full bg-surface/10 backdrop-blur-sm transition-all hover:border-blue/30";
-        card.innerHTML = `
+      grid.innerHTML = carpetas.map((folder, fIndex) => `
+        <div class="folder-card border border-border rounded-[2rem] p-6 flex flex-col h-full overflow-hidden bg-surface/10 backdrop-blur-sm">
           <div class="flex justify-between items-start mb-6">
-            <div class="max-w-[70%]">
-              <h3 class="text-xl font-black text-white leading-tight mb-1 truncate">${folder.nombre}</h3>
+            <div>
+              <h3 class="text-xl font-black text-white leading-tight mb-1">${folder.nombre}</h3>
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-blue animate-pulse"></span>
-                <span class="text-[10px] text-muted uppercase font-black tracking-tighter">${folder.links ? folder.links.length : 0} Elementos</span>
+                <span class="text-[10px] text-muted uppercase font-black tracking-tighter">${folder.links.length} Elementos</span>
               </div>
             </div>
             <div class="flex gap-2">
@@ -238,28 +194,39 @@
               <button onclick="eliminarCarpeta(${fIndex})" class="w-8 h-8 flex items-center justify-center bg-surface border border-border rounded-lg hover:border-red-500 transition-colors text-xs text-red-400">🗑</button>
             </div>
           </div>
+
+          <div class="relative mb-4">
+            <input type="text" oninput="filtrarLinks(this, ${fIndex})"
+              placeholder="Buscar por nombre..."
+              class="w-full bg-bg/50 border border-border text-[11px] p-3 rounded-xl focus:border-blue/50 outline-none transition-all placeholder:text-muted/30">
+          </div>
+
           <div id="links-container-${fIndex}" class="space-y-2 mb-6 flex-grow overflow-y-auto max-h-56 pr-2 custom-scroll">
-            ${(folder.links || []).map((link, lIndex) => `
-              <div class="link-wrapper flex justify-between items-center bg-bg/40 border border-border/50 p-3 rounded-xl group hover:bg-bg transition-colors">
+            ${folder.links.map((link, lIndex) => `
+              <div class="link-wrapper flex justify-between items-center bg-bg/40 border border-border/50 p-3 rounded-xl group hover:bg-bg transition-colors"
+                data-name="${link.nombre}">
                 <div class="flex flex-col overflow-hidden max-w-[80%]">
-                   <a href="${link.url}" target="_blank" class="truncate text-[11px] font-bold text-white group-hover:text-blue transition-colors">${link.nombre}</a>
-                   <span class="text-[9px] text-muted/50 truncate">${link.url.replace(/^https?:\/\//, '')}</span>
+                   <a href="${link.url}" target="_blank" class="truncate text-[11px] font-bold text-white group-hover:text-blue transition-colors">
+                    ${link.nombre}
+                   </a>
+                   <span class="text-[9px] text-muted/50 truncate">${link.url.replace('https://', '').replace('http://', '')}</span>
                 </div>
-                <button onclick="eliminarEnlace(${fIndex}, ${lIndex})" class="text-red-400/50 hover:text-red-400 text-[10px]">✕</button>
+                <button onclick="eliminarEnlace(${fIndex}, ${lIndex})" class="text-red-400/50 hover:text-red-400 text-[10px] transition-colors">✕</button>
               </div>
             `).join('')}
           </div>
-          <button onclick="agregarEnlace(${fIndex})" class="w-full py-3 bg-blue/5 hover:bg-blue/10 text-blue border border-blue/10 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">
+
+          <button onclick="agregarEnlace(${fIndex})"
+            class="w-full py-3 bg-blue/5 hover:bg-blue/10 text-blue border border-blue/10 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">
             + Añadir Enlace
           </button>
-        `;
-        grid.appendChild(card);
-      });
+        </div>
+      `).join('');
     }
 
     function nuevaCarpeta() {
       const n = prompt("Nombre de la nueva colección:");
-      if (n && n.trim() !== "") {
+      if (n) {
         carpetas.push({ nombre: n, links: [] });
         guardarYRenderizar();
       }
@@ -278,7 +245,6 @@
         const nombre = prompt("¿Qué nombre (etiqueta) le quieres poner?");
         if (nombre) {
           const finalUrl = url.startsWith('http') ? url : `https://${url}`;
-          if(!carpetas[i].links) carpetas[i].links = [];
           carpetas[i].links.push({ nombre: nombre, url: finalUrl });
           guardarYRenderizar();
         }
@@ -290,44 +256,45 @@
       guardarYRenderizar();
     }
 
-    /* ================= COMPARTIR ================= */
+    function filtrarLinks(input, folderIndex) {
+      const filtro = input.value.toLowerCase();
+      const items = document.getElementById(`links-container-${folderIndex}`).getElementsByClassName('link-wrapper');
+      Array.from(items).forEach(item => {
+        const texto = item.getAttribute('data-name').toLowerCase();
+        item.style.display = texto.includes(filtro) ? 'flex' : 'none';
+      });
+    }
+
     async function abrirCompartir(index) {
       try {
         const carpeta = carpetas[index];
-        const nick = document.getElementById('userNicknameDisplay').textContent;
-        
+        const nick = localStorage.getItem('userNickname') || 'Anonimo';
         const { data, error } = await supabaseClient
           .from('carpetas')
-          .insert([{ 
-            nombre: carpeta.nombre, 
-            links: carpeta.links, 
-            user_nickname: nick,
-            user_id: currentUser.id 
-          }])
+          .insert([{ nombre: carpeta.nombre, links: carpeta.links, user_nickname: nick }])
           .select();
 
         if (error) throw error;
 
-        const shareId = data[0].id;
-        const urlPublica = `${window.location.origin}/view.html?id=${shareId}`;
-        textoCompartir = `¡Mira mi colección "${carpeta.nombre}" en LinkApp!\n\nLink: ${urlPublica}`;
-        document.getElementById("shareModal").classList.remove("hidden");
+        if (data && data.length > 0) {
+          const shareId = data[0].id;
+          const urlPublica = `${window.location.origin}/view.html?id=${shareId}`;
+          textoCompartir = `¡Mira mi colección "${carpeta.nombre}" en LinkApp!\n\nLink: ${urlPublica}`;
+          document.getElementById("shareModal").classList.remove("hidden");
+        }
       } catch (err) {
-        alert("Error al generar enlace seguro.");
+        console.error("Error al compartir:", err.message);
+        alert("Error al generar enlace.");
       }
     }
 
     function cerrarShare() { document.getElementById("shareModal").classList.add("hidden"); }
-    function copyShare() { navigator.clipboard.writeText(textoCompartir); alert("Copiado ✔"); cerrarShare(); }
     function shareWhatsApp() { window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`); cerrarShare(); }
     function shareFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textoCompartir)}`); cerrarShare(); }
     function shareTelegram() { window.open(`https://t.me/share/url?text=${encodeURIComponent(textoCompartir)}`); cerrarShare(); }
+    function copyShare() { navigator.clipboard.writeText(textoCompartir); alert("Copiado ✔"); cerrarShare(); }
 
-    window.addEventListener("click", function(e) {
-      if (!e.target.closest("#userDropdown") && !e.target.closest("button[onclick='toggleUserMenu()']")) {
-        document.getElementById("userDropdown").classList.add("hidden");
-      }
-    });
+    renderCarpetas();
   </script>
 </body>
 </html>
