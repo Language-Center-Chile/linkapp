@@ -15,85 +15,118 @@
             theme: {
                 extend: {
                     colors: {
-                        bg: "#000000", surface: "#18181b", border: "#27272a",
-                        blue: "#38BDF8", teal: "#2DD4BF", text: "#E2E8F0"
+                        bg: "#000000",
+                        surface: "#18181b",
+                        border: "#27272a",
+                        blue: "#38BDF8",
+                        teal: "#2DD4BF",
+                        text: "#E2E8F0"
                     }
                 }
             }
         };
 
-        // CONEXIÓN (Usa las mismas llaves que en funcion.html)
+        // --- CONFIGURACIÓN DE CONEXIÓN ---
         let supabaseClient;
+        const supabaseUrl =  'https://dvgcycyiphjmdnahjdvk.supabase.co/';  // 👈 PEGA TU URL
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI'; // 👈 PEGA TU KEY
+        
         try {
-            const supabaseUrl = 'TU_URL_AQUÍ';
-            const supabaseKey = 'TU_KEY_AQUÍ';
             supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-        } catch (e) { console.error(e); }
+        } catch (e) {
+            console.error("Error al conectar con Supabase:", e);
+        }
     </script>
 </head>
 
 <body class="min-h-screen bg-bg text-text relative overflow-x-hidden">
     <div class="bg-mesh"></div>
 
-    <main class="max-w-3xl mx-auto px-6 py-20">
+    <main class="max-w-3xl mx-auto px-6 py-20 relative z-10">
         <div class="text-center mb-12">
             <img src="logo1.png" alt="Logo" class="w-12 h-16 mx-auto mb-6">
-            <h1 id="folderTitle" class="text-4xl font-black text-white mb-2">Cargando carpeta...</h1>
-            <p id="creatorName" class="text-muted text-sm uppercase tracking-widest font-bold"></p>
+            <h1 id="folderTitle" class="text-4xl font-black text-white mb-2 italic tracking-tighter">Cargando carpeta...</h1>
+            <p id="creatorName" class="text-muted text-sm uppercase tracking-widest font-bold text-blue"></p>
         </div>
 
         <div id="linksContainer" class="grid gap-4">
             </div>
 
         <div class="mt-16 text-center">
-            <a href="index.html" class="text-xs font-black uppercase tracking-[0.3em] text-muted hover:text-blue transition">
-                Creado con LinkApp
+            <a href="index.html" class="text-xs font-black uppercase tracking-[0.3em] text-zinc-500 hover:text-blue transition-all">
+                ← Volver a LinkApp
             </a>
         </div>
     </main>
 
     <script>
-        // Lógica para leer la base de datos
+        // 1. Capturar el ID de la URL (?id=...)
         const params = new URLSearchParams(window.location.search);
         const folderId = params.get('id');
 
         async function cargarCarpeta() {
+            // Validar que exista un ID en la URL
             if (!folderId) {
                 document.getElementById('folderTitle').textContent = "Enlace no válido";
                 return;
             }
 
+            console.log("Buscando carpeta ID:", folderId);
+
             try {
+                // Convertir ID a número si es necesario (para evitar errores en Supabase)
+                const idFinal = isNaN(folderId) ? folderId : Number(folderId);
+
+                // 2. Consultar la tabla 'carpetas'
                 const { data, error } = await supabaseClient
                     .from('carpetas')
                     .select('*')
-                    .eq('id', folderId)
+                    .eq('id', idFinal)
                     .single();
 
-                if (error || !data) throw error;
+                if (error) throw error;
+                if (!data) throw new Error("No se encontró la carpeta en la base de datos");
 
-                // Llenar los datos
-                document.getElementById('folderTitle').innerHTML = `Colección: <span class="gradient-text">${data.nombre}</span>`;
-                document.getElementById('creatorName').textContent = `Compartido por: ${data.user_nickname}`;
+                // 3. Renderizar Título y Creador
+                document.getElementById('folderTitle').innerHTML = `Colección: <span class="text-blue">${data.nombre}</span>`;
+                document.getElementById('creatorName').textContent = `Compartido por: ${data.user_nickname || 'Anónimo'}`;
 
+                // 4. Renderizar Links
                 const container = document.getElementById('linksContainer');
-                container.innerHTML = data.links.map(link => `
-                    <a href="${link}" target="_blank" 
-                       class="folder-card p-6 rounded-2xl border border-border flex justify-between items-center group hover:border-blue transition-all">
-                        <span class="text-sm font-medium text-muted group-hover:text-white truncate pr-4">
-                            ${link.replace('https://', '').replace('http://', '')}
-                        </span>
-                        <span class="text-blue opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
-                    </a>
-                `).join('');
+                if (data.links && Array.isArray(data.links)) {
+                    container.innerHTML = data.links.map(link => `
+                        <a href="${link}" target="_blank" 
+                           class="bg-surface/50 backdrop-blur-sm p-6 rounded-2xl border border-border flex justify-between items-center group hover:border-blue hover:bg-surface transition-all">
+                            <span class="text-sm font-medium text-zinc-400 group-hover:text-white truncate pr-4">
+                                ${link.replace(/^https?:\/\//, '')}
+                            </span>
+                            <span class="text-blue transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">↗</span>
+                        </a>
+                    `).join('');
+                } else {
+                    container.innerHTML = "<p class='text-center text-zinc-500'>Esta carpeta no tiene links.</p>";
+                }
 
             } catch (err) {
+                console.error("Error al cargar:", err.message);
                 document.getElementById('folderTitle').textContent = "Carpeta no encontrada";
-                console.error(err);
+                document.getElementById('creatorName').textContent = "El link puede haber expirado o ser incorrecto.";
             }
         }
 
+        // Ejecutar al cargar la página
         cargarCarpeta();
     </script>
+
+    <style>
+        .bg-mesh {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, #38BDF822, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .text-muted { color: #71717a; }
+    </style>
 </body>
 </html>
