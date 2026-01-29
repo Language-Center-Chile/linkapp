@@ -6,7 +6,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
-    // 2. Configuración de diseño (Esto DEBE ir solo para que no falle)
     tailwind.config = {
       darkMode: "class",
       theme: {
@@ -22,20 +21,15 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // EN EL HEAD
-let supabaseClient; // Usaremos este nombre único
-
-try {
-  const supabaseUrl =  'https://dvgcycyiphjmdnahjdvk.supabase.co/'; 
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
-
-  // Aquí usamos la librería global (supabase) para crear nuestro cliente (supabaseClient)
-  supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-  
-  console.log("Conexión establecida con supabaseClient");
-} catch (error) {
-  console.error("Error al inicializar:", error);
-}
+    let supabaseClient;
+    try {
+      const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
+      supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+      console.log("Conexión establecida con supabaseClient");
+    } catch (error) {
+      console.error("Error al inicializar:", error);
+    }
   </script>
 </head>
 
@@ -74,9 +68,9 @@ try {
                 <span>👤</span> Editar Perfil
               </a>
               <a href="suscripcion2.html" class="flex items-center gap-3 px-4 py-3 text-sm text-muted hover:bg-bg hover:text-purple rounded-xl transition-all group border-y border-border/10">
-      <span class="group-hover:scale-110 transition-transform">💎</span> 
-      <span class="font-medium">Suscripción Pro</span>
-    </a>
+                <span class="group-hover:scale-110 transition-transform">💎</span> 
+                <span class="font-medium">Suscripción Pro</span>
+              </a>
               <button onclick="logout()" class="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-xl transition">
                 <span>🚪</span> Cerrar sesión
               </button>
@@ -99,14 +93,12 @@ try {
       </button>
     </div>
 
-    <div id="folderGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      </div>
+    <div id="folderGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
   </main>
 
   <div id="shareModal" class="share-overlay hidden">
     <div class="share-box animate-success">
       <h3 class="text-xl font-black text-white mb-6 text-center tracking-tight">Compartir <span class="text-blue">Carpeta</span></h3>
-
       <div class="grid grid-cols-2 gap-3 mb-8">
         <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-green-500/50 transition-colors" onclick="shareWhatsApp()">
           <span class="text-2xl">📱</span> <span class="text-[10px] font-bold uppercase tracking-widest">WhatsApp</span>
@@ -121,7 +113,6 @@ try {
           <span class="text-2xl">🔗</span> <span class="text-[10px] font-bold uppercase tracking-widest">Copiar</span>
         </button>
       </div>
-
       <button class="w-full py-3 text-muted text-xs font-black uppercase tracking-widest hover:text-white transition" onclick="cerrarShare()">
         Cerrar ventana
       </button>
@@ -140,13 +131,10 @@ try {
     window.addEventListener('load', function() {
       const nick = localStorage.getItem('userNickname') || 'Usuario';
       const avatar = localStorage.getItem('userAvatar');
-
       document.getElementById('userNicknameDisplay').textContent = nick;
       document.getElementById('userNicknameMenu').textContent = nick;
-
       const avatarImg = document.getElementById('userAvatarDisplay');
       const fallback = document.getElementById('avatarFallback');
-
       if (avatar) {
         avatarImg.src = avatar;
         avatarImg.classList.remove('hidden');
@@ -171,7 +159,7 @@ try {
       window.location.href = 'login.html';
     }
 
-    /* ================= SISTEMA DE CARPETAS (LÓGICA INTACTA) ================= */
+    /* ================= SISTEMA DE CARPETAS ================= */
     let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
     let textoCompartir = "";
 
@@ -182,7 +170,6 @@ try {
 
     function renderCarpetas() {
       const grid = document.getElementById('folderGrid');
-
       if (carpetas.length === 0) {
         grid.innerHTML = `
           <div class="col-span-full flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-[2.5rem] bg-surface/20">
@@ -193,7 +180,7 @@ try {
       }
 
       grid.innerHTML = carpetas.map((folder, fIndex) => `
-        <div class="folder-card border border-border rounded-[2rem] p-6 flex flex-col h-full overflow-hidden">
+        <div class="folder-card border border-border rounded-[2rem] p-6 flex flex-col h-full overflow-hidden bg-surface/10 backdrop-blur-sm">
           <div class="flex justify-between items-start mb-6">
             <div>
               <h3 class="text-xl font-black text-white leading-tight mb-1">${folder.nombre}</h3>
@@ -210,17 +197,20 @@ try {
 
           <div class="relative mb-4">
             <input type="text" oninput="filtrarLinks(this, ${fIndex})"
-              placeholder="Buscar enlace..."
+              placeholder="Buscar por nombre..."
               class="w-full bg-bg/50 border border-border text-[11px] p-3 rounded-xl focus:border-blue/50 outline-none transition-all placeholder:text-muted/30">
           </div>
 
           <div id="links-container-${fIndex}" class="space-y-2 mb-6 flex-grow overflow-y-auto max-h-56 pr-2 custom-scroll">
             ${folder.links.map((link, lIndex) => `
               <div class="link-wrapper flex justify-between items-center bg-bg/40 border border-border/50 p-3 rounded-xl group hover:bg-bg transition-colors"
-                data-url="${link}">
-                <a href="${link}" target="_blank" class="truncate text-[11px] font-medium text-muted group-hover:text-blue transition-colors max-w-[80%]">
-                  ${link.replace('https://', '').replace('http://', '')}
-                </a>
+                data-name="${link.nombre}">
+                <div class="flex flex-col overflow-hidden max-w-[80%]">
+                   <a href="${link.url}" target="_blank" class="truncate text-[11px] font-bold text-white group-hover:text-blue transition-colors">
+                    ${link.nombre}
+                   </a>
+                   <span class="text-[9px] text-muted/50 truncate">${link.url.replace('https://', '').replace('http://', '')}</span>
+                </div>
                 <button onclick="eliminarEnlace(${fIndex}, ${lIndex})" class="text-red-400/50 hover:text-red-400 text-[10px] transition-colors">✕</button>
               </div>
             `).join('')}
@@ -234,7 +224,6 @@ try {
       `).join('');
     }
 
-    /* ================= FUNCIONES DE CARPETA ================= */
     function nuevaCarpeta() {
       const n = prompt("Nombre de la nueva colección:");
       if (n) {
@@ -251,10 +240,14 @@ try {
     }
 
     function agregarEnlace(i) {
-      const l = prompt("Pega la URL del enlace:");
-      if (l) {
-        carpetas[i].links.push(l.startsWith('http') ? l : `https://${l}`);
-        guardarYRenderizar();
+      const url = prompt("Pega la URL del enlace:");
+      if (url) {
+        const nombre = prompt("¿Qué nombre (etiqueta) le quieres poner?");
+        if (nombre) {
+          const finalUrl = url.startsWith('http') ? url : `https://${url}`;
+          carpetas[i].links.push({ nombre: nombre, url: finalUrl });
+          guardarYRenderizar();
+        }
       }
     }
 
@@ -265,76 +258,41 @@ try {
 
     function filtrarLinks(input, folderIndex) {
       const filtro = input.value.toLowerCase();
-      const listaLinks = document.getElementById(`links-container-${folderIndex}`);
-      const items = listaLinks.getElementsByClassName('link-wrapper');
-
+      const items = document.getElementById(`links-container-${folderIndex}`).getElementsByClassName('link-wrapper');
       Array.from(items).forEach(item => {
-        const texto = item.getAttribute('data-url').toLowerCase();
+        const texto = item.getAttribute('data-name').toLowerCase();
         item.style.display = texto.includes(filtro) ? 'flex' : 'none';
       });
     }
 
-    /* ================= COMPARTIR ================= */
-     async function abrirCompartir(index) {
-  console.log("Iniciando proceso de compartido...");
-  
-  try {
-    const carpeta = carpetas[index];
-    const nick = localStorage.getItem('userNickname') || 'Anonimo';
+    async function abrirCompartir(index) {
+      try {
+        const carpeta = carpetas[index];
+        const nick = localStorage.getItem('userNickname') || 'Anonimo';
+        const { data, error } = await supabaseClient
+          .from('carpetas')
+          .insert([{ nombre: carpeta.nombre, links: carpeta.links, user_nickname: nick }])
+          .select();
 
-    // USAMOS EL NUEVO NOMBRE AQUÍ
-    const { data, error } = await supabaseClient
-      .from('carpetas')
-      .insert([
-        { 
-          nombre: carpeta.nombre, 
-          links: carpeta.links, 
-          user_nickname: nick 
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const shareId = data[0].id;
+          const urlPublica = `${window.location.origin}/view.html?id=${shareId}`;
+          textoCompartir = `¡Mira mi colección "${carpeta.nombre}" en LinkApp!\n\nLink: ${urlPublica}`;
+          document.getElementById("shareModal").classList.remove("hidden");
         }
-      ])
-      .select();
-
-    if (error) throw error;
-
-    if (data && data.length > 0) {
-      const shareId = data[0].id;
-      const urlPublica = `${window.location.origin}/view.html?id=${shareId}`;
-      textoCompartir = `¡Mira mi colección "${carpeta.nombre}" en LinkApp!\n\nLink: ${urlPublica}`;
-
-      document.getElementById("shareModal").classList.remove("hidden");
-      console.log("Carpeta guardada en la nube con ID:", shareId);
+      } catch (err) {
+        console.error("Error al compartir:", err.message);
+        alert("Error al generar enlace.");
+      }
     }
 
-  } catch (err) {
-    console.error("Error al intentar compartir:", err.message);
-    alert("No se pudo generar el enlace. Revisa la consola.");
-  }
-}
-
-    function cerrarShare() {
-      document.getElementById("shareModal").classList.add("hidden");
-    }
-
-    function shareWhatsApp() {
-      window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`);
-      cerrarShare();
-    }
-
-    function shareFacebook() {
-      window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textoCompartir)}`);
-      cerrarShare();
-    }
-
-    function shareTelegram() {
-      window.open(`https://t.me/share/url?text=${encodeURIComponent(textoCompartir)}`);
-      cerrarShare();
-    }
-
-    function copyShare() {
-      navigator.clipboard.writeText(textoCompartir);
-      alert("Copiado al portapapeles ✔");
-      cerrarShare();
-    }
+    function cerrarShare() { document.getElementById("shareModal").classList.add("hidden"); }
+    function shareWhatsApp() { window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`); cerrarShare(); }
+    function shareFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textoCompartir)}`); cerrarShare(); }
+    function shareTelegram() { window.open(`https://t.me/share/url?text=${encodeURIComponent(textoCompartir)}`); cerrarShare(); }
+    function copyShare() { navigator.clipboard.writeText(textoCompartir); alert("Copiado ✔"); cerrarShare(); }
 
     renderCarpetas();
   </script>

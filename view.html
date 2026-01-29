@@ -15,106 +15,103 @@
             theme: {
                 extend: {
                     colors: {
-                        bg: "#000000",
-                        surface: "#18181b",
-                        border: "#27272a",
-                        blue: "#38BDF8",
-                        teal: "#2DD4BF",
-                        text: "#E2E8F0"
+                        bg: "#000000", surface: "#18181b", border: "#27272a",
+                        blue: "#38BDF8", teal: "#2DD4BF", text: "#E2E8F0"
                     }
                 }
             }
         };
 
-        // --- CONFIGURACIÓN DE CONEXIÓN ---
+        // CONEXIÓN (Mantenemos tus credenciales)
         let supabaseClient;
-        const supabaseUrl =  'https://dvgcycyiphjmdnahjdvk.supabase.co/';  // 👈 PEGA TU URL
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI'; // 👈 PEGA TU KEY
-        
         try {
+            const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
             supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-        } catch (e) {
-            console.error("Error al conectar con Supabase:", e);
-        }
+        } catch (e) { console.error("Error de conexión:", e); }
     </script>
 </head>
 
-<body class="min-h-screen bg-bg text-text relative overflow-x-hidden">
+<body class="min-h-screen bg-bg text-text relative overflow-x-hidden flex flex-col">
     <div class="bg-mesh"></div>
 
-    <main class="max-w-3xl mx-auto px-6 py-20 relative z-10">
+    <main class="max-w-3xl mx-auto px-6 py-20 relative z-10 flex-grow w-full">
         <div class="text-center mb-12">
             <img src="logo1.png" alt="Logo" class="w-12 h-16 mx-auto mb-6">
             <h1 id="folderTitle" class="text-4xl font-black text-white mb-2 italic tracking-tighter">Cargando carpeta...</h1>
-            <p id="creatorName" class="text-muted text-sm uppercase tracking-widest font-bold text-blue"></p>
+            <p id="creatorName" class="text-zinc-500 text-sm uppercase tracking-widest font-bold"></p>
         </div>
 
         <div id="linksContainer" class="grid gap-4">
             </div>
 
         <div class="mt-16 text-center">
-            <a href="index.html" class="text-xs font-black uppercase tracking-[0.3em] text-zinc-500 hover:text-blue transition-all">
-                ← Volver a LinkApp
+            <a href="index.html" class="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 hover:text-blue transition">
+                Creado con LinkApp
             </a>
         </div>
     </main>
 
+    <footer class="py-10 text-center relative z-10">
+        <p class="text-[9px] text-zinc-800 uppercase tracking-widest font-medium">© 2026 LinkApp Environment</p>
+    </footer>
+
     <script>
-        // 1. Capturar el ID de la URL (?id=...)
         const params = new URLSearchParams(window.location.search);
         const folderId = params.get('id');
 
         async function cargarCarpeta() {
-            // Validar que exista un ID en la URL
             if (!folderId) {
                 document.getElementById('folderTitle').textContent = "Enlace no válido";
                 return;
             }
 
-            console.log("Buscando carpeta ID:", folderId);
-
             try {
-                // Convertir ID a número si es necesario (para evitar errores en Supabase)
-                const idFinal = isNaN(folderId) ? folderId : Number(folderId);
+                // Ajuste para IDs numéricos o UUID
+                const idParaConsulta = isNaN(folderId) ? folderId : Number(folderId);
 
-                // 2. Consultar la tabla 'carpetas'
                 const { data, error } = await supabaseClient
                     .from('carpetas')
                     .select('*')
-                    .eq('id', idFinal)
+                    .eq('id', idParaConsulta)
                     .single();
 
-                if (error) throw error;
-                if (!data) throw new Error("No se encontró la carpeta en la base de datos");
+                if (error || !data) throw error;
 
-                // 3. Renderizar Título y Creador
+                // Título y Creador
                 document.getElementById('folderTitle').innerHTML = `Colección: <span class="text-blue">${data.nombre}</span>`;
-                document.getElementById('creatorName').textContent = `Compartido por: ${data.user_nickname || 'Anónimo'}`;
+                document.getElementById('creatorName').textContent = `Compartido por: ${data.user_nickname}`;
 
-                // 4. Renderizar Links
                 const container = document.getElementById('linksContainer');
-                if (data.links && Array.isArray(data.links)) {
-                    container.innerHTML = data.links.map(link => `
-                        <a href="${link}" target="_blank" 
-                           class="bg-surface/50 backdrop-blur-sm p-6 rounded-2xl border border-border flex justify-between items-center group hover:border-blue hover:bg-surface transition-all">
-                            <span class="text-sm font-medium text-zinc-400 group-hover:text-white truncate pr-4">
-                                ${link.replace(/^https?:\/\//, '')}
-                            </span>
-                            <span class="text-blue transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">↗</span>
+                
+                // Renderizado con soporte para el nuevo formato de etiquetas
+                container.innerHTML = data.links.map(link => {
+                    // Verificamos si es el nuevo formato (objeto) o el antiguo (string)
+                    const nombreMostrar = typeof link === 'object' ? link.nombre : link;
+                    const urlReal = typeof link === 'object' ? link.url : link;
+
+                    return `
+                        <a href="${urlReal}" target="_blank" 
+                           class="bg-surface/40 backdrop-blur-md p-6 rounded-[1.5rem] border border-border flex justify-between items-center group hover:border-blue/50 hover:bg-surface/80 transition-all">
+                            <div class="flex flex-col overflow-hidden pr-4">
+                                <span class="text-lg font-bold text-white group-hover:text-blue transition-colors truncate">
+                                    ${nombreMostrar}
+                                </span>
+                                <span class="text-[10px] text-zinc-500 truncate italic">
+                                    ${urlReal.replace(/^https?:\/\//, '')}
+                                </span>
+                            </div>
+                            <span class="text-blue opacity-40 group-hover:opacity-100 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all text-xl">↗</span>
                         </a>
-                    `).join('');
-                } else {
-                    container.innerHTML = "<p class='text-center text-zinc-500'>Esta carpeta no tiene links.</p>";
-                }
+                    `;
+                }).join('');
 
             } catch (err) {
-                console.error("Error al cargar:", err.message);
                 document.getElementById('folderTitle').textContent = "Carpeta no encontrada";
-                document.getElementById('creatorName').textContent = "El link puede haber expirado o ser incorrecto.";
+                console.error("Error al cargar datos:", err);
             }
         }
 
-        // Ejecutar al cargar la página
         cargarCarpeta();
     </script>
 
@@ -122,11 +119,10 @@
         .bg-mesh {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -20%, #38BDF822, transparent 50%);
+            background: radial-gradient(circle at 50% -20%, #38BDF815, transparent 50%);
             z-index: 0;
             pointer-events: none;
         }
-        .text-muted { color: #71717a; }
     </style>
 </body>
 </html>
