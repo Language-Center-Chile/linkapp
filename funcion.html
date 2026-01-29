@@ -25,8 +25,8 @@
     let supabase;
     try {
       // Usa comillas simples y asegúrate de que no haya espacios
-      const supabaseUrl = 'TU_URL_AQUÍ'; 
-      const supabaseKey = 'TU_KEY_AQUÍ';
+      const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co'; 
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
       supabase = supabase.createClient(supabaseUrl, supabaseKey);
       console.log("Supabase conectado correctamente");
     } catch (e) {
