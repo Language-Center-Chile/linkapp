@@ -6,6 +6,7 @@
   <title>Registro - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="estilos.css">
   <script>
     tailwind.config = {
@@ -24,6 +25,11 @@
         },
       },
     };
+
+    // Configuración de Supabase
+    const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
 
   <style>
@@ -92,6 +98,7 @@
           <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Correo Electrónico</label>
           <input
             type="email"
+            id="email"
             class="w-full bg-bg/50 border border-border rounded-2xl px-4 py-4 text-white placeholder:text-muted/30 outline-none transition-all focus:border-blue/50"
             placeholder="correo@ejemplo.com"
             required
@@ -119,12 +126,14 @@
             required
           >
           <p id="errorMsg" class="text-red-400 text-[11px] font-bold mt-3 ml-1 hidden flex items-center gap-1">
-             ⚠️ Las contraseñas no coinciden
+              ⚠️ Las contraseñas no coinciden
           </p>
+          <p id="supabaseError" class="text-red-400 text-[11px] font-bold mt-3 ml-1 hidden"></p>
         </div>
 
         <button
           type="submit"
+          id="btnRegistro"
           class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 mt-4 uppercase tracking-widest text-sm"
         >
           REGISTRAR CUENTA
@@ -150,24 +159,52 @@
   </footer>
 
   <script>
-    function validarRegistro(event) {
+    async function validarRegistro(event) {
       event.preventDefault();
 
+      const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirmPassword").value;
       const errorMsg = document.getElementById("errorMsg");
+      const supabaseError = document.getElementById("supabaseError");
+      const btnRegistro = document.getElementById("btnRegistro");
 
+      // Resetear errores
+      errorMsg.classList.add("hidden");
+      supabaseError.classList.add("hidden");
+
+      // Validar coincidencia de contraseña
       if (password !== confirmPassword) {
         errorMsg.classList.remove("hidden");
-        // Pequeño efecto de vibración en el error
         errorMsg.classList.add("animate-pulse");
         return;
       }
 
-      errorMsg.classList.add("hidden");
+      // Desactivar botón mientras procesa
+      btnRegistro.disabled = true;
+      btnRegistro.textContent = "PROCESANDO...";
+      btnRegistro.style.opacity = "0.7";
 
-      // Redirigir a pantalla de éxito
-      window.location.href = "registro-exitoso.html";
+      try {
+        // REGISTRO REAL EN SUPABASE
+        const { data, error } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password,
+        });
+
+        if (error) throw error;
+
+        // Si no hay error, el registro fue exitoso
+        console.log("Registro exitoso:", data);
+        window.location.href = "registro-exitoso.html";
+
+      } catch (error) {
+        supabaseError.textContent = "❌ " + error.message;
+        supabaseError.classList.remove("hidden");
+        btnRegistro.disabled = false;
+        btnRegistro.textContent = "REGISTRAR CUENTA";
+        btnRegistro.style.opacity = "1";
+      }
     }
   </script>
 
