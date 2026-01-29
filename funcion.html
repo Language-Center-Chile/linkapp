@@ -22,16 +22,20 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    let supabase;
-    try {
-      // Usa comillas simples y asegúrate de que no haya espacios
-      const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co'; 
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
-      supabase = supabase.createClient(supabaseUrl, supabaseKey);
-      console.log("Supabase conectado correctamente");
-    } catch (e) {
-      console.error("Error crítico en conexión Supabase:", e);
-    }
+    // EN EL HEAD
+let supabaseClient; // Usaremos este nombre único
+
+try {
+  const supabaseUrl =  'https://dvgcycyiphjmdnahjdvk.supabase.co/'; 
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
+
+  // Aquí usamos la librería global (supabase) para crear nuestro cliente (supabaseClient)
+  supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+  
+  console.log("Conexión establecida con supabaseClient");
+} catch (error) {
+  console.error("Error al inicializar:", error);
+}
   </script>
 </head>
 
@@ -271,18 +275,41 @@
     }
 
     /* ================= COMPARTIR ================= */
-    function abrirCompartir(index) {
-      const carpeta = carpetas[index];
-      const nickname = localStorage.getItem('userNickname') || 'Un usuario';
-      
-      textoCompartir = 
-        `El usuario ${nickname} compartió esta carpeta de enlaces usando LinkApp\n\n` +
-        `📁 Carpeta: ${carpeta.nombre}\n` +
-        `---------------------------\n` +
-        carpeta.links.map((l, i) => `${i + 1}. ${l}`).join('\n');
+     async function abrirCompartir(index) {
+  console.log("Iniciando proceso de compartido...");
+  
+  try {
+    const carpeta = carpetas[index];
+    const nick = localStorage.getItem('userNickname') || 'Anonimo';
+
+    // USAMOS EL NUEVO NOMBRE AQUÍ
+    const { data, error } = await supabaseClient
+      .from('carpetas')
+      .insert([
+        { 
+          nombre: carpeta.nombre, 
+          links: carpeta.links, 
+          user_nickname: nick 
+        }
+      ])
+      .select();
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      const shareId = data[0].id;
+      const urlPublica = `${window.location.origin}/view.html?id=${shareId}`;
+      textoCompartir = `¡Mira mi colección "${carpeta.nombre}" en LinkApp!\n\nLink: ${urlPublica}`;
 
       document.getElementById("shareModal").classList.remove("hidden");
+      console.log("Carpeta guardada en la nube con ID:", shareId);
     }
+
+  } catch (err) {
+    console.error("Error al intentar compartir:", err.message);
+    alert("No se pudo generar el enlace. Revisa la consola.");
+  }
+}
 
     function cerrarShare() {
       document.getElementById("shareModal").classList.add("hidden");
