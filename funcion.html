@@ -2,36 +2,37 @@
 <html lang="es" class="dark">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestor - LinkApp</title>
-  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="stylesheet" href="estilos.css?v=1.2">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="stylesheet" href="estilos.css">
+
   <script>
+    // 2. Configuración de diseño (Esto DEBE ir solo para que no falle)
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            bg: "#000000",
-            surface: "#18181b",
-            border: "#27272a",
-            blue: "#38BDF8",
-            teal: "#2DD4BF",
-            text: "#E2E8F0",
-            muted: "#94A3B8"
+            bg: "#000000", surface: "#18181b", border: "#27272a",
+            blue: "#38BDF8", teal: "#2DD4BF", text: "#E2E8F0", muted: "#94A3B8"
           }
         }
       }
     };
-    if (localStorage.getItem('isLoggedIn') !== 'true') {
-      window.location.href = 'login.html';
-    }
   </script>
 
-  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    let supabase;
+    try {
+      // Usa comillas simples y asegúrate de que no haya espacios
+      const supabaseUrl = 'TU_URL_AQUÍ'; 
+      const supabaseKey = 'TU_KEY_AQUÍ';
+      supabase = supabase.createClient(supabaseUrl, supabaseKey);
+      console.log("Supabase conectado correctamente");
+    } catch (e) {
+      console.error("Error crítico en conexión Supabase:", e);
+    }
+  </script>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
