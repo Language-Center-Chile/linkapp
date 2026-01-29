@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Perfil - LinkApp</title>
+  <title>Editar Perfil - LinkApp</title>
   <link rel="icon" type="image/png" href="logo1.png">
-  <link rel="stylesheet" href="estilos.css">
   <script src="https://cdn.tailwindcss.com"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="estilos.css?v=1.2">
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -20,203 +20,182 @@
             blue: "#38BDF8",
             teal: "#2DD4BF",
             text: "#E2E8F0",
-            muted: "#94A3B8"
-          }
-        }
-      }
+            muted: "#94A3B8",
+          },
+        },
+      },
     };
 
-    if (localStorage.getItem('isLoggedIn') !== 'true') {
-      window.location.href = 'login.html';
-    }
+    const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
 
   <style>
     body { font-family: 'Inter', sans-serif; }
-    
     .gradient-text {
       background: linear-gradient(90deg, #38BDF8, #2DD4BF);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    .animate-fade-in {
-      animation: fadeIn 0.6s ease-out;
+    .profile-card {
+      backdrop-filter: blur(16px);
+      background-color: rgba(24, 24, 27, 0.7);
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+    .animate-slide-up {
+      animation: slideUp 0.5s ease-out;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-
-    #avatarInput { display: none; }
-
-    .glass-card {
-      backdrop-filter: blur(12px);
-      background-color: rgba(24, 24, 27, 0.8);
-    }
-
-    .avatar-glow {
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .avatar-glow:hover {
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.3);
-      border-color: #38BDF8;
-      transform: scale(1.02);
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
-  
+<body class="min-h-screen flex flex-col bg-bg text-text relative overflow-hidden">
   <div class="bg-mesh"></div>
 
-  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
+  <header class="border-b border-border bg-bg/80 backdrop-blur-md z-50">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <img src="logo1.png" alt="logo" class="w-10 h-12">
         <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
       </div>
-
-      <nav class="hidden md:flex items-center gap-8 text-sm">
-        <div class="flex gap-6 border-r border-border pr-6 text-muted font-medium">
-          <a href="index.html" class="hover:text-blue transition-colors">Inicio</a>
-          <a href="funcion.html" class="hover:text-blue transition-colors">Mi Gestor</a>
-        </div>
-        <div class="flex gap-4 items-center">
-          <a href="funcion.html" class="flex items-center gap-2 px-5 py-2 border border-border rounded-xl text-muted hover:text-blue hover:border-blue/50 transition-all text-xs font-black bg-surface/50 uppercase tracking-widest">
-            <span>←</span> Volver
-          </a>
-        </div>
-      </nav>
-      
-      <button class="md:hidden text-white">☰</button>
+      <a href="funcion.html" class="text-[10px] font-black uppercase tracking-[0.2em] text-muted hover:text-blue transition-colors">
+        ← Cancelar y Volver
+      </a>
     </div>
   </header>
 
-  <main class="flex-grow flex items-center justify-center px-6 py-12 animate-fade-in">
-    <div class="w-full max-w-md glass-card border border-border rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden">
+  <main class="flex-grow flex items-center justify-center px-6 py-12">
+    <div class="w-full max-w-md profile-card p-10 rounded-[3rem] border border-border shadow-2xl animate-slide-up">
       
-      <div class="absolute -top-24 -left-24 w-48 h-48 bg-blue/10 rounded-full blur-3xl"></div>
-
-      <div class="text-center mb-10 relative">
-        <h1 class="text-3xl font-black text-white tracking-tight">Mi <span class="gradient-text">Perfil</span></h1>
-        <p class="text-muted text-xs mt-2 font-bold uppercase tracking-widest opacity-60">Configuración de Identidad</p>
-      </div>
-
-      <div class="flex flex-col items-center mb-10">
-        <div class="relative group">
-          <label for="avatarInput" class="cursor-pointer block">
-            <div class="w-32 h-32 rounded-full border-2 border-dashed border-border overflow-hidden bg-bg/50 flex items-center justify-center avatar-glow relative">
-              <img id="previewAvatar" class="w-full h-full object-cover hidden">
-              <span id="avatarFallback" class="text-4xl font-black text-blue/40">?</span>
-              
-              <div class="absolute inset-0 bg-blue/20 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-[2px]">
-                <span class="text-[10px] text-white font-black uppercase tracking-tighter">Cambiar Foto</span>
-              </div>
-            </div>
-          </label>
-          <div class="absolute bottom-1 right-1 w-7 h-7 bg-teal border-[4px] border-surface rounded-full shadow-lg"></div>
+      <div class="text-center mb-8">
+        <div class="relative inline-block mb-6">
+           <div class="w-24 h-24 rounded-full border-2 border-blue/30 p-1 bg-surface">
+              <img id="previewAvatar" src="" class="w-full h-full rounded-full object-cover hidden">
+              <div id="fallbackAvatar" class="w-full h-full rounded-full bg-blue/10 flex items-center justify-center text-blue text-2xl font-black">?</div>
+           </div>
+           <div class="absolute -bottom-1 -right-1 bg-blue text-black p-2 rounded-full text-xs shadow-lg">✏️</div>
         </div>
         
-        <input type="file" id="avatarInput" accept="image/*">
-        <p class="mt-4 text-[10px] text-muted uppercase tracking-[0.2em] font-black">Avatar Digital</p>
+        <h2 class="text-3xl font-black text-white tracking-tight italic uppercase">Tu <span class="gradient-text">Identidad</span></h2>
+        <p class="text-muted text-xs mt-2 font-medium tracking-widest uppercase">Personaliza tu perfil digital</p>
       </div>
 
-      <div class="space-y-8">
+      <form id="profileForm" class="space-y-6">
         <div>
-          <label class="block text-[10px] text-muted mb-3 uppercase font-black tracking-[0.2em] ml-1">Tu Nickname</label>
+          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-[0.2em]">Nickname Público</label>
           <div class="relative group">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors font-bold">@</span>
-            <input type="text" id="nicknameInput"
-              class="w-full bg-bg/40 border border-border text-white pl-10 pr-4 py-4 rounded-2xl focus:border-blue/50 outline-none transition-all placeholder:text-muted/20 font-medium"
-              placeholder="nickname">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors">@</span>
+            <input type="text" id="newNickname" 
+              class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all focus:border-blue/50 font-bold" 
+              placeholder="tu_nombre_digital" required>
           </div>
         </div>
 
-        <div class="pt-2">
-          <button onclick="guardarPerfil()"
-            class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 flex items-center justify-center gap-2 uppercase tracking-widest text-sm">
-            <span>Actualizar Datos</span>
-          </button>
+        <button type="submit" id="saveBtn"
+          class="w-full py-5 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 uppercase tracking-[0.15em] text-xs">
+          ACTUALIZAR PERFIL
+        </button>
+      </form>
 
-          <div id="saveMsg" class="flex items-center justify-center gap-2 text-teal text-[11px] font-black uppercase tracking-widest mt-6 opacity-0 transition-all duration-500 translate-y-2">
-            <span class="w-1.5 h-1.5 bg-teal rounded-full animate-ping"></span> 
-            Cambios sincronizados
-          </div>
-        </div>
-      </div>
+      <p id="statusMsg" class="mt-6 text-center text-[10px] font-bold uppercase tracking-widest hidden"></p>
     </div>
   </main>
 
-  <footer class="border-t border-border py-10 bg-surface/30">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col items-center gap-4">
-      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40">
-      <p class="text-muted/40 text-[10px] uppercase tracking-[0.3em] font-medium">© 2026 LinkApp Digital Identity</p>
-    </div>
+  <footer class="py-8 text-center">
+    <p class="text-muted/30 text-[9px] uppercase tracking-[0.4em]">Configuración de Entorno Seguro</p>
   </footer>
 
   <script>
-    const avatarInput = document.getElementById('avatarInput');
-    const previewAvatar = document.getElementById('previewAvatar');
-    const avatarFallback = document.getElementById('avatarFallback');
-    const nicknameInput = document.getElementById('nicknameInput');
-    const saveMsg = document.getElementById('saveMsg');
+    let currentUser = null;
 
-    window.addEventListener('load', () => {
-      const savedNick = localStorage.getItem('userNickname');
-      const savedAvatar = localStorage.getItem('userAvatar');
+    window.addEventListener('load', async function() {
+      try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
 
-      if (savedNick) {
-        nicknameInput.value = savedNick;
-        avatarFallback.textContent = savedNick.charAt(0).toUpperCase();
-      }
+        if (error || !session) {
+          window.location.href = 'login.html';
+          return;
+        }
 
-      if (savedAvatar) {
-        previewAvatar.src = savedAvatar;
-        previewAvatar.classList.remove('hidden');
-        avatarFallback.classList.add('hidden');
+        currentUser = session.user;
+        
+        // 1. Intentar cargar desde la tabla 'perfiles' primero
+        const { data: profile } = await supabaseClient
+          .from('perfiles')
+          .select('nickname, avatar_url')
+          .eq('id', currentUser.id)
+          .single();
+
+        const currentNick = profile?.nickname || localStorage.getItem('userNickname') || currentUser.user_metadata.nickname || "";
+        document.getElementById('newNickname').value = currentNick;
+        
+        // Cargar avatar
+        const currentAvatar = profile?.avatar_url || localStorage.getItem('userAvatar') || currentUser.user_metadata.avatar_url;
+        const img = document.getElementById('previewAvatar');
+        const fallback = document.getElementById('fallbackAvatar');
+
+        if (currentAvatar) {
+          img.src = currentAvatar;
+          img.classList.remove('hidden');
+          fallback.classList.add('hidden');
+        } else {
+          fallback.textContent = currentNick ? currentNick.charAt(0).toUpperCase() : "?";
+        }
+      } catch (err) {
+        console.error("Error de conexión inicial:", err);
       }
     });
 
-    avatarInput.addEventListener('change', function () {
-      const file = this.files[0];
-      if (!file) return;
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('saveBtn');
+      const msg = document.getElementById('statusMsg');
+      const nickname = document.getElementById('newNickname').value.trim();
 
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        previewAvatar.src = e.target.result;
-        previewAvatar.classList.remove('hidden');
-        avatarFallback.classList.add('hidden');
-        localStorage.setItem('userAvatar', e.target.result);
-      };
-      reader.readAsDataURL(file);
+      if (!nickname) return;
+
+      btn.disabled = true;
+      btn.textContent = "SINCRONIZANDO...";
+      msg.classList.add('hidden');
+
+      try {
+        // 1. Guardar en la tabla 'perfiles' (Base de Datos)
+        const { error: dbError } = await supabaseClient
+          .from('perfiles')
+          .upsert({ 
+            id: currentUser.id, 
+            nickname: nickname,
+            updated_at: new Date() 
+          });
+
+        if (dbError) throw dbError;
+
+        // 2. Actualizar metadata de Auth
+        const { error: authError } = await supabaseClient.auth.updateUser({
+          data: { nickname: nickname }
+        });
+
+        if (authError) throw authError;
+
+        // 3. Sincronizar LocalStorage
+        localStorage.setItem('userNickname', nickname);
+        
+        msg.textContent = "✨ Perfil actualizado correctamente";
+        msg.className = "mt-6 text-center text-[10px] font-bold uppercase tracking-widest text-teal block";
+        
+        setTimeout(() => { window.location.href = 'funcion.html'; }, 1500);
+
+      } catch (err) {
+        console.error("Detalle del error:", err);
+        msg.textContent = "❌ " + (err.message.includes('fetch') ? "Error de conexión (CORS)" : err.message);
+        msg.className = "mt-6 text-center text-[10px] font-bold uppercase tracking-widest text-red-400 block";
+        btn.disabled = false;
+        btn.textContent = "REINTENTAR ACTUALIZACIÓN";
+      }
     });
-
-    function guardarPerfil() {
-      const nick = nicknameInput.value.trim();
-      if (nick.length < 2) {
-        alert("⚠️ Nickname inválido");
-        return;
-      }
-
-      localStorage.setItem('userNickname', nick);
-      if (previewAvatar.classList.contains('hidden')) {
-        avatarFallback.textContent = nick.charAt(0).toUpperCase();
-      }
-
-      // Animación de éxito
-      saveMsg.classList.remove('opacity-0', 'translate-y-2');
-      saveMsg.classList.add('opacity-100', 'translate-y-0');
-
-      setTimeout(() => {
-        saveMsg.classList.add('opacity-0', 'translate-y-2');
-        saveMsg.classList.remove('opacity-100', 'translate-y-0');
-      }, 3000);
-    }
   </script>
-
 </body>
 </html>
