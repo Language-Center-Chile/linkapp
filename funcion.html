@@ -2,8 +2,13 @@
 <html lang="es" class="dark">
 
 <head>
-  <link rel="stylesheet" href="estilos.css?v=1.2">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestor - LinkApp</title>
+  <link rel="icon" type="image/png" href="imagenes/logo1.png">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -11,290 +16,525 @@
       theme: {
         extend: {
           colors: {
-            bg: "#000000", surface: "#18181b", border: "#27272a",
-            blue: "#38BDF8", teal: "#2DD4BF", text: "#E2E8F0", muted: "#94A3B8"
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            blue: "#38BDF8",
+            teal: "#2DD4BF",
+            text: "#E2E8F0",
+            muted: "#94A3B8"
           }
         }
       }
     };
-  </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    let supabaseClient;
-    try {
-      const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
-      supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-      console.log("Conexión establecida con supabaseClient");
-    } catch (error) {
-      console.error("Error al inicializar:", error);
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
     }
   </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .hidden { display: none; }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #38BDF8, #2DD4BF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mesh-gradient {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -10; background-color: #000000; overflow: hidden;
+    }
+    .mesh-sphere {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3;
+    }
+    .sphere-1 { width: 400px; height: 400px; background: #38BDF8; top: -100px; right: -100px; }
+    .sphere-2 { width: 500px; height: 500px; background: #2DD4BF; bottom: -150px; left: -150px; }
+
+    .folder-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(16px);
+      background-color: rgba(24, 24, 27, 0.6);
+      position: relative;
+    }
+
+    .folder-card:hover:not(.is-archived) {
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px -20px rgba(56, 189, 248, 0.3);
+    }
+
+    .is-archived {
+      filter: grayscale(1) contrast(0.8);
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .custom-scroll::-webkit-scrollbar { width: 4px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #38BDF8; }
+
+    .share-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px); display: flex; align-items: center;
+      justify-content: center; z-index: 100;
+    }
+    .share-box {
+      background: rgba(24, 24, 27, 0.95); border: 1px solid #27272a;
+      padding: 2.5rem; border-radius: 3rem; width: 100%; max-width: 480px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      max-height: 90vh; overflow-y: auto;
+    }
+
+    #qrcode img { margin: 0 auto; border-radius: 1rem; border: 8px solid white; }
+
+    .nav-link { transition: all 0.3s; position: relative; }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: #38BDF8; transition: width 0.3s;
+    }
+    .nav-link:hover::after { width: 100%; }
+    
+    /* Estilos mejorados para logos y botones sociales */
+    .social-logo { width: 40px; height: 40px; transition: transform 0.2s; }
+    .social-btn:hover .social-logo { transform: scale(1.1); }
+    .social-btn {
+      transition: all 0.3s ease;
+      display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+      padding: 1.5rem; background: rgba(255,255,255,0.03);
+      border: 1px solid #27272a; rounded: 2rem;
+    }
+    .social-btn:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      background: rgba(56, 189, 248, 0.05);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+  </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
-  <div class="bg-mesh"></div>
+  
+  <div class="mesh-gradient">
+    <div class="mesh-sphere sphere-1"></div>
+    <div class="mesh-sphere sphere-2"></div>
+  </div>
 
   <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
         <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
       </div>
 
-      <div class="flex items-center gap-5">
-        <div class="text-right hidden sm:block">
-          <p id="userNicknameDisplay" class="text-sm font-black text-white leading-none">Usuario</p>
-          <button onclick="logout()" class="text-[9px] text-red-400 hover:text-red-300 uppercase tracking-widest mt-1 font-bold">
-            Desconectar
-          </button>
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+        <div class="flex gap-6 border-r border-border pr-6 font-medium">
+          <a href="index.html" class="text-muted hover:text-blue transition-colors nav-link">Inicio</a>
+          <a href="suscripcion.html" class="text-muted hover:text-blue transition-colors nav-link">Planes</a>
         </div>
 
-        <div class="relative">
-          <button onclick="toggleUserMenu()" 
-            class="w-12 h-12 rounded-full border-2 border-border bg-surface overflow-hidden hover:border-blue transition-all shadow-lg active:scale-95">
-            <img id="userAvatarDisplay" src="" alt="Perfil" class="w-full h-full object-cover hidden">
-            <div id="avatarFallback" class="w-full h-full flex items-center justify-center bg-blue/10 text-blue font-bold">?</div>
-          </button>
+        <div class="flex items-center gap-5">
+          <div class="text-right">
+            <p id="userNicknameDisplay" class="text-sm font-black text-white leading-none">Usuario</p>
+            <button onclick="logout()" class="text-[9px] text-red-400 hover:text-red-300 uppercase font-black tracking-[0.2em] mt-1 transition-colors">
+              Desconectar
+            </button>
+          </div>
 
-          <div id="userDropdown" class="hidden absolute right-0 mt-3 w-56 bg-surface border border-border rounded-2xl shadow-2xl overflow-hidden z-50 animate-fade-in">
-            <div class="px-4 py-4 border-b border-border bg-bg/20">
-              <p class="text-[10px] text-muted uppercase font-black tracking-widest">Cuenta</p>
-              <p id="userNicknameMenu" class="font-bold text-white truncate">Usuario</p>
-            </div>
-            <div class="p-2">
-              <a href="perfil.html" class="flex items-center gap-3 px-3 py-2 text-sm text-muted hover:bg-bg hover:text-blue rounded-xl transition">
-                <span>👤</span> Editar Perfil
-              </a>
-              <a href="suscripcion2.html" class="flex items-center gap-3 px-4 py-3 text-sm text-muted hover:bg-bg hover:text-purple rounded-xl transition-all group border-y border-border/10">
-                <span class="group-hover:scale-110 transition-transform">💎</span> 
-                <span class="font-medium">Suscripción Pro</span>
-              </a>
-              <button onclick="logout()" class="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-xl transition">
-                <span>🚪</span> Cerrar sesión
-              </button>
+          <div class="relative">
+            <button onclick="toggleUserMenu()" 
+              class="w-12 h-12 rounded-full border-2 border-border bg-surface overflow-hidden hover:border-blue transition-all shadow-lg active:scale-95">
+              <img id="userAvatarDisplay" src="" alt="Perfil" class="w-full h-full object-cover hidden">
+              <div id="avatarFallback" class="w-full h-full flex items-center justify-center bg-blue/10 text-blue font-black text-lg">?</div>
+            </button>
+
+            <div id="userDropdown" class="hidden absolute right-0 mt-4 w-60 bg-surface border border-border rounded-[2rem] shadow-2xl overflow-hidden z-50">
+              <div class="px-6 py-5 border-b border-border bg-white/5">
+                <p class="text-[10px] text-muted uppercase font-black tracking-widest mb-1">Tu Cuenta</p>
+                <p id="userNicknameMenu" class="font-black text-white truncate text-lg">Usuario</p>
+              </div>
+              <div class="p-3">
+                <a href="ajustes-perfil.html" class="flex items-center gap-3 px-4 py-3 text-sm text-muted hover:bg-white/5 hover:text-blue rounded-xl transition-all font-bold">
+                  <span>⚙️</span> Ajustes de Perfil
+                </a>
+                <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 rounded-xl transition-all font-bold">
+                  <span>🚪</span> Cerrar Sesión
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </nav>
+      
+      <button class="md:hidden text-white text-2xl" onclick="toggleUserMenu()">☰</button>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-6 py-12 w-full flex-grow">
-    <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-      <div>
-        <h1 class="text-4xl font-black tracking-tight text-white mb-2">Mis <span class="gradient-text">Colecciones</span></h1>
-        <p class="text-muted text-sm font-medium">Gestiona y comparte tus espacios de trabajo digitales.</p>
+    <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-8">
+      <div class="text-center md:text-left">
+        <h1 class="text-5xl font-black tracking-tighter text-white mb-4">Mis <span class="gradient-text">Colecciones</span></h1>
+        <p class="text-muted text-lg font-medium max-w-xl">Gestiona tus links con estilo PRO.</p>
+        
+        <div class="flex justify-center md:justify-start gap-4 mt-6">
+          <button onclick="exportarDatos()" class="text-[10px] font-black uppercase tracking-widest text-muted hover:text-blue transition-colors flex items-center gap-2">📥 Backup</button>
+          <button onclick="document.getElementById('importInput').click()" class="text-[10px] font-black uppercase tracking-widest text-muted hover:text-teal transition-colors flex items-center gap-2">📤 Restaurar</button>
+          <input type="file" id="importInput" class="hidden" accept=".json" onchange="importarDatos(event)">
+        </div>
       </div>
       <button onclick="nuevaCarpeta()" 
-        class="px-8 py-3 bg-blue hover:bg-blue/90 text-black font-black rounded-xl transition-all shadow-lg shadow-blue/20 active:scale-95 uppercase tracking-widest text-xs">
+        class="px-10 py-5 bg-blue hover:bg-blue/90 text-black font-black rounded-3xl transition-all shadow-xl shadow-blue/20 active:scale-95 uppercase tracking-widest text-xs">
         + Nueva Carpeta
       </button>
+    </div>
+
+    <div class="relative mb-12 max-w-2xl mx-auto">
+      <div class="absolute left-6 top-1/2 -translate-y-1/2 text-blue">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y2="16.65"></line></svg>
+      </div>
+      <input type="text" id="globalSearch" oninput="buscarEnTodo(this.value)"
+        placeholder="¿Qué link estás buscando hoy?"
+        class="w-full bg-surface border-2 border-border text-white p-6 pl-16 rounded-[2.5rem] focus:border-blue outline-none transition-all shadow-2xl">
     </div>
 
     <div id="folderGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
   </main>
 
   <div id="shareModal" class="share-overlay hidden">
-    <div class="share-box animate-success">
-      <h3 class="text-xl font-black text-white mb-6 text-center tracking-tight">Compartir <span class="text-blue">Carpeta</span></h3>
-      <div class="grid grid-cols-2 gap-3 mb-8">
-        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-green-500/50 transition-colors" onclick="shareWhatsApp()">
-          <span class="text-2xl">📱</span> <span class="text-[10px] font-bold uppercase tracking-widest">WhatsApp</span>
+    <div class="share-box">
+      <div class="text-center mb-8">
+        <h3 id="shareTitle" class="text-3xl font-black text-white tracking-tight">Compartir <span class="text-blue">Carpeta</span></h3>
+        <p id="shareSubtitle" class="text-muted text-[10px] uppercase font-bold tracking-widest mt-2"></p>
+      </div>
+      
+      <div id="qrContainer" class="hidden"><div id="qrcode" class="flex justify-center mb-8"></div></div>
+      
+      <div class="grid grid-cols-2 gap-4 mb-8">
+        
+        <button class="social-btn group" onclick="shareWhatsApp()">
+          <svg class="social-logo" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a5.463 5.463 0 0 1-2.793-.765l-.2-.118-2.083.545.556-2.031-.129-.211a5.467 5.467 0 0 1-.836-2.887c0-3.024 2.463-5.486 5.487-5.486 1.464 0 2.84.57 3.875 1.605a5.465 5.465 0 0 1 1.605 3.874c.001 3.024-2.463 5.486-5.486 5.486m8.88-13.847C17.518 4.29 14.858 1.628 11.594 1.628c-3.691 0-6.705 3.013-6.706 6.706 0 1.181.307 2.333.892 3.351L3.91 16.51l4.582-1.202a6.666 6.666 0 0 0 3.102.79h.003c3.691 0 6.705-3.013 6.706-6.706 0-1.787-.696-3.468-1.961-4.731z"/></svg>
+          <span class="text-[10px] font-black text-muted group-hover:text-green-400 uppercase tracking-widest">WhatsApp</span>
         </button>
-        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-blue-500/50 transition-colors" onclick="shareFacebook()">
-          <span class="text-2xl">🔵</span> <span class="text-[10px] font-bold uppercase tracking-widest">Facebook</span>
+
+        <button class="social-btn group" onclick="shareFacebook()">
+          <svg class="social-logo" viewBox="0 0 24 24" fill="#1877F2"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+          <span class="text-[10px] font-black text-muted group-hover:text-blue-400 uppercase tracking-widest">Facebook</span>
         </button>
-        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-sky-500/50 transition-colors" onclick="shareTelegram()">
-          <span class="text-2xl">✈️</span> <span class="text-[10px] font-bold uppercase tracking-widest">Telegram</span>
+
+        <button class="social-btn group" onclick="shareX()">
+          <svg class="social-logo" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          <span class="text-[10px] font-black text-muted group-hover:text-white uppercase tracking-widest">Twitter/X</span>
         </button>
-        <button class="flex flex-col items-center gap-2 p-4 bg-bg rounded-2xl border border-border hover:border-white/50 transition-colors" onclick="copyShare()">
-          <span class="text-2xl">🔗</span> <span class="text-[10px] font-bold uppercase tracking-widest">Copiar</span>
+
+        <button class="social-btn group" onclick="shareInstagram()">
+          <svg class="social-logo" viewBox="0 0 24 24" fill="url(#instagram-gradient)"><defs><linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#833ab4"/><stop offset="50%" stop-color="#fd1d1d"/><stop offset="100%" stop-color="#fcb045"/></linearGradient></defs><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          <span class="text-[10px] font-black text-muted group-hover:text-pink-400 uppercase tracking-widest">Instagram</span>
         </button>
       </div>
-      <button class="w-full py-3 text-muted text-xs font-black uppercase tracking-widest hover:text-white transition" onclick="cerrarShare()">
-        Cerrar ventana
+
+      <button onclick="copyShare()" class="w-full py-4 bg-white/5 border border-dashed border-border rounded-2xl text-xs font-bold text-blue hover:bg-blue/10 transition-all mb-6">
+        🔗 Copiar Enlace Directo
       </button>
+
+      <button class="w-full py-2 text-muted text-[10px] font-black uppercase tracking-widest" onclick="cerrarShare()">[ CERRAR ]</button>
     </div>
   </div>
 
-  <footer class="border-t border-border py-10 bg-surface/30">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col items-center gap-4">
-      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40">
-      <p class="text-muted/40 text-[10px] uppercase tracking-[0.3em] font-medium">© 2026 LinkApp Environment</p>
+  <footer class="border-t border-border py-8 bg-surface/30 mt-auto">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col items-center gap-2">
+      <p class="text-muted/40 text-[9px] uppercase tracking-[0.3em] font-medium">© 2026 LinkApp Digital Environment</p>
     </div>
   </footer>
 
   <script>
-    /* ================= LÓGICA DE USUARIO ================= */
-    window.addEventListener('load', function() {
-      const nick = localStorage.getItem('userNickname') || 'Usuario';
-      const avatar = localStorage.getItem('userAvatar');
-      document.getElementById('userNicknameDisplay').textContent = nick;
-      document.getElementById('userNicknameMenu').textContent = nick;
-      const avatarImg = document.getElementById('userAvatarDisplay');
-      const fallback = document.getElementById('avatarFallback');
-      if (avatar) {
-        avatarImg.src = avatar;
-        avatarImg.classList.remove('hidden');
-        fallback.classList.add('hidden');
-      } else {
-        fallback.textContent = nick.charAt(0).toUpperCase();
-      }
-    });
+    const SUPABASE_URL = 'https://ioekbpgxywkvmxvfzblz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvZWticGd4eXdrdm14dmZ6Ymx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMjYzMDEsImV4cCI6MjA4NTYwMjMwMX0.of00FGlEr8tLpyXkWk0ZuiKhiYsjenA9YPHUfvOGYOs';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function toggleUserMenu() {
-      document.getElementById("userDropdown").classList.toggle("hidden");
-    }
-
-    window.addEventListener("click", function(e) {
-      if (!e.target.closest("#userDropdown") && !e.target.closest("button[onclick='toggleUserMenu()']")) {
-        document.getElementById("userDropdown").classList.add("hidden");
-      }
-    });
-
-    function logout() {
-      localStorage.removeItem('isLoggedIn');
-      window.location.href = 'login.html';
-    }
-
-    /* ================= SISTEMA DE CARPETAS ================= */
-    let carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
+    let carpetas = []; 
     let textoCompartir = "";
+    let enlacePublico = ""; 
 
-    function guardarYRenderizar() {
-      localStorage.setItem('carpetas', JSON.stringify(carpetas));
-      renderCarpetas();
+    const LIMIT_FOLDERS_FREE = 2;
+    const LIMIT_LINKS_FREE = 3;
+
+    window.logout = function() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    };
+
+    window.toggleUserMenu = function() {
+      document.getElementById('userDropdown').classList.toggle('hidden');
+    };
+
+    async function inicializar() {
+      actualizarInterfazUsuario();
+      try {
+        carpetas = JSON.parse(localStorage.getItem('carpetas')) || [];
+        renderCarpetas();
+      } catch (e) { carpetas = []; }
+      await cargarDeSupabase();
+    }
+
+    async function cargarDeSupabase() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) return;
+      const userId = session.user.id;
+      localStorage.setItem('supabaseUserId', userId);
+
+      const { data: profile } = await supabaseClient.from('profiles').select('plan').eq('id', userId).single();
+      if (profile) localStorage.setItem('userPlan', profile.plan);
+
+      const { data: folderData } = await supabaseClient.from('linkapp_folders').select('content').eq('user_id', userId).single();
+      if (folderData && folderData.content) {
+        carpetas = folderData.content;
+        localStorage.setItem('carpetas', JSON.stringify(carpetas));
+        renderCarpetas();
+      }
     }
 
     function renderCarpetas() {
       const grid = document.getElementById('folderGrid');
+      if (!grid) return;
       if (carpetas.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-[2.5rem] bg-surface/20">
-            <span class="text-4xl mb-4 opacity-20">📁</span>
-            <p class="text-muted font-bold uppercase tracking-widest text-xs">Tu biblioteca está vacía</p>
-          </div>`;
+        grid.innerHTML = `<div class="col-span-full text-center py-20 opacity-50 font-black uppercase text-xs tracking-widest">No hay colecciones creadas</div>`;
         return;
       }
 
-      grid.innerHTML = carpetas.map((folder, fIndex) => `
-        <div class="folder-card border border-border rounded-[2rem] p-6 flex flex-col h-full overflow-hidden bg-surface/10 backdrop-blur-sm">
-          <div class="flex justify-between items-start mb-6">
-            <div>
-              <h3 class="text-xl font-black text-white leading-tight mb-1">${folder.nombre}</h3>
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-blue animate-pulse"></span>
-                <span class="text-[10px] text-muted uppercase font-black tracking-tighter">${folder.links.length} Elementos</span>
+      const plan = localStorage.getItem('userPlan') || 'free';
+
+      grid.innerHTML = carpetas.map((folder, fIndex) => {
+        const isArchived = (plan === 'free' && fIndex >= LIMIT_FOLDERS_FREE);
+        
+        return `
+          <div class="folder-card border border-border rounded-[2.5rem] p-8 flex flex-col h-full ${isArchived ? 'is-archived' : ''}" data-f-index="${fIndex}">
+            
+            ${isArchived ? `
+              <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 rounded-[2.5rem] backdrop-blur-[2px]">
+                <span class="text-2xl mb-2">🔒</span>
+                <p class="text-[10px] font-black text-white tracking-[0.2em] uppercase bg-blue/80 px-4 py-1 rounded-full">Proyectado en PRO</p>
               </div>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="abrirCompartir(${fIndex})" class="w-8 h-8 flex items-center justify-center bg-surface border border-border rounded-lg hover:border-blue transition-colors text-xs">📤</button>
-              <button onclick="eliminarCarpeta(${fIndex})" class="w-8 h-8 flex items-center justify-center bg-surface border border-border rounded-lg hover:border-red-500 transition-colors text-xs text-red-400">🗑</button>
-            </div>
-          </div>
+            ` : ''}
 
-          <div class="relative mb-4">
-            <input type="text" oninput="filtrarLinks(this, ${fIndex})"
-              placeholder="Buscar por nombre..."
-              class="w-full bg-bg/50 border border-border text-[11px] p-3 rounded-xl focus:border-blue/50 outline-none transition-all placeholder:text-muted/30">
-          </div>
-
-          <div id="links-container-${fIndex}" class="space-y-2 mb-6 flex-grow overflow-y-auto max-h-56 pr-2 custom-scroll">
-            ${folder.links.map((link, lIndex) => `
-              <div class="link-wrapper flex justify-between items-center bg-bg/40 border border-border/50 p-3 rounded-xl group hover:bg-bg transition-colors"
-                data-name="${link.nombre}">
-                <div class="flex flex-col overflow-hidden max-w-[80%]">
-                   <a href="${link.url}" target="_blank" class="truncate text-[11px] font-bold text-white group-hover:text-blue transition-colors">
-                    ${link.nombre}
-                   </a>
-                   <span class="text-[9px] text-muted/50 truncate">${link.url.replace('https://', '').replace('http://', '')}</span>
+            <div class="flex justify-between items-start mb-6">
+              <div class="max-w-[60%]">
+                <div class="flex items-center gap-2 group">
+                  <h3 class="text-xl font-black text-white truncate">${folder.nombre}</h3>
+                  <button onclick="${isArchived ? '' : `editarCarpeta(${fIndex})`}" class="opacity-0 group-hover:opacity-100 text-[10px] transition-all hover:text-blue">✏️</button>
                 </div>
-                <button onclick="eliminarEnlace(${fIndex}, ${lIndex})" class="text-red-400/50 hover:text-red-400 text-[10px] transition-colors">✕</button>
+                <p class="text-[9px] text-muted font-black tracking-widest mt-1 uppercase">${folder.links.length} LINKS</p>
               </div>
-            `).join('')}
-          </div>
+              <div class="flex gap-1 relative z-20">
+                <button onclick="${isArchived ? '' : `abrirCompartir(${fIndex}, 'normal')`}" class="p-2 hover:text-blue transition-colors">🔗</button>
+                <button onclick="${isArchived ? '' : `abrirCompartir(${fIndex}, 'qr')`}" class="p-2 hover:text-teal transition-colors">QR</button>
+                <button onclick="eliminarCarpeta(${fIndex})" class="p-2 hover:text-red-400 transition-colors">🗑</button>
+              </div>
+            </div>
 
-          <button onclick="agregarEnlace(${fIndex})"
-            class="w-full py-3 bg-blue/5 hover:bg-blue/10 text-blue border border-blue/10 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">
-            + Añadir Enlace
-          </button>
-        </div>
-      `).join('');
+            <div class="relative mb-4">
+              <input type="text" oninput="filtrarLinks(this, ${fIndex})" 
+                placeholder="Filtrar..."
+                class="w-full bg-bg/50 border border-border text-[10px] p-3 rounded-xl focus:border-blue/50 outline-none transition-all">
+            </div>
+
+            <div id="links-container-${fIndex}" class="space-y-2 mb-6 flex-grow max-h-60 overflow-y-auto custom-scroll pr-2">
+              ${folder.links.map((link, lIndex) => `
+                <div class="link-wrapper flex justify-between items-center bg-white/5 p-3 rounded-xl border border-transparent hover:border-blue/20 transition-all group/link" 
+                  data-url="${link.url}" data-tag="${link.tag || ''}">
+                  <div class="truncate mr-2 flex items-center gap-2">
+                    <a href="${isArchived ? '#' : link.url}" target="${isArchived ? '' : '_blank'}" class="text-xs font-bold text-white hover:text-blue transition-colors block truncate">
+                      ${link.tag || link.url}
+                    </a>
+                  </div>
+                  <div class="flex gap-2 opacity-0 group-hover/link:opacity-100 transition-opacity">
+                    <button onclick="${isArchived ? '' : `editarEnlace(${fIndex}, ${lIndex})`}" class="text-[10px] hover:text-blue">✏️</button>
+                    <button onclick="${isArchived ? '' : `eliminarEnlace(${fIndex}, ${lIndex})`}" class="text-[10px] hover:text-red-400">✕</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <button onclick="${isArchived ? '' : `agregarEnlace(${fIndex})`}" 
+              class="w-full py-3 bg-blue/10 text-blue rounded-xl font-black text-[9px] uppercase tracking-tighter hover:bg-blue hover:text-black transition-all relative z-20">
+              + Añadir Enlace
+            </button>
+          </div>
+        `;
+      }).join('');
     }
 
-    function nuevaCarpeta() {
-      const n = prompt("Nombre de la nueva colección:");
+    // --- FUNCIONES DE EDICIÓN ---
+    window.editarCarpeta = function(i) {
+      const nuevoNombre = prompt("Nuevo nombre para la colección:", carpetas[i].nombre);
+      if (nuevoNombre && nuevoNombre.trim() !== "") {
+        carpetas[i].nombre = nuevoNombre.trim();
+        guardarYRenderizar();
+      }
+    };
+
+    window.editarEnlace = function(fi, li) {
+      const linkActual = carpetas[fi].links[li];
+      const nuevoTag = prompt("Editar nombre del link:", linkActual.tag);
+      const nuevaUrl = prompt("Editar URL del link:", linkActual.url);
+      
+      if (nuevaUrl && nuevaUrl.trim() !== "") {
+        carpetas[fi].links[li] = {
+          url: nuevaUrl.startsWith('http') ? nuevaUrl.trim() : `https://${nuevaUrl.trim()}`,
+          tag: nuevoTag || ""
+        };
+        guardarYRenderizar();
+      }
+    };
+
+    window.buscarEnTodo = function(termino) {
+      const filtro = termino.toLowerCase();
+      document.querySelectorAll('.folder-card').forEach(card => {
+        const fIndex = card.dataset.fIndex;
+        const nombre = carpetas[fIndex].nombre.toLowerCase();
+        const items = card.querySelectorAll('.link-wrapper');
+        let matchLink = false;
+        items.forEach(link => {
+          const m = link.dataset.url.toLowerCase().includes(filtro) || link.dataset.tag.toLowerCase().includes(filtro);
+          link.style.display = m ? 'flex' : 'none';
+          if (m) matchLink = true;
+        });
+        card.style.display = (nombre.includes(filtro) || matchLink) ? 'flex' : 'none';
+      });
+    };
+
+    window.filtrarLinks = function(input, i) {
+      const filtro = input.value.toLowerCase();
+      document.getElementById(`links-container-${i}`).querySelectorAll('.link-wrapper').forEach(item => {
+        const content = item.dataset.url.toLowerCase() + item.dataset.tag.toLowerCase();
+        item.style.display = content.includes(filtro) ? 'flex' : 'none';
+      });
+    };
+
+    window.nuevaCarpeta = function() {
+      const plan = localStorage.getItem('userPlan') || 'free';
+      if (plan === 'free' && carpetas.length >= LIMIT_FOLDERS_FREE) {
+        alert("🔒 Límite de Plan FREE: Solo puedes tener 2 carpetas activas. Mejora a PRO para crear más.");
+        return;
+      }
+      const n = prompt("Nombre de la colección:");
       if (n) {
         carpetas.push({ nombre: n, links: [] });
         guardarYRenderizar();
       }
-    }
+    };
 
-    function eliminarCarpeta(i) {
-      if (confirm("¿Eliminar carpeta definitivamente?")) {
-        carpetas.splice(i, 1);
-        guardarYRenderizar();
+    window.agregarEnlace = function(i) {
+      const plan = localStorage.getItem('userPlan') || 'free';
+      if (plan === 'free' && carpetas[i].links.length >= LIMIT_LINKS_FREE) {
+        alert("🔒 Límite de Plan FREE: Máximo 3 enlaces por carpeta.");
+        return;
       }
-    }
+      const url = prompt("URL del enlace:");
+      if (!url) return;
+      const tag = prompt("Nombre (opcional):");
+      const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+      carpetas[i].links.push({ url: fullUrl, tag: tag || "" });
+      guardarYRenderizar();
+    };
 
-    function agregarEnlace(i) {
-      const url = prompt("Pega la URL del enlace:");
-      if (url) {
-        const nombre = prompt("¿Qué nombre (etiqueta) le quieres poner?");
-        if (nombre) {
-          const finalUrl = url.startsWith('http') ? url : `https://${url}`;
-          carpetas[i].links.push({ nombre: nombre, url: finalUrl });
-          guardarYRenderizar();
-        }
-      }
-    }
+    window.eliminarCarpeta = function(i) {
+      if (confirm("¿Eliminar colección?")) { carpetas.splice(i, 1); guardarYRenderizar(); }
+    };
 
-    function eliminarEnlace(fi, li) {
+    window.eliminarEnlace = function(fi, li) {
       carpetas[fi].links.splice(li, 1);
       guardarYRenderizar();
-    }
+    };
 
-    function filtrarLinks(input, folderIndex) {
-      const filtro = input.value.toLowerCase();
-      const items = document.getElementById(`links-container-${folderIndex}`).getElementsByClassName('link-wrapper');
-      Array.from(items).forEach(item => {
-        const texto = item.getAttribute('data-name').toLowerCase();
-        item.style.display = texto.includes(filtro) ? 'flex' : 'none';
-      });
-    }
-
-    async function abrirCompartir(index) {
-      try {
-        const carpeta = carpetas[index];
-        const nick = localStorage.getItem('userNickname') || 'Anonimo';
-        const { data, error } = await supabaseClient
-          .from('carpetas')
-          .insert([{ nombre: carpeta.nombre, links: carpeta.links, user_nickname: nick }])
-          .select();
-
-        if (error) throw error;
-
-        if (data && data.length > 0) {
-          const shareId = data[0].id;
-          const urlPublica = `${window.location.origin}/view.html?id=${shareId}`;
-          textoCompartir = `¡Mira mi colección "${carpeta.nombre}" en LinkApp!\n\nLink: ${urlPublica}`;
-          document.getElementById("shareModal").classList.remove("hidden");
-        }
-      } catch (err) {
-        console.error("Error al compartir:", err.message);
-        alert("Error al generar enlace.");
+    async function guardarYRenderizar() {
+      localStorage.setItem('carpetas', JSON.stringify(carpetas));
+      renderCarpetas();
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        await supabaseClient.from('linkapp_folders').upsert({
+          user_id: session.user.id,
+          content: carpetas,
+          updated_at: new Date()
+        });
       }
     }
 
-    function cerrarShare() { document.getElementById("shareModal").classList.add("hidden"); }
-    function shareWhatsApp() { window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`); cerrarShare(); }
-    function shareFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textoCompartir)}`); cerrarShare(); }
-    function shareTelegram() { window.open(`https://t.me/share/url?text=${encodeURIComponent(textoCompartir)}`); cerrarShare(); }
-    function copyShare() { navigator.clipboard.writeText(textoCompartir); alert("Copiado ✔"); cerrarShare(); }
+    // --- SISTEMA DE COMPARTIR MEJORADO ---
+    window.abrirCompartir = function(index, tipo) {
+      const plan = localStorage.getItem('userPlan') || 'free';
+      if (tipo === 'qr' && plan !== 'pro') {
+        alert("🔒 El Código QR es una función PRO.");
+        window.location.href = 'suscripcion.html';
+        return;
+      }
+      const carpeta = carpetas[index];
+      const dataStr = JSON.stringify({ n: carpeta.nombre, u: localStorage.getItem('userNickname'), l: carpeta.links, id: localStorage.getItem('supabaseUserId') });
+      const base64 = btoa(unescape(encodeURIComponent(dataStr)));
+      enlacePublico = `${window.location.origin}${window.location.pathname.replace('funcion.html', 'view.html')}?data=${encodeURIComponent(base64)}`;
+      textoCompartir = `Checkea mi carpeta "${carpeta.nombre}" en LinkApp: ${enlacePublico}`;
+      
+      const qrBox = document.getElementById("qrcode");
+      qrBox.innerHTML = "";
+      if (tipo === 'qr') {
+        document.getElementById("qrContainer").classList.remove("hidden");
+        new QRCode(qrBox, { text: enlacePublico, width: 180, height: 180 });
+      } else {
+        document.getElementById("qrContainer").classList.add("hidden");
+      }
+      document.getElementById("shareModal").classList.remove("hidden");
+    };
 
-    renderCarpetas();
+    window.cerrarShare = () => document.getElementById("shareModal").classList.add("hidden");
+    
+    window.copyShare = () => { 
+      navigator.clipboard.writeText(enlacePublico); 
+      alert("¡Enlace copiado al portapapeles! 🚀"); 
+    };
+
+    window.shareWhatsApp = () => window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`);
+    
+    window.shareFacebook = () => {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(enlacePublico)}`, '_blank');
+    };
+
+    window.shareX = () => {
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(textoCompartir)}`, '_blank');
+    };
+
+    window.shareInstagram = () => {
+      navigator.clipboard.writeText(enlacePublico);
+      alert("Instagram no permite compartir links directamente. \n\n¡Hemos copiado el enlace por ti! Ahora puedes pegarlo en tu Bio o Stories. 📸");
+    };
+
+    function actualizarInterfazUsuario() {
+      const nick = localStorage.getItem('userNickname') || 'Usuario';
+      document.getElementById('userNicknameDisplay').textContent = nick;
+      document.getElementById('userNicknameMenu').textContent = nick;
+      const avatar = localStorage.getItem('userAvatar');
+      if (avatar && avatar !== 'null') {
+        const el = document.getElementById('userAvatarDisplay');
+        el.src = avatar; el.classList.remove('hidden');
+        document.getElementById('avatarFallback').classList.add('hidden');
+      }
+    }
+
+    window.exportarDatos = () => {
+      const blob = new Blob([JSON.stringify(carpetas)], {type: 'application/json'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+      a.download = 'linkapp_backup.json'; a.click();
+    };
+
+    window.importarDatos = (e) => {
+      const reader = new FileReader();
+      reader.onload = (ev) => { carpetas = JSON.parse(ev.target.result); guardarYRenderizar(); };
+      reader.readAsText(e.target.files[0]);
+    };
+
+    document.addEventListener('DOMContentLoaded', inicializar);
+    window.onclick = (e) => { if (!e.target.closest('button') && !e.target.closest('.share-box')) document.getElementById('userDropdown').classList.add('hidden'); }
   </script>
 </body>
 </html>

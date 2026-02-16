@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registro - LinkApp</title>
-  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="icon" type="image/png" href="imagenes/logo1.png">
   <script src="https://cdn.tailwindcss.com"></script>
+  
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="stylesheet" href="estilos.css">
+
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -25,188 +26,212 @@
         },
       },
     };
-
-    // Configuración de Supabase
-    const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
 
   <style>
     body { font-family: 'Inter', sans-serif; }
-    
     .gradient-text {
       background: linear-gradient(90deg, #38BDF8, #2DD4BF);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    .animate-fade-in {
-      animation: fadeIn 0.8s ease-out;
-    }
-
+    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    .glass-card {
-      backdrop-filter: blur(10px);
-      background-color: rgba(24, 24, 27, 0.8);
+    .mesh-gradient {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -10; background-color: #000000; overflow: hidden;
     }
+    .mesh-sphere { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; }
+    .sphere-1 { width: 450px; height: 450px; background: #38BDF8; top: -150px; right: -100px; }
+    .sphere-2 { width: 550px; height: 550px; background: #2DD4BF; bottom: -200px; left: -150px; }
+    .glass-card { backdrop-filter: blur(16px); background-color: rgba(24, 24, 27, 0.7); }
+    input:focus { border-color: rgba(56, 189, 248, 0.5) !important; box-shadow: 0 0 20px rgba(56, 189, 248, 0.05); }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
-  <div class="bg-mesh"></div>
+  
+  <div class="mesh-gradient">
+    <div class="mesh-sphere sphere-1"></div>
+    <div class="mesh-sphere sphere-2"></div>
+  </div>
 
   <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
         <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
       </div>
 
       <nav class="hidden md:flex items-center gap-8 text-sm">
-        <div class="flex gap-6 border-r border-border pr-6 text-muted">
+        <div class="flex gap-6 border-r border-border pr-6 text-muted font-medium">
           <a href="index.html" class="hover:text-blue transition-colors">Inicio</a>
           <a href="sobre-nosotros.html" class="hover:text-blue transition-colors">Nosotros</a>
           <a href="contacto.html" class="hover:text-blue transition-colors">Contacto</a>
         </div>
         <div class="flex gap-4 items-center">
-          <a href="index.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-muted hover:text-blue hover:border-blue/50 transition-all text-xs font-bold bg-surface/50">
+          <a href="index.html" class="flex items-center gap-2 px-5 py-2.5 border border-border rounded-xl text-muted hover:text-white hover:border-white/40 transition-all text-[10px] font-black uppercase tracking-widest bg-surface/50">
             <span>←</span> Volver al Inicio
           </a>
         </div>
       </nav>
-      
-      <button class="md:hidden text-white">☰</button>
+      <button class="md:hidden text-white text-2xl">☰</button>
     </div>
   </header>
 
   <main class="flex-grow flex items-center justify-center px-6 py-12 animate-fade-in">
-    <div class="w-full max-w-md glass-card p-10 rounded-[2.5rem] border border-border shadow-2xl">
+    <div class="w-full max-w-md glass-card p-10 rounded-[3rem] border border-border shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-24 -right-24 w-48 h-48 bg-teal/10 blur-3xl rounded-full"></div>
 
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-black text-white tracking-tight">Únete a <span class="gradient-text">Nosotros</span></h2>
-        <p class="text-muted text-sm mt-3 font-medium">Crea tu cuenta y empieza a organizar</p>
+      <div class="text-center mb-10 relative">
+        <h2 class="text-4xl font-black text-white tracking-tight">Únete a <span class="gradient-text">Nosotros</span></h2>
+        <p class="text-muted text-xs mt-3 font-bold uppercase tracking-widest">Crea tu identidad digital</p>
       </div>
 
-      <form class="space-y-5" onsubmit="validarRegistro(event)">
-
+      <form class="space-y-6 relative" onsubmit="validarRegistro(event)">
         <div>
-          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Correo Electrónico</label>
-          <input
-            type="email"
-            id="email"
-            class="w-full bg-bg/50 border border-border rounded-2xl px-4 py-4 text-white placeholder:text-muted/30 outline-none transition-all focus:border-blue/50"
-            placeholder="correo@ejemplo.com"
-            required
-          >
+          <label class="block text-[10px] text-muted mb-2.5 ml-1 uppercase font-black tracking-[0.2em]">Tu Nickname / Nombre</label>
+          <div class="relative group">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-30 group-focus-within:opacity-100 transition-opacity">👤</span>
+            <input type="text" id="nickname" class="w-full bg-bg/40 border border-border rounded-2xl pl-12 pr-4 py-4 text-white placeholder:text-muted/20 outline-none transition-all" placeholder="Ej: Juan Perez" required>
+          </div>
         </div>
 
         <div>
-          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            class="w-full bg-bg/50 border border-border rounded-2xl px-4 py-4 text-white placeholder:text-muted/30 outline-none transition-all focus:border-blue/50"
-            placeholder="••••••••"
-            required
-          >
+          <label class="block text-[10px] text-muted mb-2.5 ml-1 uppercase font-black tracking-[0.2em]">Correo Electrónico</label>
+          <div class="relative group">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-30 group-focus-within:opacity-100 transition-opacity">📧</span>
+            <input type="email" id="email" class="w-full bg-bg/40 border border-border rounded-2xl pl-12 pr-4 py-4 text-white placeholder:text-muted/20 outline-none transition-all" placeholder="tu@email.com" required>
+          </div>
         </div>
 
         <div>
-          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Confirmar Contraseña</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            class="w-full bg-bg/50 border border-border rounded-2xl px-4 py-4 text-white placeholder:text-muted/30 outline-none transition-all focus:border-blue/50"
-            placeholder="••••••••"
-            required
-          >
-          <p id="errorMsg" class="text-red-400 text-[11px] font-bold mt-3 ml-1 hidden flex items-center gap-1">
-              ⚠️ Las contraseñas no coinciden
+          <label class="block text-[10px] text-muted mb-2.5 ml-1 uppercase font-black tracking-[0.2em]">Contraseña</label>
+          <div class="relative group">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-30 group-focus-within:opacity-100 transition-opacity">🔑</span>
+            <input type="password" id="password" class="w-full bg-bg/40 border border-border rounded-2xl pl-12 pr-4 py-4 text-white placeholder:text-muted/20 outline-none transition-all" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-muted mb-2.5 ml-1 uppercase font-black tracking-[0.2em]">Confirmar Contraseña</label>
+          <div class="relative group">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-30 group-focus-within:opacity-100 transition-opacity">🛡️</span>
+            <input type="password" id="confirmPassword" class="w-full bg-bg/40 border border-border rounded-2xl pl-12 pr-4 py-4 text-white placeholder:text-muted/20 outline-none transition-all" placeholder="••••••••" required>
+          </div>
+          <p id="errorMsg" class="text-red-400 text-[10px] font-black mt-4 ml-1 hidden uppercase tracking-widest flex items-center gap-2">
+            <span class="bg-red-400/20 p-1 rounded-md">⚠️</span> <span id="errorText">Las contraseñas no coinciden</span>
           </p>
-          <p id="supabaseError" class="text-red-400 text-[11px] font-bold mt-3 ml-1 hidden"></p>
         </div>
 
-        <button
-          type="submit"
-          id="btnRegistro"
-          class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 mt-4 uppercase tracking-widest text-sm"
-        >
+        <button type="submit" id="btnRegistro" class="w-full py-5 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 mt-4 uppercase tracking-[0.2em] text-xs">
           REGISTRAR CUENTA
         </button>
-
       </form>
 
-      <div class="mt-8 text-center">
-        <p class="text-sm text-muted font-medium">
-          ¿Ya tienes cuenta? 
-          <a href="login.html" class="text-blue font-bold hover:underline">Inicia sesión</a>
-        </p>
+      <div class="mt-10 text-center">
+        <p class="text-xs text-muted font-medium">¿Ya tienes una cuenta activa? <a href="login.html" class="text-blue font-black hover:underline ml-1">Inicia sesión</a></p>
       </div>
-
     </div>
   </main>
 
   <footer class="border-t border-border py-12 px-6 bg-surface/30 mt-auto">
     <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
-      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
-      <p class="text-muted/60 text-[10px] uppercase tracking-[0.3em] font-medium">© 2026 LinkApp Digital Environment</p>
+      <img src="imagenes/logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
+      <p class="text-muted/60 text-[9px] uppercase tracking-[0.4em] font-medium">© 2026 LinkApp Digital Environment</p>
     </div>
   </footer>
 
   <script>
+    // CREDENCIALES IOEK CORRECTAS
+    const SUPABASE_URL = 'https://ioekbpgxywkvmxvfzblz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvZWticGd4eXdrdm14dmZ6Ymx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMjYzMDEsImV4cCI6MjA4NTYwMjMwMX0.of00FGlEr8tLpyXkWk0ZuiKhiYsjenA9YPHUfvOGYOs';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     async function validarRegistro(event) {
       event.preventDefault();
 
+      const nickname = document.getElementById("nickname").value;
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirmPassword").value;
       const errorMsg = document.getElementById("errorMsg");
-      const supabaseError = document.getElementById("supabaseError");
-      const btnRegistro = document.getElementById("btnRegistro");
+      const errorText = document.getElementById("errorText");
+      const btn = document.getElementById("btnRegistro");
 
-      // Resetear errores
-      errorMsg.classList.add("hidden");
-      supabaseError.classList.add("hidden");
-
-      // Validar coincidencia de contraseña
       if (password !== confirmPassword) {
+        errorText.innerText = "Las contraseñas no coinciden";
         errorMsg.classList.remove("hidden");
-        errorMsg.classList.add("animate-pulse");
         return;
       }
 
-      // Desactivar botón mientras procesa
-      btnRegistro.disabled = true;
-      btnRegistro.textContent = "PROCESANDO...";
-      btnRegistro.style.opacity = "0.7";
+      if (password.length < 6) {
+        errorText.innerText = "Mínimo 6 caracteres requeridos";
+        errorMsg.classList.remove("hidden");
+        return;
+      }
+
+      errorMsg.classList.add("hidden");
+      btn.innerText = "PROCESANDO...";
+      btn.disabled = true;
 
       try {
-        // REGISTRO REAL EN SUPABASE
-        const { data, error } = await supabaseClient.auth.signUp({
+        // 1. Registro en Supabase Auth con Metadatos
+        const { data, error } = await _supabase.auth.signUp({
           email: email,
           password: password,
+          options: {
+            data: {
+              nickname: nickname // Guardamos el nombre en los metadatos de Auth
+            }
+          }
         });
 
         if (error) throw error;
 
-        // Si no hay error, el registro fue exitoso
-        console.log("Registro exitoso:", data);
-        window.location.href = "registro-exitoso.html";
+        if (data.user) {
+          // 2. Crear Perfil en la tabla 'profiles' (Vinculamos el Nickname real)
+          const { error: profileError } = await _supabase
+            .from('profiles')
+            .insert([{ 
+                id: data.user.id, 
+                email: email, 
+                nickname: nickname, // USAMOS EL NICKNAME DEL INPUT
+                updated_at: new Date()
+            }]);
 
-      } catch (error) {
-        supabaseError.textContent = "❌ " + error.message;
-        supabaseError.classList.remove("hidden");
-        btnRegistro.disabled = false;
-        btnRegistro.textContent = "REGISTRAR CUENTA";
-        btnRegistro.style.opacity = "1";
+          if (profileError) console.error("Error perfil:", profileError.message);
+
+          // 3. Crear Tabla de Carpetas asociada al UUID
+          const { error: folderError } = await _supabase
+            .from('carpetas') // Cambié a 'carpetas' para que coincida con funcion.html
+            .insert([{ 
+                user_id: data.user.id, 
+                links: [], // Cambiado a 'links' para consistencia
+                nombre: 'Mi primera carpeta',
+                user_nickname: nickname
+            }]);
+
+          if (folderError) console.error("Error carpetas:", folderError.message);
+
+          // Guardamos localmente para uso inmediato
+          localStorage.setItem('userNickname', nickname);
+          localStorage.setItem('isLoggedIn', 'true');
+          
+          alert("¡Cuenta creada exitosamente!");
+          window.location.href = "login.html"; // Enviamos a login para confirmar identidad
+        }
+
+      } catch (err) {
+        errorText.innerText = err.message;
+        errorMsg.classList.remove("hidden");
+        btn.innerText = "REGISTRAR CUENTA";
+        btn.disabled = false;
       }
     }
   </script>
-
 </body>
 </html>

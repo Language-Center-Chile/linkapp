@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - LinkApp</title>
-  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="icon" type="image/png" href="imagenes/logo1.png">
   <script src="https://cdn.tailwindcss.com"></script>
+  
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="stylesheet" href="estilos.css">
+
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -25,62 +26,68 @@
         },
       },
     };
-
-    // Configuración de Supabase
-    const supabaseUrl = 'https://dvgcycyiphjmdnahjdvk.supabase.co/';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2Z2N5Y3lpcGhqbWRuYWhqZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NjQxMzcsImV4cCI6MjA4NTI0MDEzN30.9QoKWLs0tiv9a_oapNSB5syPbpcUOeHekX0tBnzqYVI';
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
 
   <style>
     body { font-family: 'Inter', sans-serif; }
-    
     .gradient-text {
       background: linear-gradient(90deg, #38BDF8, #2DD4BF);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    .animate-fade-in {
-      animation: fadeIn 0.6s ease-out;
-    }
-
+    .animate-fade-in { animation: fadeIn 0.6s ease-out; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    .login-card {
-      backdrop-filter: blur(10px);
-      background-color: rgba(24, 24, 27, 0.8);
+    .mesh-gradient {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -10; background-color: #000000; overflow: hidden;
     }
+    .mesh-sphere {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4;
+    }
+    .sphere-1 { width: 400px; height: 400px; background: #38BDF8; top: -100px; right: -100px; }
+    .sphere-2 { width: 500px; height: 500px; background: #2DD4BF; bottom: -150px; left: -150px; }
+    .sphere-3 { width: 300px; height: 300px; background: #38BDF8; top: 40%; left: 20%; opacity: 0.2; }
+    .login-card { backdrop-filter: blur(12px); background-color: rgba(24, 24, 27, 0.7); }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text relative overflow-hidden">
-  <div class="bg-mesh"></div>
+  
+  <div class="mesh-gradient">
+    <div class="mesh-sphere sphere-1"></div>
+    <div class="mesh-sphere sphere-2"></div>
+    <div class="mesh-sphere sphere-3"></div>
+  </div>
 
   <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
         <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
       </div>
 
       <nav class="hidden md:flex items-center gap-8 text-sm">
-        <div class="flex gap-6 border-r border-border pr-6 text-muted">
-          <a href="index.html" class="hover:text-blue transition-colors">Inicio</a>
-          <a href="sobre-nosotros.html" class="hover:text-blue transition-colors">Nosotros</a>
-          <a href="contacto.html" class="hover:text-blue transition-colors">Contacto</a>
+        <div class="flex gap-6 border-r border-border pr-6 font-medium">
+          <a href="index.html" class="text-muted hover:text-blue transition-colors">Inicio</a>
+          <a href="sobre-nosotros.html" class="text-muted hover:text-blue transition-colors">Nosotros</a>
+          <a href="contacto.html" class="text-muted hover:text-blue transition-colors">Contacto</a>
+          <a href="suscripcion.html" class="text-muted hover:text-blue transition-colors">Suscripción</a>
         </div>
+
         <div class="flex gap-4 items-center">
-          <a href="index.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-muted hover:text-blue hover:border-blue/50 transition-all text-xs font-bold bg-surface/50">
-            <span>←</span> Volver al Inicio
+          <a href="login.html" class="px-5 py-2 text-white border border-blue/30 rounded-xl text-xs font-black uppercase tracking-widest bg-blue/5">
+            Login
+          </a>
+          <a href="registro-correo.html" class="px-5 py-2.5 bg-blue text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-blue/20">
+            Registrarse
           </a>
         </div>
       </nav>
       
-      <button class="md:hidden text-white">☰</button>
+      <button class="md:hidden text-white text-2xl">☰</button>
     </div>
   </header>
 
@@ -89,7 +96,7 @@
       
       <div class="text-center mb-10">
         <div class="mb-6">
-          <img src="logo1.png" alt="LinkApp Logo" class="w-20 h-24 mx-auto drop-shadow-[0_0_20px_rgba(56,189,248,0.4)] object-contain">
+          <img src="imagenes/logo1.png" alt="LinkApp Logo" class="w-20 h-24 mx-auto drop-shadow-[0_0_20px_rgba(56,189,248,0.4)] object-contain">
         </div>
         
         <h2 class="text-3xl font-black text-white tracking-tight">Acceder</h2>
@@ -100,10 +107,10 @@
         <div>
           <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Correo Electrónico</label>
           <div class="relative group">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors">📧</span>
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-blue transition-colors">👤</span>
             <input type="email" id="email" 
               class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all focus:border-blue/50" 
-              placeholder="tu@correo.com" required>
+              placeholder="tu@email.com" required>
           </div>
         </div>
         
@@ -117,9 +124,7 @@
           </div>
         </div>
 
-        <p id="errorMessage" class="text-red-400 text-[11px] font-bold mt-2 ml-1 hidden text-center"></p>
-
-        <button type="submit" id="loginBtn"
+        <button type="submit" id="submitBtn"
           class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 mt-4 uppercase tracking-widest text-sm">
           ENTRAR AHORA
         </button>
@@ -139,42 +144,81 @@
   </footer>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    const SUPABASE_URL = 'https://ioekbpgxywkvmxvfzblz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvZWticGd4eXdrdm14dmZ6Ymx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMjYzMDEsImV4cCI6MjA4NTYwMjMwMX0.of00FGlEr8tLpyXkWk0ZuiKhiYsjenA9YPHUfvOGYOs';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const loginForm = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const errorDisplay = document.getElementById('errorMessage');
-      const loginBtn = document.getElementById('loginBtn');
 
-      // Estado de carga
-      errorDisplay.classList.add('hidden');
-      loginBtn.disabled = true;
-      loginBtn.textContent = "VERIFICANDO...";
-      loginBtn.style.opacity = "0.7";
+      submitBtn.innerText = "SINCROINIZANDO...";
+      submitBtn.disabled = true;
 
       try {
-        // LOGIN REAL CON SUPABASE
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-          email: email,
-          password: password,
+        const { data: authData, error: authError } = await _supabase.auth.signInWithPassword({
+          email,
+          password,
         });
 
-        if (error) throw error;
+        if (authError) throw authError;
 
-        // Guardamos información básica para el siguiente paso (registro-perfil)
-        localStorage.setItem('temp_user_id', data.user.id);
-        localStorage.setItem('temp_email', data.user.email);
+        const user = authData.user;
 
-        // REDIRECCIÓN SOLICITADA
-        window.location.href = 'registro-perfil.html';
+        // 1. Intentar traer Perfil de la tabla 'profiles'
+        const { data: profile } = await _supabase
+          .from('profiles')
+          .select('nickname, avatar_url')
+          .eq('id', user.id)
+          .single();
+
+        // 2. Traer Carpetas de la tabla 'linkapp_folders'
+        const { data: folderData } = await _supabase
+          .from('linkapp_folders')
+          .select('content')
+          .eq('user_id', user.id)
+          .single();
+
+        // 3. LOGICA DE NICKNAME REPARADA:
+        // Prioridad 1: Nickname en tabla 'profiles'
+        // Prioridad 2: Nickname en Metadatos de Auth (el que se pone al registrarse)
+        // Prioridad 3: El nombre del correo (solo si todo lo anterior falla)
+        
+        let finalNickname = "";
+        
+        if (profile && profile.nickname && !profile.nickname.includes('@')) {
+          finalNickname = profile.nickname;
+        } else if (user.user_metadata && user.user_metadata.nickname) {
+          finalNickname = user.user_metadata.nickname;
+        } else {
+          finalNickname = email.split('@')[0];
+        }
+
+        // 4. Guardamos en LocalStorage para que funcion.html lo lea al instante
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userNickname', finalNickname);
+        
+        if (profile && profile.avatar_url) {
+          localStorage.setItem('userAvatar', profile.avatar_url);
+        }
+
+        // Sincronizar carpetas
+        if (folderData && folderData.content) {
+          localStorage.setItem('carpetas', JSON.stringify(folderData.content));
+        } else {
+          localStorage.setItem('carpetas', '[]');
+        }
+
+        window.location.href = 'funcion.html';
 
       } catch (error) {
-        errorDisplay.textContent = "❌ " + error.message;
-        errorDisplay.classList.remove('hidden');
-        loginBtn.disabled = false;
-        loginBtn.textContent = "ENTRAR AHORA";
-        loginBtn.style.opacity = "1";
+        alert("Error: " + error.message);
+        submitBtn.innerText = "ENTRAR AHORA";
+        submitBtn.disabled = false;
       }
     });
   </script>
