@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Configurar Perfil - LinkApp</title>
-  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="icon" type="image/png" href="imagenes/logo1.png">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="estilos.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -32,116 +34,207 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .animate-fade-in {
-      animation: fadeIn 0.8s ease-out;
-    }
+    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .profile-card {
-      backdrop-filter: blur(10px);
-      background-color: rgba(24, 24, 27, 0.8);
+    .mesh-gradient {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -10; background-color: #000000; overflow: hidden;
     }
+    .mesh-sphere { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; }
+    .sphere-1 { width: 400px; height: 400px; background: #38BDF8; top: -100px; right: -100px; }
+    .sphere-2 { width: 500px; height: 500px; background: #2DD4BF; bottom: -150px; left: -150px; }
+    .sphere-3 { width: 300px; height: 300px; background: #38BDF8; top: 40%; left: 20%; opacity: 0.2; }
+    .profile-card { backdrop-filter: blur(16px); background-color: rgba(24, 24, 27, 0.7); }
+    input:focus { border-color: #38BDF8 !important; box-shadow: 0 0 15px rgba(56, 189, 248, 0.1); }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
-  <div class="bg-mesh"></div>
+  
+  <div class="mesh-gradient">
+    <div class="mesh-sphere sphere-1"></div>
+    <div class="mesh-sphere sphere-2"></div>
+    <div class="mesh-sphere sphere-3"></div>
+  </div>
 
   <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <img src="logo1.png" alt="logo" class="w-10 h-12">
+        <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
         <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
       </div>
 
       <nav class="hidden md:flex items-center gap-8 text-sm">
-        <div class="flex gap-6 border-r border-border pr-6 text-muted font-medium">
-          <span>Configuración de cuenta</span>
+        <div class="flex gap-6 border-r border-border pr-6 text-muted font-medium uppercase tracking-[0.2em] text-[10px]">
+          Paso 2: Configuración de Perfil
         </div>
         <div class="flex gap-4 items-center">
-          <a href="index.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-muted hover:text-blue transition-all text-xs font-bold bg-surface/50">
+          <a href="index.html" class="flex items-center gap-2 px-4 py-2 border border-border rounded-xl text-muted hover:text-white hover:border-white/50 transition-all text-[10px] font-black uppercase tracking-widest bg-surface/50">
             Salir
           </a>
         </div>
       </nav>
-      <button class="md:hidden text-white">☰</button>
+      <button class="md:hidden text-white text-2xl">☰</button>
     </div>
   </header>
 
   <main class="flex-grow flex items-center justify-center px-6 py-12 animate-fade-in">
-    <div class="w-full max-w-md profile-card p-10 rounded-[2.5rem] border border-border shadow-2xl text-center">
+    <div class="w-full max-w-md profile-card p-10 rounded-[3rem] border border-border shadow-2xl text-center relative overflow-hidden">
+      <div class="absolute -top-24 -left-24 w-48 h-48 bg-blue/10 blur-3xl rounded-full"></div>
       
-      <div class="mb-6">
-        <h2 class="text-3xl font-black text-white tracking-tight">Tu <span class="gradient-text">Identidad</span></h2>
-        <p class="text-muted text-sm mt-2 font-medium">Personaliza tu espacio digital</p>
+      <div class="mb-10 relative">
+        <h2 class="text-3xl font-black text-white tracking-tight leading-none">Tu <span class="gradient-text">Identidad</span></h2>
+        <p class="text-muted text-xs mt-3 font-medium uppercase tracking-widest">Personaliza tu espacio digital</p>
       </div>
 
-      <form id="profileForm" class="space-y-8">
+      <form id="profileForm" class="space-y-8 relative">
         <div class="flex flex-col items-center">
           <div class="relative group cursor-pointer">
-            <div id="imagePreview" class="w-28 h-28 rounded-full bg-bg border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden transition-all group-hover:border-blue/50 group-hover:bg-surface relative">
-              <span id="placeholderText" class="text-muted text-[10px] font-bold uppercase tracking-widest text-center px-2">Subir<br>Foto</span>
+            <div id="imagePreview" class="w-32 h-32 rounded-full bg-bg border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden transition-all group-hover:border-blue/50 group-hover:bg-surface/80 relative shadow-inner">
+              <span id="placeholderText" class="text-muted text-[10px] font-black uppercase tracking-widest text-center px-2 transition-transform group-hover:scale-90">
+                Subir<br>Foto
+              </span>
               <img id="avatarImg" src="" class="hidden w-full h-full object-cover">
-              <div class="absolute inset-0 bg-blue/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span class="text-xs text-blue font-bold">Cambiar</span>
+              <div class="absolute inset-0 bg-blue/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                <span class="text-[10px] text-white font-black uppercase tracking-tighter">Cambiar Imagen</span>
               </div>
             </div>
             <input type="file" id="fileInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
           </div>
-          <p class="text-[10px] text-muted uppercase tracking-widest mt-4 font-black">Imagen de perfil</p>
+          <p class="text-[10px] text-muted uppercase tracking-[0.3em] mt-4 font-black">Imagen de perfil</p>
         </div>
 
         <div class="text-left">
-          <label class="block text-[10px] text-muted mb-2 ml-1 uppercase font-black tracking-widest">Nickname</label>
-          <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted">@</span>
+          <label class="block text-[10px] text-muted mb-3 ml-2 uppercase font-black tracking-[0.2em]">Nickname único</label>
+          <div class="relative group">
+            <span class="absolute left-5 top-1/2 -translate-y-1/2 text-blue font-bold group-focus-within:scale-125 transition-transform">@</span>
             <input type="text" id="nickname" required
-              class="w-full bg-bg/50 border border-border text-white pl-10 pr-4 py-4 rounded-2xl outline-none transition-all focus:border-blue/50 placeholder:text-muted/20" 
-              placeholder="LinkMaster_99">
+              class="w-full bg-bg/40 border border-border text-white pl-12 pr-6 py-4 rounded-2xl outline-none transition-all placeholder:text-muted/30 font-medium" 
+              placeholder="tu_nombre_pro">
           </div>
         </div>
 
-        <button type="submit" 
-          class="w-full py-4 bg-blue hover:bg-blue/90 text-black font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 uppercase tracking-widest text-sm">
-          Guardar y Continuar
+        <button type="submit" id="btnCompletar"
+          class="w-full py-5 bg-blue hover:bg-blue/90 text-black font-extrabold rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue/20 uppercase tracking-widest text-xs">
+          Completar Registro
         </button>
       </form>
     </div>
   </main>
 
-  <footer class="border-t border-border py-10 bg-surface/30">
-    <div class="max-w-6xl mx-auto flex flex-col items-center gap-4">
-      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40">
-      <p class="text-muted/40 text-[10px] uppercase tracking-[0.3em] font-medium">© 2026 LinkApp Digital Environment</p>
+  <footer class="border-t border-border py-12 bg-surface/30">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
+      <img src="imagenes/logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-all">
+      <p class="text-muted/40 text-[9px] uppercase tracking-[0.4em] font-medium text-center">
+        © 2026 LinkApp Digital Environment<br>
+        <span class="text-[8px]">Powered by LinkTeam</span>
+      </p>
     </div>
   </footer>
 
   <script>
+    // 1. CONFIGURACIÓN SUPABASE (CREDENCALES IOEK)
+    const SUPABASE_URL = 'https://ioekbpgxywkvmxvfzblz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvZWticGd4eXdrdm14dmZ6Ymx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMjYzMDEsImV4cCI6MjA4NTYwMjMwMX0.of00FGlEr8tLpyXkWk0ZuiKhiYsjenA9YPHUfvOGYOs';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     const fileInput = document.getElementById('fileInput');
     const avatarImg = document.getElementById('avatarImg');
     const placeholderText = document.getElementById('placeholderText');
+    const btnCompletar = document.getElementById('btnCompletar');
+
+    let base64Image = "";
+
+    // Cargar imagen previa si existe en localStorage
+    window.onload = () => {
+        const savedAvatar = localStorage.getItem('userAvatar');
+        if (savedAvatar && savedAvatar.startsWith('data:image')) {
+            base64Image = savedAvatar;
+            avatarImg.src = base64Image;
+            avatarImg.classList.remove('hidden');
+            placeholderText.classList.add('hidden');
+        }
+    };
 
     fileInput.addEventListener('change', function() {
       const file = this.files[0];
       if (file) {
+        // Validar tamaño (máx 2MB para evitar errores de cuota en LocalStorage/DB)
+        if (file.size > 2 * 1024 * 1024) {
+            alert("La imagen es demasiado grande. Máximo 2MB.");
+            return;
+        }
         const reader = new FileReader();
         reader.onload = function(e) {
-          avatarImg.src = e.target.result;
+          base64Image = e.target.result;
+          avatarImg.src = base64Image;
           avatarImg.classList.remove('hidden');
           placeholderText.classList.add('hidden');
-          localStorage.setItem('userAvatar', e.target.result);
+          localStorage.setItem('userAvatar', base64Image);
         }
         reader.readAsDataURL(file);
       }
     });
 
-    document.getElementById('profileForm').addEventListener('submit', (e) => {
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const nick = document.getElementById('nickname').value;
-      localStorage.setItem('userNickname', nick);
-      window.location.href = 'funcion.html';
+      
+      btnCompletar.innerText = "GUARDANDO...";
+      btnCompletar.disabled = true;
+
+      try {
+        // 2. OBTENER USUARIO ACTUAL
+        const { data: { user }, error: userError } = await _supabase.auth.getUser();
+        
+        if (userError || !user) {
+            throw new Error("No se detectó una sesión activa. Por favor, regístrate de nuevo.");
+        }
+
+        // 3. ACTUALIZAR METADATOS DE AUTH (Para que aparezca en el Login)
+        const { error: authError } = await _supabase.auth.updateUser({
+          data: { 
+            nickname: nick,
+            avatar_url: base64Image 
+          }
+        });
+        if (authError) throw authError;
+
+        // 4. ACTUALIZAR O INSERTAR EN TABLA PROFILES
+        const { error: profileError } = await _supabase
+          .from('profiles')
+          .upsert({ 
+            id: user.id, 
+            nickname: nick, 
+            avatar_url: base64Image,
+            email: user.email,
+            updated_at: new Date() 
+          });
+        
+        if (profileError) throw profileError;
+
+        // 5. ACTUALIZAR NICKNAME EN TABLA CARPETAS (Para que los compartidos se vean bien)
+        await _supabase
+          .from('carpetas')
+          .update({ user_nickname: nick })
+          .eq('user_id', user.id);
+
+        // Guardamos localmente para acceso inmediato
+        localStorage.setItem('userNickname', nick);
+        localStorage.setItem('isLoggedIn', 'true');
+        
+        alert("¡Perfil configurado con éxito!");
+        window.location.href = 'funcion.html';
+
+      } catch (err) {
+        console.error("Error completo:", err);
+        alert("Error al guardar perfil: " + err.message);
+        btnCompletar.innerText = "Completar Registro";
+        btnCompletar.disabled = false;
+      }
     });
   </script>
 </body>

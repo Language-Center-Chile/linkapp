@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LinkApp - Organiza tu mundo digital</title>
 
-  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="icon" type="image/png" href="imagenes/logo1.png">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -34,42 +34,96 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+
+    /* Estilos para el Mesh Gradient */
+    .mesh-gradient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -10;
+      background-color: #000000;
+      overflow: hidden;
+    }
+
+    .mesh-sphere {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+    }
+
+    .sphere-1 {
+      width: 400px;
+      height: 400px;
+      background: #38BDF8;
+      top: -100px;
+      right: -100px;
+    }
+
+    .sphere-2 {
+      width: 500px;
+      height: 500px;
+      background: #2DD4BF;
+      bottom: -150px;
+      left: -150px;
+    }
+
+    .sphere-3 {
+      width: 300px;
+      height: 300px;
+      background: #38BDF8;
+      top: 40%;
+      left: 20%;
+      opacity: 0.2;
+    }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text relative">
-  <div class="bg-mesh"></div>
+  <div class="mesh-gradient">
+    <div class="mesh-sphere sphere-1"></div>
+    <div class="mesh-sphere sphere-2"></div>
+    <div class="mesh-sphere sphere-3"></div>
+  </div>
 
   <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <img src="logo1.png" alt="logo" class="w-10 h-12">
-        <span class="font-bold text-xl tracking-tighter">LinkApp</span>
+  <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
+      <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
+    </div>
+
+    <nav class="hidden md:flex items-center gap-8 text-sm">
+      <div class="flex gap-6 border-r border-border pr-6 font-medium">
+        <a href="index.html" class="text-muted hover:text-blue transition-colors">Inicio</a>
+        <a href="sobre-nosotros.html" class="text-muted hover:text-blue transition-colors">Nosotros</a>
+        <a href="contacto.html" class="text-muted hover:text-blue transition-colors">Contacto</a>
+        <a href="suscripcion.html" class="text-muted hover:text-blue transition-colors">Suscripción</a>
       </div>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm">
-        <div class="flex gap-6 border-r border-border pr-6">
-          <a href="index.html" class="hover:text-blue transition-colors">Inicio</a>
-          <a href="sobre-nosotros.html" class="hover:text-blue transition-colors">Nosotros</a>
-          <a href="contacto.html" class="hover:text-blue transition-colors">Contacto</a>
-          <a href="suscripcion.html" class="hover:text-blue transition-colors">Suscripción</a>
-        </div>
-        <div class="flex gap-4 items-center">
-          <a href="login.html" class="text-muted hover:text-white transition-colors">Login</a>
-          <a href="registro-correo.html" class="px-4 py-2 bg-blue/10 text-blue border border-blue/20 rounded-lg font-bold hover:bg-blue hover:text-black transition-all">
-            Empezar Gratis
-          </a>
-        </div>
-      </nav>
-      
-      <button class="md:hidden text-white">☰</button>
-    </div>
-  </header>
+      <div class="flex gap-4 items-center">
+        <a href="login.html" id="btn-login" class="px-5 py-2 text-muted hover:text-white transition-colors text-xs font-black uppercase tracking-widest">
+          Login
+        </a>
+        <a href="registro-correo.html" id="btn-registro" class="px-5 py-2.5 bg-blue text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-blue/20">
+          Registrarse
+        </a>
+        <a href="funcion.html" id="btn-panel" class="hidden px-5 py-2.5 bg-teal text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-teal/20">
+          Mi Panel
+        </a>
+      </div>
+    </nav>
+    
+    <button class="md:hidden text-white text-2xl">☰</button>
+  </div>
+</header>
 
   <main class="flex-grow">
     <section class="text-center pt-20 pb-16 px-6 flex flex-col items-center">
       <div class="mb-8 animate-pulse">
-        <img src="logo1.png" alt="LinkApp Logo" class="w-40 h-40 drop-shadow-[0_0_25px_rgba(56,189,248,0.4)] object-contain">
+        <img src="imagenes/logo1.png" alt="LinkApp Logo" class="w-40 h-40 drop-shadow-[0_0_25px_rgba(56,189,248,0.4)] object-contain">
       </div>
 
       <h1 class="text-5xl md:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
@@ -83,8 +137,11 @@
       </p>
 
       <div class="flex gap-4">
-        <a href="registro-correo.html" class="px-8 py-4 bg-blue text-black font-black rounded-xl hover:scale-105 transition-transform shadow-lg shadow-blue/20">
+        <a href="registro-correo.html" id="cta-registro" class="px-8 py-4 bg-blue text-black font-black rounded-xl hover:scale-105 transition-transform shadow-lg shadow-blue/20">
           Crear mi cuenta
+        </a>
+        <a href="funcion.html" id="cta-panel" class="hidden px-8 py-4 bg-teal text-black font-black rounded-xl hover:scale-105 transition-transform shadow-lg shadow-teal/20">
+          Ir a mi panel
         </a>
       </div>
     </section>
@@ -93,7 +150,7 @@
       <div class="group p-8 bg-surface border border-border rounded-3xl hover:border-blue/50 transition-all duration-300 hover:-translate-y-2">
         <div class="text-blue text-3xl mb-4">📂</div>
         <h3 class="text-xl font-bold mb-3 text-white">Organización Inteligente</h3>
-        <p class="text-muted text-sm leading-relaxed">Estructura tus enlaces mediante carpetas personalizadas accesibles en un click.</p>
+        <p class="text-muted text-sm leading-relaxed">Estructura tus enlaces mediante carpetas personalizadas accesibles en un clic.</p>
       </div>
 
       <div class="group p-8 bg-surface border border-border rounded-3xl hover:border-blue/50 transition-all duration-300 hover:-translate-y-2">
@@ -112,7 +169,7 @@
 
   <footer class="border-t border-border py-12 px-6 bg-surface/30">
     <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
-      <img src="logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
+      <img src="imagenes/logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
       <div class="flex gap-8 text-xs text-muted uppercase tracking-widest font-bold">
         <a href="#" class="hover:text-blue">Privacidad</a>
         <a href="#" class="hover:text-blue">Términos</a>
@@ -123,5 +180,28 @@
   </footer>
 
   <script src="search.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+      const btnLogin = document.getElementById('btn-login');
+      const btnRegistro = document.getElementById('btn-registro');
+      const btnPanel = document.getElementById('btn-panel');
+      const ctaRegistro = document.getElementById('cta-registro');
+      const ctaPanel = document.getElementById('cta-panel');
+
+      if (isLoggedIn) {
+        // Ocultar botones de Auth
+        btnLogin.classList.add('hidden');
+        btnRegistro.classList.add('hidden');
+        ctaRegistro.classList.add('hidden');
+        
+        // Mostrar botones de panel
+        btnPanel.classList.remove('hidden');
+        ctaPanel.classList.remove('hidden');
+      }
+    });
+  </script>
 </body>
 </html>

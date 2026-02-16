@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajustes de Perfil - LinkApp</title>
+  <link rel="icon" type="image/png" href="imagenes/logo1.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            bg: "#000000",
+            surface: "#18181b",
+            border: "#27272a",
+            blue: "#38BDF8",
+            text: "#E2E8F0",
+            muted: "#94A3B8"
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .mesh-gradient {
+      position: fixed; inset: 0; z-index: -10; background: #000; overflow: hidden;
+    }
+    .mesh-sphere {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3;
+    }
+    .sphere-1 { width: 400px; height: 400px; background: #38BDF8; top: -10%; right: -10%; }
+    .sphere-2 { width: 400px; height: 400px; background: #2DD4BF; bottom: -10%; left: -10%; }
+
+    .settings-card {
+      backdrop-filter: blur(20px);
+      background: rgba(24, 24, 27, 0.7);
+    }
+    
+    .color-dot {
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+      transition: all 0.3s; border: 2px solid transparent;
+    }
+    .color-dot:hover { transform: scale(1.2); }
+    .color-dot.active { border-color: white; transform: scale(1.1); }
+    
+    main { transition: opacity 0.5s ease-in-out; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
+  
+  <div class="mesh-gradient">
+    <div class="mesh-sphere sphere-1"></div>
+    <div class="mesh-sphere sphere-2"></div>
+  </div>
+
+  <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
+      </div>
+      <a href="funcion.html" class="px-5 py-2 border border-border rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-surface transition-all">
+        Volver al Panel
+      </a>
+    </div>
+  </header>
+
+  <main id="mainContent" class="max-w-4xl mx-auto px-6 py-12 w-full grid md:grid-cols-2 gap-12 items-start opacity-0">
+    
+    <div class="settings-card p-8 rounded-[2.5rem] border border-border shadow-2xl space-y-8">
+      <div>
+        <h1 class="text-3xl font-black text-white tracking-tight">Editar <span class="text-blue">Perfil</span></h1>
+        <p class="text-muted text-xs mt-2 uppercase tracking-widest font-bold">Configura tu presencia digital</p>
+      </div>
+
+      <form id="settingsForm" class="space-y-6">
+        <div class="flex items-center gap-6 p-4 bg-bg/40 rounded-3xl border border-border">
+          <div class="relative group w-20 h-20">
+            <img id="previewAvatar" src="" class="w-full h-full object-cover rounded-full border border-border hidden">
+            <div id="fallbackAvatar" class="w-full h-full rounded-full bg-blue/10 flex items-center justify-center text-blue font-black">?</div>
+            <input type="file" id="uploadFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
+          </div>
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-widest text-white">Imagen de Avatar</p>
+            <p class="text-[10px] text-muted mt-1">Click para subir nueva foto</p>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-[10px] text-muted uppercase font-black tracking-widest ml-2">Tu Nickname</label>
+          <input type="text" id="editNickname" class="w-full bg-bg/50 border border-border p-4 rounded-2xl outline-none focus:border-blue transition-all" placeholder="Nuevo nickname">
+        </div>
+
+        <div class="space-y-3">
+          <label class="text-[10px] text-muted uppercase font-black tracking-widest ml-2">Color de Acento</label>
+          <div class="flex gap-4 p-2">
+            <div class="color-dot active" style="background: #38BDF8;" data-color="#38BDF8"></div>
+            <div class="color-dot" style="background: #A855F7;" data-color="#A855F7"></div>
+            <div class="color-dot" style="background: #2DD4BF;" data-color="#2DD4BF"></div>
+            <div class="color-dot" style="background: #F472B6;" data-color="#F472B6"></div>
+          </div>
+        </div>
+
+        <button type="submit" id="btnGuardar" class="w-full py-4 bg-blue text-black font-black rounded-2xl shadow-lg shadow-blue/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest text-xs">
+          Guardar Cambios
+        </button>
+      </form>
+    </div>
+
+    <div class="sticky top-32 space-y-6">
+      <p class="text-[10px] text-muted uppercase font-black tracking-widest text-center">Previsualización de Tarjeta</p>
+      <div class="settings-card p-8 rounded-[3rem] border border-border text-center space-y-4">
+        <div class="w-24 h-24 mx-auto rounded-full border-4 border-blue p-1">
+          <img id="cardAvatar" src="" class="w-full h-full object-cover rounded-full bg-surface hidden">
+          <div id="cardFallback" class="w-full h-full rounded-full bg-surface flex items-center justify-center text-2xl font-black">?</div>
+        </div>
+        <div>
+          <h3 id="cardName" class="text-2xl font-black text-white">@Usuario</h3>
+          <p class="text-blue text-[10px] font-black uppercase tracking-[0.3em] mt-1">Miembro Premium</p>
+        </div>
+        <div class="pt-4 border-t border-border/50 flex justify-center gap-4 opacity-50">
+          <span id="statsFolder">📁 --</span> <span id="statsLinks">🔗 --</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const SUPABASE_URL = 'https://ioekbpgxywkvmxvfzblz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvZWticGd4eXdrdm14dmZ6Ymx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMjYzMDEsImV4cCI6MjA4NTYwMjMwMX0.of00FGlEr8tLpyXkWk0ZuiKhiYsjenA9YPHUfvOGYOs';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const nicknameInput = document.getElementById('editNickname');
+    const uploadFile = document.getElementById('uploadFile');
+    const cardName = document.getElementById('cardName');
+    const colorDots = document.querySelectorAll('.color-dot');
+    const btnGuardar = document.getElementById('btnGuardar');
+    const mainContent = document.getElementById('mainContent');
+
+    let base64Avatar = "";
+
+    // AL CARGAR LA PÁGINA
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await _supabase.auth.getSession();
+      if (!session) { window.location.href = 'login.html'; return; }
+
+      mainContent.classList.remove('opacity-0');
+
+      // Intentamos cargar desde la tabla 'profiles'
+      const { data: profile, error } = await _supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', session.user.id)
+        .single();
+
+      // Si hay perfil, usamos esos datos. Si no, usamos lo que haya en la sesión de Auth.
+      const currentNick = profile?.nickname || session.user.user_metadata?.nickname || session.user.email.split('@')[0];
+      base64Avatar = profile?.avatar_url || session.user.user_metadata?.avatar_url || "";
+      
+      nicknameInput.value = currentNick;
+      cardName.textContent = '@' + currentNick;
+      
+      if (base64Avatar) {
+        updateAvatars(base64Avatar);
+      } else {
+        const letra = currentNick[0].toUpperCase();
+        document.getElementById('fallbackAvatar').textContent = letra;
+        document.getElementById('cardFallback').textContent = letra;
+      }
+
+      // Cargar estadísticas
+      try {
+        const { data: folderData } = await _supabase
+          .from('linkapp_folders')
+          .select('content')
+          .eq('user_id', session.user.id)
+          .single();
+        
+        if (folderData?.content) {
+          const carpetas = folderData.content;
+          document.getElementById('statsFolder').textContent = `📁 ${carpetas.length}`;
+          document.getElementById('statsLinks').textContent = `🔗 ${carpetas.reduce((acc, f) => acc + (f.links?.length || 0), 0)}`;
+        }
+      } catch (e) { console.warn("Aún no hay carpetas creadas."); }
+    });
+
+    // EVENTOS DE INPUT
+    nicknameInput.addEventListener('input', (e) => {
+      cardName.textContent = '@' + (e.target.value || 'Usuario');
+    });
+
+    uploadFile.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        // Validación de tamaño (máximo 1MB para evitar el error de red)
+        if (file.size > 1024 * 1024 * 5) {
+            alert("La imagen es muy pesada. Intenta con una de menos de 5MB.");
+            this.value = "";
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          base64Avatar = e.target.result;
+          updateAvatars(base64Avatar);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function updateAvatars(src) {
+      ['previewAvatar', 'cardAvatar'].forEach(id => {
+        const img = document.getElementById(id);
+        img.src = src;
+        img.classList.remove('hidden');
+      });
+      ['fallbackAvatar', 'cardFallback'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    }
+
+    // BOTÓN GUARDAR (LA LÓGICA CORREGIDA)
+    document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btnGuardar.innerText = "SINCRONIZANDO...";
+      btnGuardar.disabled = true;
+
+      try {
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (!session) throw new Error("No hay sesión activa");
+
+        const nuevoNick = nicknameInput.value;
+
+        // 1. PRIMERO: Guardar en la tabla 'profiles'
+        // Esto es lo más importante porque es lo que lee tu panel principal.
+        const { error: profileError } = await _supabase
+          .from('profiles')
+          .upsert({
+            id: session.user.id,
+            nickname: nuevoNick,
+            avatar_url: base64Avatar,
+            email: session.user.email,
+            updated_at: new Date()
+          });
+
+        if (profileError) {
+            console.error("Error en tabla profiles:", profileError);
+            throw new Error("No se pudo guardar en la base de datos. ¿Creaste las columnas avatar_url y updated_at?");
+        }
+
+        // 2. SEGUNDO: Intentar actualizar Auth (opcional, si falla no bloqueamos al usuario)
+        try {
+            await _supabase.auth.updateUser({
+                data: { nickname: nuevoNick } 
+                // Nota: No enviamos avatar_url aquí para evitar el "Failed to fetch" por peso.
+            });
+        } catch (authErr) {
+            console.warn("Auth falló, pero el perfil se guardó en la tabla.", authErr);
+        }
+
+        // 3. ACTUALIZAR LOCALSTORAGE
+        localStorage.setItem('userNickname', nuevoNick);
+        if (base64Avatar) localStorage.setItem('userAvatar', base64Avatar);
+
+        alert('¡Perfil actualizado con éxito! ✔');
+        window.location.href = 'funcion.html';
+
+      } catch (err) {
+        console.error("Error crítico:", err);
+        alert(err.message);
+        btnGuardar.innerText = "Guardar Cambios";
+        btnGuardar.disabled = false;
+      }
+    });
+
+    // COLORES DE ACENTO
+    colorDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        colorDots.forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+        const color = dot.dataset.color;
+        document.querySelectorAll('.text-blue').forEach(el => el.style.color = color);
+        document.getElementById('cardAvatar').parentElement.style.borderColor = color;
+      });
+    });
+  </script>
+</body>
+</html>
