@@ -9,6 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
     tailwind.config = {
@@ -98,14 +99,13 @@
     }
     .nav-link:hover::after { width: 100%; }
     
-    /* Estilos mejorados para logos y botones sociales */
     .social-logo { width: 40px; height: 40px; transition: transform 0.2s; }
     .social-btn:hover .social-logo { transform: scale(1.1); }
     .social-btn {
       transition: all 0.3s ease;
       display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
       padding: 1.5rem; background: rgba(255,255,255,0.03);
-      border: 1px solid #27272a; rounded: 2rem;
+      border: 1px solid #27272a; border-radius: 2rem;
     }
     .social-btn:hover {
       border-color: rgba(56, 189, 248, 0.5);
@@ -113,6 +113,23 @@
       transform: translateY(-2px);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
     }
+
+    /* Estilos personalizados para SweetAlert2 para que combine con LinkApp */
+    .swal2-popup {
+      background: #18181b !important;
+      border: 1px solid #27272a !important;
+      border-radius: 2.5rem !important;
+      color: #E2E8F0 !important;
+    }
+    .swal2-title { color: #ffffff !important; font-weight: 900 !important; letter-spacing: -0.05em; }
+    .swal2-input {
+      background: #000000 !important;
+      border: 1px solid #27272a !important;
+      border-radius: 1rem !important;
+      color: #ffffff !important;
+    }
+    .swal2-confirm { border-radius: 1rem !important; font-weight: 800 !important; text-transform: uppercase; font-size: 0.75rem !important; letter-spacing: 0.1em; }
+    .swal2-cancel { border-radius: 1rem !important; font-weight: 800 !important; text-transform: uppercase; font-size: 0.75rem !important; letter-spacing: 0.1em; }
   </style>
 </head>
 
@@ -213,7 +230,6 @@
       <div id="qrContainer" class="hidden"><div id="qrcode" class="flex justify-center mb-8"></div></div>
       
       <div class="grid grid-cols-2 gap-4 mb-8">
-        
         <button class="social-btn group" onclick="shareWhatsApp()">
           <svg class="social-logo" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a5.463 5.463 0 0 1-2.793-.765l-.2-.118-2.083.545.556-2.031-.129-.211a5.467 5.467 0 0 1-.836-2.887c0-3.024 2.463-5.486 5.487-5.486 1.464 0 2.84.57 3.875 1.605a5.465 5.465 0 0 1 1.605 3.874c.001 3.024-2.463 5.486-5.486 5.486m8.88-13.847C17.518 4.29 14.858 1.628 11.594 1.628c-3.691 0-6.705 3.013-6.706 6.706 0 1.181.307 2.333.892 3.351L3.91 16.51l4.582-1.202a6.666 6.666 0 0 0 3.102.79h.003c3.691 0 6.705-3.013 6.706-6.706 0-1.787-.696-3.468-1.961-4.731z"/></svg>
           <span class="text-[10px] font-black text-muted group-hover:text-green-400 uppercase tracking-widest">WhatsApp</span>
@@ -260,6 +276,20 @@
 
     const LIMIT_FOLDERS_FREE = 2;
     const LIMIT_LINKS_FREE = 3;
+
+    // Configuración base de SweetAlert para LinkApp
+    const LinkAlert = Swal.mixin({
+      background: '#18181b',
+      color: '#E2E8F0',
+      confirmButtonColor: '#38BDF8',
+      cancelButtonColor: '#27272a',
+      customClass: {
+        popup: 'rounded-[2.5rem] border border-border shadow-2xl',
+        title: 'text-white font-black uppercase tracking-tighter',
+        confirmButton: 'rounded-xl px-6 py-3',
+        cancelButton: 'rounded-xl px-6 py-3'
+      }
+    });
 
     window.logout = function() {
       localStorage.clear();
@@ -366,24 +396,47 @@
       }).join('');
     }
 
-    // --- FUNCIONES DE EDICIÓN ---
-    window.editarCarpeta = function(i) {
-      const nuevoNombre = prompt("Nuevo nombre para la colección:", carpetas[i].nombre);
+    // --- FUNCIONES DE EDICIÓN (MODIFICADAS CON SWEETALERT) ---
+    window.editarCarpeta = async function(i) {
+      const { value: nuevoNombre } = await LinkAlert.fire({
+        title: 'Editar Colección',
+        input: 'text',
+        inputValue: carpetas[i].nombre,
+        inputPlaceholder: 'Nuevo nombre...',
+        showCancelButton: true,
+        confirmButtonText: 'Guardar'
+      });
+
       if (nuevoNombre && nuevoNombre.trim() !== "") {
         carpetas[i].nombre = nuevoNombre.trim();
         guardarYRenderizar();
       }
     };
 
-    window.editarEnlace = function(fi, li) {
+    window.editarEnlace = async function(fi, li) {
       const linkActual = carpetas[fi].links[li];
-      const nuevoTag = prompt("Editar nombre del link:", linkActual.tag);
-      const nuevaUrl = prompt("Editar URL del link:", linkActual.url);
       
-      if (nuevaUrl && nuevaUrl.trim() !== "") {
+      const { value: formValues } = await LinkAlert.fire({
+        title: 'Editar Enlace',
+        html:
+          `<input id="swal-input1" class="swal2-input" placeholder="Nombre (Tag)" value="${linkActual.tag}">` +
+          `<input id="swal-input2" class="swal2-input" placeholder="URL" value="${linkActual.url}">`,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Actualizar',
+        preConfirm: () => {
+          return [
+            document.getElementById('swal-input1').value,
+            document.getElementById('swal-input2').value
+          ]
+        }
+      });
+
+      if (formValues && formValues[1].trim() !== "") {
+        const nuevaUrl = formValues[1].trim();
         carpetas[fi].links[li] = {
-          url: nuevaUrl.startsWith('http') ? nuevaUrl.trim() : `https://${nuevaUrl.trim()}`,
-          tag: nuevoTag || ""
+          url: nuevaUrl.startsWith('http') ? nuevaUrl : `https://${nuevaUrl}`,
+          tag: formValues[0] || ""
         };
         guardarYRenderizar();
       }
@@ -413,35 +466,82 @@
       });
     };
 
-    window.nuevaCarpeta = function() {
+    window.nuevaCarpeta = async function() {
       const plan = localStorage.getItem('userPlan') || 'free';
       if (plan === 'free' && carpetas.length >= LIMIT_FOLDERS_FREE) {
-        alert("🔒 Límite de Plan FREE: Solo puedes tener 2 carpetas activas. Mejora a PRO para crear más.");
+        LinkAlert.fire({
+          icon: 'warning',
+          title: 'Límite FREE',
+          text: 'Solo puedes tener 2 carpetas activas. Mejora a PRO para crear más.',
+          footer: '<a href="suscripcion.html" style="color:#38BDF8">Ver planes PRO</a>'
+        });
         return;
       }
-      const n = prompt("Nombre de la colección:");
+
+      const { value: n } = await LinkAlert.fire({
+        title: 'Nueva Colección',
+        input: 'text',
+        inputPlaceholder: 'Nombre de la carpeta...',
+        showCancelButton: true,
+        confirmButtonText: 'Crear'
+      });
+
       if (n) {
         carpetas.push({ nombre: n, links: [] });
         guardarYRenderizar();
       }
     };
 
-    window.agregarEnlace = function(i) {
+    window.agregarEnlace = async function(i) {
       const plan = localStorage.getItem('userPlan') || 'free';
       if (plan === 'free' && carpetas[i].links.length >= LIMIT_LINKS_FREE) {
-        alert("🔒 Límite de Plan FREE: Máximo 3 enlaces por carpeta.");
+        LinkAlert.fire({
+          icon: 'warning',
+          title: 'Límite de Enlaces',
+          text: 'Máximo 3 enlaces por carpeta en el plan FREE.',
+          footer: '<a href="suscripcion.html" style="color:#38BDF8">Mejorar a PRO</a>'
+        });
         return;
       }
-      const url = prompt("URL del enlace:");
-      if (!url) return;
-      const tag = prompt("Nombre (opcional):");
-      const fullUrl = url.startsWith('http') ? url : `https://${url}`;
-      carpetas[i].links.push({ url: fullUrl, tag: tag || "" });
-      guardarYRenderizar();
+
+      const { value: formValues } = await LinkAlert.fire({
+        title: 'Nuevo Enlace',
+        html:
+          '<input id="swal-url" class="swal2-input" placeholder="URL (ej: google.com)">' +
+          '<input id="swal-tag" class="swal2-input" placeholder="Nombre (opcional)">',
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Añadir',
+        preConfirm: () => {
+          return {
+            url: document.getElementById('swal-url').value,
+            tag: document.getElementById('swal-tag').value
+          }
+        }
+      });
+
+      if (formValues && formValues.url) {
+        const fullUrl = formValues.url.startsWith('http') ? formValues.url : `https://${formValues.url}`;
+        carpetas[i].links.push({ url: fullUrl, tag: formValues.tag || "" });
+        guardarYRenderizar();
+      }
     };
 
-    window.eliminarCarpeta = function(i) {
-      if (confirm("¿Eliminar colección?")) { carpetas.splice(i, 1); guardarYRenderizar(); }
+    window.eliminarCarpeta = async function(i) {
+      const result = await LinkAlert.fire({
+        title: '¿Eliminar colección?',
+        text: "Esta acción no se puede deshacer",
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      });
+
+      if (result.isConfirmed) { 
+        carpetas.splice(i, 1); 
+        guardarYRenderizar(); 
+      }
     };
 
     window.eliminarEnlace = function(fi, li) {
@@ -466,8 +566,15 @@
     window.abrirCompartir = function(index, tipo) {
       const plan = localStorage.getItem('userPlan') || 'free';
       if (tipo === 'qr' && plan !== 'pro') {
-        alert("🔒 El Código QR es una función PRO.");
-        window.location.href = 'suscripcion.html';
+        LinkAlert.fire({
+          icon: 'lock',
+          title: 'Función PRO',
+          text: 'El Código QR es exclusivo para usuarios PRO.',
+          confirmButtonText: 'Saber más',
+          showCancelButton: true,
+        }).then((res) => {
+          if(res.isConfirmed) window.location.href = 'suscripcion.html';
+        });
         return;
       }
       const carpeta = carpetas[index];
@@ -491,7 +598,13 @@
     
     window.copyShare = () => { 
       navigator.clipboard.writeText(enlacePublico); 
-      alert("¡Enlace copiado al portapapeles! 🚀"); 
+      LinkAlert.fire({
+        icon: 'success',
+        title: '¡Copiado!',
+        text: 'Enlace listo para pegar 🚀',
+        timer: 1500,
+        showConfirmButton: false
+      });
     };
 
     window.shareWhatsApp = () => window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`);
@@ -506,7 +619,11 @@
 
     window.shareInstagram = () => {
       navigator.clipboard.writeText(enlacePublico);
-      alert("Instagram no permite compartir links directamente. \n\n¡Hemos copiado el enlace por ti! Ahora puedes pegarlo en tu Bio o Stories. 📸");
+      LinkAlert.fire({
+        title: 'Pégalo en Instagram',
+        text: 'Instagram no permite links directos externos. ¡Copiamos el enlace por ti! Puedes pegarlo en tu Bio o Stories. 📸',
+        icon: 'info'
+      });
     };
 
     function actualizarInterfazUsuario() {
@@ -529,7 +646,16 @@
 
     window.importarDatos = (e) => {
       const reader = new FileReader();
-      reader.onload = (ev) => { carpetas = JSON.parse(ev.target.result); guardarYRenderizar(); };
+      reader.onload = (ev) => { 
+        carpetas = JSON.parse(ev.target.result); 
+        guardarYRenderizar(); 
+        LinkAlert.fire({
+          icon: 'success',
+          title: 'Datos Restaurados',
+          timer: 1500,
+          showConfirmButton: false
+        });
+      };
       reader.readAsText(e.target.files[0]);
     };
 

@@ -51,11 +51,17 @@
     .sphere-2 { width: 500px; height: 500px; background: #2DD4BF; bottom: -150px; left: -150px; }
     .sphere-3 { width: 300px; height: 300px; background: #38BDF8; top: 40%; left: 20%; opacity: 0.2; }
     .login-card { backdrop-filter: blur(12px); background-color: rgba(24, 24, 27, 0.7); }
+
+    /* Estilos para las alertas flotantes */
+    .notification-enter { transform: translateX(100%); opacity: 0; }
+    .notification-active { transform: translateX(0); opacity: 1; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-bg text-text relative overflow-hidden">
   
+  <div id="notification-container" class="fixed top-6 right-6 z-[100] flex flex-col gap-3"></div>
+
   <div class="mesh-gradient">
     <div class="mesh-sphere sphere-1"></div>
     <div class="mesh-sphere sphere-2"></div>
@@ -151,6 +157,34 @@
     const loginForm = document.getElementById('loginForm');
     const submitBtn = document.getElementById('submitBtn');
 
+    // FUNCIÓN DE ALERTA PERSONALIZADA
+    function mostrarAlerta(mensaje, tipo = 'error') {
+      const container = document.getElementById('notification-container');
+      const notification = document.createElement('div');
+      
+      const bgColor = tipo === 'success' ? 'bg-teal/90' : 'bg-red-500/90';
+      const icon = tipo === 'success' ? '🚀' : '⚠️';
+
+      notification.className = `${bgColor} backdrop-blur-md text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[300px] notification-enter border border-white/10`;
+      notification.innerHTML = `
+        <span class="text-xl">${icon}</span>
+        <div class="flex flex-col">
+          <span class="text-[10px] font-bold uppercase tracking-widest opacity-70">${tipo === 'success' ? 'Acceso' : 'Error'}</span>
+          <span class="text-sm font-medium">${mensaje}</span>
+        </div>
+      `;
+
+      container.appendChild(notification);
+      setTimeout(() => notification.classList.add('notification-active'), 10);
+
+      setTimeout(() => {
+        notification.classList.remove('notification-active');
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(20px)';
+        setTimeout(() => notification.remove(), 400);
+      }, 3500);
+    }
+
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
@@ -184,10 +218,6 @@
           .single();
 
         // 3. LOGICA DE NICKNAME REPARADA:
-        // Prioridad 1: Nickname en tabla 'profiles'
-        // Prioridad 2: Nickname en Metadatos de Auth (el que se pone al registrarse)
-        // Prioridad 3: El nombre del correo (solo si todo lo anterior falla)
-        
         let finalNickname = "";
         
         if (profile && profile.nickname && !profile.nickname.includes('@')) {
@@ -198,7 +228,7 @@
           finalNickname = email.split('@')[0];
         }
 
-        // 4. Guardamos en LocalStorage para que funcion.html lo lea al instante
+        // 4. Guardamos en LocalStorage
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userNickname', finalNickname);
         
@@ -213,10 +243,15 @@
           localStorage.setItem('carpetas', '[]');
         }
 
-        window.location.href = 'funcion.html';
+        // MOSTRAR ALERTA DE ÉXITO Y REDIRIGIR
+        mostrarAlerta(`¡Bienvenido de vuelta, ${finalNickname}!`, "success");
+        
+        setTimeout(() => {
+            window.location.href = 'funcion.html';
+        }, 1500);
 
       } catch (error) {
-        alert("Error: " + error.message);
+        mostrarAlerta(error.message, "error");
         submitBtn.innerText = "ENTRAR AHORA";
         submitBtn.disabled = false;
       }

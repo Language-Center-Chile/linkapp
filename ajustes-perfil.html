@@ -18,6 +18,7 @@
             surface: "#18181b",
             border: "#27272a",
             blue: "#38BDF8",
+            teal: "#2DD4BF",
             text: "#E2E8F0",
             muted: "#94A3B8"
           }
@@ -49,10 +50,16 @@
     .color-dot.active { border-color: white; transform: scale(1.1); }
     
     main { transition: opacity 0.5s ease-in-out; }
+
+    /* Estilos para las alertas flotantes */
+    .notification-enter { transform: translateX(100%); opacity: 0; }
+    .notification-active { transform: translateX(0); opacity: 1; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-bg text-text relative overflow-x-hidden">
   
+  <div id="notification-container" class="fixed top-6 right-6 z-[100] flex flex-col gap-3"></div>
+
   <div class="mesh-gradient">
     <div class="mesh-sphere sphere-1"></div>
     <div class="mesh-sphere sphere-2"></div>
@@ -145,6 +152,34 @@
 
     let base64Avatar = "";
 
+    // FUNCIÓN DE ALERTA PERSONALIZADA
+    function mostrarAlerta(mensaje, tipo = 'error') {
+      const container = document.getElementById('notification-container');
+      const notification = document.createElement('div');
+      
+      const bgColor = tipo === 'success' ? 'bg-teal/90' : 'bg-red-500/90';
+      const icon = tipo === 'success' ? '✨' : '⚠️';
+
+      notification.className = `${bgColor} backdrop-blur-md text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[300px] notification-enter border border-white/10`;
+      notification.innerHTML = `
+        <span class="text-xl">${icon}</span>
+        <div class="flex flex-col">
+          <span class="text-[10px] font-bold uppercase tracking-widest opacity-70">${tipo === 'success' ? 'Sistema' : 'Atención'}</span>
+          <span class="text-sm font-medium">${mensaje}</span>
+        </div>
+      `;
+
+      container.appendChild(notification);
+      setTimeout(() => notification.classList.add('notification-active'), 10);
+
+      setTimeout(() => {
+        notification.classList.remove('notification-active');
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(20px)';
+        setTimeout(() => notification.remove(), 400);
+      }, 3500);
+    }
+
     // AL CARGAR LA PÁGINA
     document.addEventListener('DOMContentLoaded', async () => {
       const { data: { session } } = await _supabase.auth.getSession();
@@ -152,14 +187,12 @@
 
       mainContent.classList.remove('opacity-0');
 
-      // Intentamos cargar desde la tabla 'profiles'
-      const { data: profile, error } = await _supabase
+      const { data: profile } = await _supabase
         .from('profiles')
         .select('*')
         .eq('id', session.user.id)
         .single();
 
-      // Si hay perfil, usamos esos datos. Si no, usamos lo que haya en la sesión de Auth.
       const currentNick = profile?.nickname || session.user.user_metadata?.nickname || session.user.email.split('@')[0];
       base64Avatar = profile?.avatar_url || session.user.user_metadata?.avatar_url || "";
       
@@ -174,7 +207,6 @@
         document.getElementById('cardFallback').textContent = letra;
       }
 
-      // Cargar estadísticas
       try {
         const { data: folderData } = await _supabase
           .from('linkapp_folders')
@@ -190,7 +222,6 @@
       } catch (e) { console.warn("Aún no hay carpetas creadas."); }
     });
 
-    // EVENTOS DE INPUT
     nicknameInput.addEventListener('input', (e) => {
       cardName.textContent = '@' + (e.target.value || 'Usuario');
     });
@@ -198,9 +229,8 @@
     uploadFile.addEventListener('change', function() {
       const file = this.files[0];
       if (file) {
-        // Validación de tamaño (máximo 1MB para evitar el error de red)
         if (file.size > 1024 * 1024 * 5) {
-            alert("La imagen es muy pesada. Intenta con una de menos de 5MB.");
+            mostrarAlerta("La imagen supera los 5MB. Usa una más ligera.", "error");
             this.value = "";
             return;
         }
@@ -208,6 +238,7 @@
         reader.onload = (e) => {
           base64Avatar = e.target.result;
           updateAvatars(base64Avatar);
+          mostrarAlerta("Previsualización de imagen cargada.", "success");
         };
         reader.readAsDataURL(file);
       }
@@ -222,7 +253,6 @@
       ['fallbackAvatar', 'cardFallback'].forEach(id => document.getElementById(id).classList.add('hidden'));
     }
 
-    // BOTÓN GUARDAR (LA LÓGICA CORREGIDA)
     document.getElementById('settingsForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       btnGuardar.innerText = "SINCRONIZANDO...";
@@ -234,8 +264,6 @@
 
         const nuevoNick = nicknameInput.value;
 
-        // 1. PRIMERO: Guardar en la tabla 'profiles'
-        // Esto es lo más importante porque es lo que lee tu panel principal.
         const { error: profileError } = await _supabase
           .from('profiles')
           .upsert({
@@ -246,37 +274,32 @@
             updated_at: new Date()
           });
 
-        if (profileError) {
-            console.error("Error en tabla profiles:", profileError);
-            throw new Error("No se pudo guardar en la base de datos. ¿Creaste las columnas avatar_url y updated_at?");
-        }
+        if (profileError) throw new Error("Error al guardar en la base de datos.");
 
-        // 2. SEGUNDO: Intentar actualizar Auth (opcional, si falla no bloqueamos al usuario)
         try {
             await _supabase.auth.updateUser({
                 data: { nickname: nuevoNick } 
-                // Nota: No enviamos avatar_url aquí para evitar el "Failed to fetch" por peso.
             });
         } catch (authErr) {
             console.warn("Auth falló, pero el perfil se guardó en la tabla.", authErr);
         }
 
-        // 3. ACTUALIZAR LOCALSTORAGE
         localStorage.setItem('userNickname', nuevoNick);
         if (base64Avatar) localStorage.setItem('userAvatar', base64Avatar);
 
-        alert('¡Perfil actualizado con éxito! ✔');
-        window.location.href = 'funcion.html';
+        mostrarAlerta('¡Perfil actualizado con éxito! Redirigiendo...', 'success');
+        
+        setTimeout(() => {
+            window.location.href = 'funcion.html';
+        }, 1500);
 
       } catch (err) {
-        console.error("Error crítico:", err);
-        alert(err.message);
+        mostrarAlerta(err.message, "error");
         btnGuardar.innerText = "Guardar Cambios";
         btnGuardar.disabled = false;
       }
     });
 
-    // COLORES DE ACENTO
     colorDots.forEach(dot => {
       dot.addEventListener('click', () => {
         colorDots.forEach(d => d.classList.remove('active'));
