@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Suscripción - LinkApp</title>
   <link rel="icon" type="image/png" href="imagenes/logo1.png">
-  <link rel="stylesheet" href="estilos.css">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -48,7 +47,16 @@
       background: linear-gradient(90deg, #38BDF8, #2DD4BF);
     }
 
-    /* Estilos para el Mesh Gradient unificado */
+    /* Animación para el menú móvil */
+    .mobile-menu-enter {
+      animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
     .mesh-gradient {
       position: fixed;
       top: 0;
@@ -67,30 +75,9 @@
       opacity: 0.4;
     }
 
-    .sphere-1 {
-      width: 400px;
-      height: 400px;
-      background: #38BDF8;
-      top: -100px;
-      right: -100px;
-    }
-
-    .sphere-2 {
-      width: 500px;
-      height: 500px;
-      background: #2DD4BF;
-      bottom: -150px;
-      left: -150px;
-    }
-
-    .sphere-3 {
-      width: 300px;
-      height: 300px;
-      background: #38BDF8;
-      top: 40%;
-      left: 20%;
-      opacity: 0.2;
-    }
+    .sphere-1 { width: 400px; height: 400px; background: #38BDF8; top: -100px; right: -100px; }
+    .sphere-2 { width: 500px; height: 500px; background: #2DD4BF; bottom: -150px; left: -150px; }
+    .sphere-3 { width: 300px; height: 300px; background: #38BDF8; top: 40%; left: 20%; opacity: 0.2; }
   </style>
 </head>
 
@@ -103,36 +90,61 @@
   </div>
 
   <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
-  <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
-      <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
-    </div>
-
-    <nav class="hidden md:flex items-center gap-8 text-sm">
-      <div class="flex gap-6 border-r border-border pr-6 font-medium">
-        <a href="index.html" class="text-muted hover:text-blue transition-colors">Inicio</a>
-        <a href="sobre-nosotros.html" class="text-muted hover:text-blue transition-colors">Nosotros</a>
-        <a href="contacto.html" class="text-muted hover:text-blue transition-colors">Contacto</a>
-        <a href="suscripcion.html" class="text-muted hover:text-blue transition-colors">Suscripción</a>
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
       </div>
 
-      <div class="flex gap-4 items-center">
-        <a href="login.html" id="btn-login" class="px-5 py-2 text-muted hover:text-white transition-colors text-xs font-black uppercase tracking-widest">
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+        <div class="flex gap-6 border-r border-border pr-6 font-medium">
+          <a href="index.html" class="text-muted hover:text-blue transition-colors">Inicio</a>
+          <a href="sobre-nosotros.html" class="text-muted hover:text-blue transition-colors">Nosotros</a>
+          <a href="contacto.html" class="text-muted hover:text-blue transition-colors">Contacto</a>
+          <a href="suscripcion.html" class="text-white hover:text-blue transition-colors">Suscripción</a>
+        </div>
+
+        <div class="flex gap-4 items-center">
+          <a href="login.html" id="btn-login" class="px-5 py-2 text-muted hover:text-white transition-colors text-xs font-black uppercase tracking-widest">
+            Login
+          </a>
+          <a href="registro-correo.html" id="btn-registro" class="px-5 py-2.5 bg-blue text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-blue/20">
+            Registrarse
+          </a>
+          <a href="funcion.html" id="btn-panel" class="hidden px-5 py-2.5 bg-teal text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-teal/20">
+            Mi Panel
+          </a>
+        </div>
+      </nav>
+      
+      <button id="menu-btn" class="md:hidden text-white text-3xl focus:outline-none hover:text-blue transition-colors">
+        <span id="menu-icon">☰</span>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden absolute top-20 left-0 w-full bg-bg/95 backdrop-blur-xl border-b border-border p-8 flex-col items-center text-center gap-6 md:hidden z-40 shadow-2xl mobile-menu-enter">
+      <div class="flex flex-col gap-5 w-full">
+        <a href="index.html" class="text-muted hover:text-blue text-lg font-bold uppercase tracking-widest">Inicio</a>
+        <a href="sobre-nosotros.html" class="text-muted hover:text-blue text-lg font-bold uppercase tracking-widest">Nosotros</a>
+        <a href="contacto.html" class="text-muted hover:text-blue text-lg font-bold uppercase tracking-widest">Contacto</a>
+        <a href="suscripcion.html" class="text-white text-lg font-bold uppercase tracking-widest">Suscripción</a>
+      </div>
+
+      <div class="h-px bg-border w-1/2 my-2 opacity-50"></div>
+
+      <div class="flex flex-col gap-4 w-full max-w-xs">
+        <a href="login.html" id="mobile-btn-login" class="text-center py-4 border border-border rounded-xl text-muted hover:text-white text-xs font-black uppercase tracking-widest">
           Login
         </a>
-        <a href="registro-correo.html" id="btn-registro" class="px-5 py-2.5 bg-blue text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-blue/20">
+        <a href="registro-correo.html" id="mobile-btn-registro" class="text-center py-4 bg-blue text-black rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue/20">
           Registrarse
         </a>
-        <a href="funcion.html" id="btn-panel" class="hidden px-5 py-2.5 bg-teal text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-teal/20">
+        <a href="funcion.html" id="mobile-btn-panel" class="hidden text-center py-4 bg-teal text-black rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-teal/20">
           Mi Panel
         </a>
       </div>
-    </nav>
-    
-    <button class="md:hidden text-white text-2xl">☰</button>
-  </div>
-</header>
+    </div>
+  </header>
 
   <main class="flex-grow max-w-7xl mx-auto px-6 py-20 w-full">
     
@@ -146,21 +158,17 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-8 items-center">
-
       <div class="pricing-card border border-border rounded-[2.5rem] p-10 text-center flex flex-col h-full">
         <h3 class="text-xl font-black mb-1 uppercase tracking-widest">Gratis</h3>
         <p class="text-muted text-xs mb-8 font-bold">Comunidad LinkApp</p>
-
         <div class="mb-8">
           <span class="text-5xl font-black text-white">$0</span>
         </div>
-
         <ul class="space-y-4 text-sm text-muted mb-10 text-left flex-grow">
           <li class="flex items-center gap-3"><span class="text-teal text-lg">✓</span> Perfil básico personal</li>
           <li class="flex items-center gap-3"><span class="text-teal text-lg">✓</span> Hasta 5 carpetas con 5 enlaces activos</li>
           <li class="flex items-center gap-3"><span class="text-teal text-lg">✕</span> Código QR estándar</li>
         </ul>
-
         <button onclick="seleccionarPlan('Gratis')"
           class="w-full py-4 rounded-2xl border border-border hover:bg-surface hover:text-white transition-all font-black text-xs uppercase tracking-widest">
           Empezar ahora
@@ -171,21 +179,17 @@
         <div class="absolute top-0 right-0 plan-badge text-black text-[9px] font-black px-4 py-1 uppercase tracking-widest rounded-bl-xl">
           Popular
         </div>
-        
         <h3 class="text-xl font-black mb-1 text-blue uppercase tracking-widest">Plus</h3>
         <p class="text-muted text-xs mb-8 font-bold">Para Creadores</p>
-
         <div class="mb-8">
           <span class="text-5xl font-black text-white">$4.990</span>
           <span class="text-muted text-xs font-bold uppercase tracking-widest ml-2">/mes</span>
         </div>
-
         <ul class="space-y-4 text-sm text-text mb-10 text-left flex-grow">
           <li class="flex items-center gap-3"><span class="text-blue text-lg">✓</span> Links ilimitados</li>
           <li class="flex items-center gap-3"><span class="text-blue text-lg">✓</span> Código QR premium</li>
           <li class="flex items-center gap-3"><span class="text-blue text-lg">✓</span> Carpetas ilimitadas</li>
         </ul>
-
         <button onclick="seleccionarPlan('Plus')"
           class="w-full py-4 rounded-2xl bg-blue text-black font-black text-xs uppercase tracking-widest shadow-lg shadow-blue/20 hover:scale-[1.02] transition-transform">
           Elegir Plus
@@ -195,25 +199,21 @@
       <div class="pricing-card border border-border rounded-[2.5rem] p-10 text-center flex flex-col h-full">
         <h3 class="text-xl font-black mb-1 text-purple uppercase tracking-widest">Business</h3>
         <p class="text-muted text-xs mb-8 font-bold">Para Empresas</p>
-
         <div class="mb-8">
           <span class="text-5xl font-black text-white">$9.990</span>
           <span class="text-muted text-xs font-bold uppercase tracking-widest ml-2">/mes</span>
         </div>
-
         <ul class="space-y-4 text-sm text-muted mb-10 text-left flex-grow">
           <li class="flex items-center gap-3"><span class="text-purple text-lg">✓</span> Todo lo del plan Plus</li>
           <li class="flex items-center gap-3"><span class="text-purple text-lg">✓</span> Dominio personalizado</li>
           <li class="flex items-center gap-3"><span class="text-purple text-lg">✓</span> Analíticas avanzadas</li>
           <li class="flex items-center gap-3"><span class="text-purple text-lg">✓</span> Eliminación de marca</li>
         </ul>
-
         <button onclick="seleccionarPlan('Business')"
           class="w-full py-4 rounded-2xl bg-purple text-black font-black text-xs uppercase tracking-widest hover:bg-purple/90 transition-all">
           Elegir Business
         </button>
       </div>
-
     </div>
   </main>
 
@@ -229,24 +229,47 @@
       localStorage.setItem("planLinkApp", plan);
       alert("¡Excelente elección! Has seleccionado el plan " + plan);
     }
-  </script>
 
-  <script>
     document.addEventListener("DOMContentLoaded", function() {
+      // 1. LÓGICA DE SESIÓN (Escritorio + Móvil)
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-
       const btnLogin = document.getElementById('btn-login');
       const btnRegistro = document.getElementById('btn-registro');
       const btnPanel = document.getElementById('btn-panel');
+      
+      const mobLogin = document.getElementById('mobile-btn-login');
+      const mobRegistro = document.getElementById('mobile-btn-registro');
+      const mobPanel = document.getElementById('mobile-btn-panel');
 
       if (isLoggedIn) {
-        // Ocultar botones de Auth
         if (btnLogin) btnLogin.classList.add('hidden');
         if (btnRegistro) btnRegistro.classList.add('hidden');
-        
-        // Mostrar botones de panel
         if (btnPanel) btnPanel.classList.remove('hidden');
+        
+        if (mobLogin) mobLogin.classList.add('hidden');
+        if (mobRegistro) mobRegistro.classList.add('hidden');
+        if (mobPanel) mobPanel.classList.remove('hidden');
       }
+
+      // 2. LÓGICA DEL MENÚ MÓVIL
+      const menuBtn = document.getElementById('menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+
+      menuBtn.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          mobileMenu.classList.add('flex');
+          menuIcon.innerText = '✕';
+          document.body.style.overflow = 'hidden';
+        } else {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('flex');
+          menuIcon.innerText = '☰';
+          document.body.style.overflow = 'auto';
+        }
+      });
     });
   </script>
 

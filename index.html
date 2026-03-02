@@ -54,29 +54,18 @@
       opacity: 0.4;
     }
 
-    .sphere-1 {
-      width: 400px;
-      height: 400px;
-      background: #38BDF8;
-      top: -100px;
-      right: -100px;
+    .sphere-1 { width: 400px; height: 400px; background: #38BDF8; top: -100px; right: -100px; }
+    .sphere-2 { width: 500px; height: 500px; background: #2DD4BF; bottom: -150px; left: -150px; }
+    .sphere-3 { width: 300px; height: 300px; background: #38BDF8; top: 40%; left: 20%; opacity: 0.2; }
+
+    /* Animación para el menú móvil */
+    .mobile-menu-enter {
+      animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .sphere-2 {
-      width: 500px;
-      height: 500px;
-      background: #2DD4BF;
-      bottom: -150px;
-      left: -150px;
-    }
-
-    .sphere-3 {
-      width: 300px;
-      height: 300px;
-      background: #38BDF8;
-      top: 40%;
-      left: 20%;
-      opacity: 0.2;
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
   </style>
 </head>
@@ -89,36 +78,61 @@
   </div>
 
   <header class="border-b border-border sticky top-0 bg-bg/80 backdrop-blur-md z-50">
-  <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
-      <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="imagenes/logo1.png" alt="logo" class="w-10 h-12">
+        <span class="font-bold text-xl tracking-tighter text-white">LinkApp</span>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+        <div class="flex gap-6 border-r border-border pr-6 font-medium">
+          <a href="index.html" class="text-white hover:text-blue transition-colors">Inicio</a>
+          <a href="sobre-nosotros.html" class="text-muted hover:text-blue transition-colors">Nosotros</a>
+          <a href="contacto.html" class="text-muted hover:text-blue transition-colors">Contacto</a>
+          <a href="suscripcion.html" class="text-muted hover:text-blue transition-colors">Suscripción</a>
+        </div>
+
+        <div class="flex gap-4 items-center">
+          <a href="login.html" id="btn-login" class="px-5 py-2 text-muted hover:text-white transition-colors text-xs font-black uppercase tracking-widest">
+            Login
+          </a>
+          <a href="registro-correo.html" id="btn-registro" class="px-5 py-2.5 bg-blue text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-blue/20">
+            Registrarse
+          </a>
+          <a href="funcion.html" id="btn-panel" class="hidden px-5 py-2.5 bg-teal text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-teal/20">
+            Mi Panel
+          </a>
+        </div>
+      </nav>
+      
+      <button id="menu-btn" class="md:hidden text-white text-3xl focus:outline-none hover:text-blue transition-colors">
+        <span id="menu-icon">☰</span>
+      </button>
     </div>
 
-    <nav class="hidden md:flex items-center gap-8 text-sm">
-      <div class="flex gap-6 border-r border-border pr-6 font-medium">
-        <a href="index.html" class="text-muted hover:text-blue transition-colors">Inicio</a>
-        <a href="sobre-nosotros.html" class="text-muted hover:text-blue transition-colors">Nosotros</a>
-        <a href="contacto.html" class="text-muted hover:text-blue transition-colors">Contacto</a>
-        <a href="suscripcion.html" class="text-muted hover:text-blue transition-colors">Suscripción</a>
+    <div id="mobile-menu" class="hidden absolute top-20 left-0 w-full bg-bg/95 backdrop-blur-xl border-b border-border p-8 flex-col items-center text-center gap-6 md:hidden z-40 shadow-2xl mobile-menu-enter">
+      <div class="flex flex-col gap-5 w-full">
+        <a href="index.html" class="text-white text-lg font-bold uppercase tracking-widest">Inicio</a>
+        <a href="sobre-nosotros.html" class="text-muted hover:text-blue text-lg font-bold uppercase tracking-widest">Nosotros</a>
+        <a href="contacto.html" class="text-muted hover:text-blue text-lg font-bold uppercase tracking-widest">Contacto</a>
+        <a href="suscripcion.html" class="text-muted hover:text-blue text-lg font-bold uppercase tracking-widest">Suscripción</a>
       </div>
 
-      <div class="flex gap-4 items-center">
-        <a href="login.html" id="btn-login" class="px-5 py-2 text-muted hover:text-white transition-colors text-xs font-black uppercase tracking-widest">
+      <div class="h-px bg-border w-1/2 my-2"></div>
+
+      <div class="flex flex-col gap-4 w-full max-w-xs">
+        <a href="login.html" id="mobile-btn-login" class="text-center py-4 border border-border rounded-xl text-muted hover:text-white text-xs font-black uppercase tracking-widest">
           Login
         </a>
-        <a href="registro-correo.html" id="btn-registro" class="px-5 py-2.5 bg-blue text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-blue/20">
+        <a href="registro-correo.html" id="mobile-btn-registro" class="text-center py-4 bg-blue text-black rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue/20">
           Registrarse
         </a>
-        <a href="funcion.html" id="btn-panel" class="hidden px-5 py-2.5 bg-teal text-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-teal/20">
-          Mi Panel
+        <a href="funcion.html" id="mobile-btn-panel" class="hidden text-center py-4 bg-teal text-black rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-teal/20">
+          Ir a mi Panel
         </a>
       </div>
-    </nav>
-    
-    <button class="md:hidden text-white text-2xl">☰</button>
-  </div>
-</header>
+    </div>
+  </header>
 
   <main class="flex-grow">
     <section class="text-center pt-20 pb-16 px-6 flex flex-col items-center">
@@ -126,7 +140,7 @@
         <img src="imagenes/logo1.png" alt="LinkApp Logo" class="w-40 h-40 drop-shadow-[0_0_25px_rgba(56,189,248,0.4)] object-contain">
       </div>
 
-      <h1 class="text-5xl md:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
+      <h1 class="text-5xl md:text-7xl font-black mb-6 leading-[1.1] tracking-tight text-white">
         Organiza tu mundo digital<br>
         <span class="gradient-text">con estilo</span>
       </h1>
@@ -171,9 +185,9 @@
     <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
       <img src="imagenes/logo1.png" alt="Logo mini" class="w-8 h-10 grayscale opacity-40 hover:opacity-100 transition-opacity">
       <div class="flex gap-8 text-xs text-muted uppercase tracking-widest font-bold">
-        <a href="#" class="hover:text-blue">Privacidad</a>
-        <a href="#" class="hover:text-blue">Términos</a>
-        <a href="#" class="hover:text-blue">Soporte</a>
+        <a href="#" class="hover:text-blue transition-colors">Privacidad</a>
+        <a href="#" class="hover:text-blue transition-colors">Términos</a>
+        <a href="#" class="hover:text-blue transition-colors">Soporte</a>
       </div>
       <p class="text-muted/60 text-xs">© 2026 LinkApp. Todos los derechos reservados.</p>
     </div>
@@ -183,6 +197,7 @@
   
   <script>
     document.addEventListener("DOMContentLoaded", function() {
+      // 1. LÓGICA DE SESIÓN (Persistencia y Visibilidad)
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
       const btnLogin = document.getElementById('btn-login');
@@ -191,16 +206,56 @@
       const ctaRegistro = document.getElementById('cta-registro');
       const ctaPanel = document.getElementById('cta-panel');
 
+      // IDs para el menú móvil
+      const mobLogin = document.getElementById('mobile-btn-login');
+      const mobRegistro = document.getElementById('mobile-btn-registro');
+      const mobPanel = document.getElementById('mobile-btn-panel');
+
       if (isLoggedIn) {
-        // Ocultar botones de Auth
-        btnLogin.classList.add('hidden');
-        btnRegistro.classList.add('hidden');
-        ctaRegistro.classList.add('hidden');
-        
-        // Mostrar botones de panel
-        btnPanel.classList.remove('hidden');
-        ctaPanel.classList.remove('hidden');
+        // Escritorio y Hero
+        if(btnLogin) btnLogin.classList.add('hidden');
+        if(btnRegistro) btnRegistro.classList.add('hidden');
+        if(ctaRegistro) ctaRegistro.classList.add('hidden');
+        if(btnPanel) btnPanel.classList.remove('hidden');
+        if(ctaPanel) ctaPanel.classList.remove('hidden');
+
+        // Móvil
+        if(mobLogin) mobLogin.classList.add('hidden');
+        if(mobRegistro) mobRegistro.classList.add('hidden');
+        if(mobPanel) mobPanel.classList.remove('hidden');
       }
+
+      // 2. LÓGICA DEL MENÚ MÓVIL (Toggle)
+      const menuBtn = document.getElementById('menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+
+      menuBtn.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          mobileMenu.classList.add('flex');
+          menuIcon.innerText = '✕';
+          document.body.style.overflow = 'hidden'; // Bloquea scroll
+        } else {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('flex');
+          menuIcon.innerText = '☰';
+          document.body.style.overflow = 'auto'; // Habilita scroll
+        }
+      });
+
+      // Cerrar menú al hacer click en enlaces
+      const mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('flex');
+          menuIcon.innerText = '☰';
+          document.body.style.overflow = 'auto';
+        });
+      });
     });
   </script>
 </body>

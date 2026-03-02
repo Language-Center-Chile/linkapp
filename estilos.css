@@ -321,3 +321,19 @@ footer {
     66% { transform: translate(-5%, 15%) scale(0.9); }
     100% { transform: translate(0, 0) scale(1); }
 }
+
+/* Estilos para el Menú Móvil Corregido */
+    #mobileMenu {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateX(100%);
+      background-color: #18181b; /* Color sólido para evitar transparencia */
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    }
+    #mobileMenu.active {
+      transform: translateX(0);
+    }
+    .mobile-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px); z-index: 55; display: none;
+    }
+    .mobile-overlay.active { display: block; }
