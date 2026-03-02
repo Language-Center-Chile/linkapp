@@ -114,7 +114,6 @@
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
     }
 
-    /* Estilos personalizados para SweetAlert2 para que combine con LinkApp */
     .swal2-popup {
       background: #18181b !important;
       border: 1px solid #27272a !important;
@@ -130,6 +129,15 @@
     }
     .swal2-confirm { border-radius: 1rem !important; font-weight: 800 !important; text-transform: uppercase; font-size: 0.75rem !important; letter-spacing: 0.1em; }
     .swal2-cancel { border-radius: 1rem !important; font-weight: 800 !important; text-transform: uppercase; font-size: 0.75rem !important; letter-spacing: 0.1em; }
+
+    /* Estilo para el menú móvil */
+    #mobileMenu {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateX(100%);
+    }
+    #mobileMenu.active {
+      transform: translateX(0);
+    }
   </style>
 </head>
 
@@ -186,9 +194,32 @@
         </div>
       </nav>
       
-      <button class="md:hidden text-white text-2xl" onclick="toggleUserMenu()">☰</button>
+      <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()">☰</button>
     </div>
   </header>
+
+  <div id="mobileMenu" class="fixed inset-0 bg-bg z-[100] flex flex-col p-8 md:hidden">
+    <div class="flex justify-between items-center mb-12">
+      <div class="flex items-center gap-2">
+        <img src="imagenes/logo1.png" alt="logo" class="w-8 h-10">
+        <span class="font-bold text-lg tracking-tighter text-white">LinkApp</span>
+      </div>
+      <button onclick="toggleMobileMenu()" class="text-white text-4xl">&times;</button>
+    </div>
+
+    <nav class="flex flex-col gap-6">
+      <a href="index.html" class="text-3xl font-black text-white hover:text-blue transition-colors">Inicio</a>
+      <a href="suscripcion.html" class="text-3xl font-black text-white hover:text-blue transition-colors">Planes</a>
+      <a href="ajustes-perfil.html" class="text-3xl font-black text-blue hover:text-teal transition-colors">Ajustes Perfil</a>
+      <hr class="border-border my-4">
+      <button onclick="logout()" class="text-left text-xl font-black text-red-400 uppercase tracking-widest">Cerrar Sesión</button>
+    </nav>
+
+    <div class="mt-auto pt-10 border-t border-border">
+      <p id="mobileUserNick" class="text-white font-black text-lg">Usuario</p>
+      <p class="text-muted text-[10px] uppercase tracking-widest">Sesión Activa</p>
+    </div>
+  </div>
 
   <main class="max-w-7xl mx-auto px-6 py-12 w-full flex-grow">
     <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-8">
@@ -226,35 +257,28 @@
         <h3 id="shareTitle" class="text-3xl font-black text-white tracking-tight">Compartir <span class="text-blue">Carpeta</span></h3>
         <p id="shareSubtitle" class="text-muted text-[10px] uppercase font-bold tracking-widest mt-2"></p>
       </div>
-      
       <div id="qrContainer" class="hidden"><div id="qrcode" class="flex justify-center mb-8"></div></div>
-      
       <div class="grid grid-cols-2 gap-4 mb-8">
         <button class="social-btn group" onclick="shareWhatsApp()">
           <svg class="social-logo" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a5.463 5.463 0 0 1-2.793-.765l-.2-.118-2.083.545.556-2.031-.129-.211a5.467 5.467 0 0 1-.836-2.887c0-3.024 2.463-5.486 5.487-5.486 1.464 0 2.84.57 3.875 1.605a5.465 5.465 0 0 1 1.605 3.874c.001 3.024-2.463 5.486-5.486 5.486m8.88-13.847C17.518 4.29 14.858 1.628 11.594 1.628c-3.691 0-6.705 3.013-6.706 6.706 0 1.181.307 2.333.892 3.351L3.91 16.51l4.582-1.202a6.666 6.666 0 0 0 3.102.79h.003c3.691 0 6.705-3.013 6.706-6.706 0-1.787-.696-3.468-1.961-4.731z"/></svg>
           <span class="text-[10px] font-black text-muted group-hover:text-green-400 uppercase tracking-widest">WhatsApp</span>
         </button>
-
         <button class="social-btn group" onclick="shareFacebook()">
           <svg class="social-logo" viewBox="0 0 24 24" fill="#1877F2"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
           <span class="text-[10px] font-black text-muted group-hover:text-blue-400 uppercase tracking-widest">Facebook</span>
         </button>
-
         <button class="social-btn group" onclick="shareX()">
           <svg class="social-logo" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           <span class="text-[10px] font-black text-muted group-hover:text-white uppercase tracking-widest">Twitter/X</span>
         </button>
-
         <button class="social-btn group" onclick="shareInstagram()">
           <svg class="social-logo" viewBox="0 0 24 24" fill="url(#instagram-gradient)"><defs><linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#833ab4"/><stop offset="50%" stop-color="#fd1d1d"/><stop offset="100%" stop-color="#fcb045"/></linearGradient></defs><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           <span class="text-[10px] font-black text-muted group-hover:text-pink-400 uppercase tracking-widest">Instagram</span>
         </button>
       </div>
-
       <button onclick="copyShare()" class="w-full py-4 bg-white/5 border border-dashed border-border rounded-2xl text-xs font-bold text-blue hover:bg-blue/10 transition-all mb-6">
         🔗 Copiar Enlace Directo
       </button>
-
       <button class="w-full py-2 text-muted text-[10px] font-black uppercase tracking-widest" onclick="cerrarShare()">[ CERRAR ]</button>
     </div>
   </div>
@@ -277,7 +301,6 @@
     const LIMIT_FOLDERS_FREE = 2;
     const LIMIT_LINKS_FREE = 3;
 
-    // Configuración base de SweetAlert para LinkApp
     const LinkAlert = Swal.mixin({
       background: '#18181b',
       color: '#E2E8F0',
@@ -298,6 +321,11 @@
 
     window.toggleUserMenu = function() {
       document.getElementById('userDropdown').classList.toggle('hidden');
+    };
+
+    // Función para el menú móvil
+    window.toggleMobileMenu = function() {
+      document.getElementById('mobileMenu').classList.toggle('active');
     };
 
     async function inicializar() {
@@ -341,14 +369,12 @@
         
         return `
           <div class="folder-card border border-border rounded-[2.5rem] p-8 flex flex-col h-full ${isArchived ? 'is-archived' : ''}" data-f-index="${fIndex}">
-            
             ${isArchived ? `
               <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 rounded-[2.5rem] backdrop-blur-[2px]">
                 <span class="text-2xl mb-2">🔒</span>
                 <p class="text-[10px] font-black text-white tracking-[0.2em] uppercase bg-blue/80 px-4 py-1 rounded-full">Proyectado en PRO</p>
               </div>
             ` : ''}
-
             <div class="flex justify-between items-start mb-6">
               <div class="max-w-[60%]">
                 <div class="flex items-center gap-2 group">
@@ -363,13 +389,11 @@
                 <button onclick="eliminarCarpeta(${fIndex})" class="p-2 hover:text-red-400 transition-colors">🗑</button>
               </div>
             </div>
-
             <div class="relative mb-4">
               <input type="text" oninput="filtrarLinks(this, ${fIndex})" 
                 placeholder="Filtrar..."
                 class="w-full bg-bg/50 border border-border text-[10px] p-3 rounded-xl focus:border-blue/50 outline-none transition-all">
             </div>
-
             <div id="links-container-${fIndex}" class="space-y-2 mb-6 flex-grow max-h-60 overflow-y-auto custom-scroll pr-2">
               ${folder.links.map((link, lIndex) => `
                 <div class="link-wrapper flex justify-between items-center bg-white/5 p-3 rounded-xl border border-transparent hover:border-blue/20 transition-all group/link" 
@@ -386,7 +410,6 @@
                 </div>
               `).join('')}
             </div>
-
             <button onclick="${isArchived ? '' : `agregarEnlace(${fIndex})`}" 
               class="w-full py-3 bg-blue/10 text-blue rounded-xl font-black text-[9px] uppercase tracking-tighter hover:bg-blue hover:text-black transition-all relative z-20">
               + Añadir Enlace
@@ -396,7 +419,7 @@
       }).join('');
     }
 
-    // --- FUNCIONES DE EDICIÓN (MODIFICADAS CON SWEETALERT) ---
+    // --- FUNCIONES MANTENIDAS ---
     window.editarCarpeta = async function(i) {
       const { value: nuevoNombre } = await LinkAlert.fire({
         title: 'Editar Colección',
@@ -406,7 +429,6 @@
         showCancelButton: true,
         confirmButtonText: 'Guardar'
       });
-
       if (nuevoNombre && nuevoNombre.trim() !== "") {
         carpetas[i].nombre = nuevoNombre.trim();
         guardarYRenderizar();
@@ -415,29 +437,18 @@
 
     window.editarEnlace = async function(fi, li) {
       const linkActual = carpetas[fi].links[li];
-      
       const { value: formValues } = await LinkAlert.fire({
         title: 'Editar Enlace',
-        html:
-          `<input id="swal-input1" class="swal2-input" placeholder="Nombre (Tag)" value="${linkActual.tag}">` +
-          `<input id="swal-input2" class="swal2-input" placeholder="URL" value="${linkActual.url}">`,
+        html: `<input id="swal-input1" class="swal2-input" placeholder="Nombre (Tag)" value="${linkActual.tag}">` +
+              `<input id="swal-input2" class="swal2-input" placeholder="URL" value="${linkActual.url}">`,
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Actualizar',
-        preConfirm: () => {
-          return [
-            document.getElementById('swal-input1').value,
-            document.getElementById('swal-input2').value
-          ]
-        }
+        preConfirm: () => [document.getElementById('swal-input1').value, document.getElementById('swal-input2').value]
       });
-
       if (formValues && formValues[1].trim() !== "") {
         const nuevaUrl = formValues[1].trim();
-        carpetas[fi].links[li] = {
-          url: nuevaUrl.startsWith('http') ? nuevaUrl : `https://${nuevaUrl}`,
-          tag: formValues[0] || ""
-        };
+        carpetas[fi].links[li] = { url: nuevaUrl.startsWith('http') ? nuevaUrl : `https://${nuevaUrl}`, tag: formValues[0] || "" };
         guardarYRenderizar();
       }
     };
@@ -469,57 +480,25 @@
     window.nuevaCarpeta = async function() {
       const plan = localStorage.getItem('userPlan') || 'free';
       if (plan === 'free' && carpetas.length >= LIMIT_FOLDERS_FREE) {
-        LinkAlert.fire({
-          icon: 'warning',
-          title: 'Límite FREE',
-          text: 'Solo puedes tener 2 carpetas activas. Mejora a PRO para crear más.',
-          footer: '<a href="suscripcion.html" style="color:#38BDF8">Ver planes PRO</a>'
-        });
+        LinkAlert.fire({ icon: 'warning', title: 'Límite FREE', text: 'Solo puedes tener 2 carpetas activas. Mejora a PRO para crear más.', footer: '<a href="suscripcion.html" style="color:#38BDF8">Ver planes PRO</a>' });
         return;
       }
-
-      const { value: n } = await LinkAlert.fire({
-        title: 'Nueva Colección',
-        input: 'text',
-        inputPlaceholder: 'Nombre de la carpeta...',
-        showCancelButton: true,
-        confirmButtonText: 'Crear'
-      });
-
-      if (n) {
-        carpetas.push({ nombre: n, links: [] });
-        guardarYRenderizar();
-      }
+      const { value: n } = await LinkAlert.fire({ title: 'Nueva Colección', input: 'text', inputPlaceholder: 'Nombre de la carpeta...', showCancelButton: true, confirmButtonText: 'Crear' });
+      if (n) { carpetas.push({ nombre: n, links: [] }); guardarYRenderizar(); }
     };
 
     window.agregarEnlace = async function(i) {
       const plan = localStorage.getItem('userPlan') || 'free';
       if (plan === 'free' && carpetas[i].links.length >= LIMIT_LINKS_FREE) {
-        LinkAlert.fire({
-          icon: 'warning',
-          title: 'Límite de Enlaces',
-          text: 'Máximo 3 enlaces por carpeta en el plan FREE.',
-          footer: '<a href="suscripcion.html" style="color:#38BDF8">Mejorar a PRO</a>'
-        });
+        LinkAlert.fire({ icon: 'warning', title: 'Límite de Enlaces', text: 'Máximo 3 enlaces por carpeta en el plan FREE.', footer: '<a href="suscripcion.html" style="color:#38BDF8">Mejorar a PRO</a>' });
         return;
       }
-
       const { value: formValues } = await LinkAlert.fire({
         title: 'Nuevo Enlace',
-        html:
-          '<input id="swal-url" class="swal2-input" placeholder="URL (ej: google.com)">' +
-          '<input id="swal-tag" class="swal2-input" placeholder="Nombre (opcional)">',
-        focusConfirm: false,
-        showCancelButton: true,
-        confirmButtonText: 'Añadir',
-        preConfirm: () => {
-          return {
-            url: document.getElementById('swal-url').value,
-            tag: document.getElementById('swal-tag').value
-          }
-        }
+        html: '<input id="swal-url" class="swal2-input" placeholder="URL (ej: google.com)">' + '<input id="swal-tag" class="swal2-input" placeholder="Nombre (opcional)">',
+        focusConfirm: false, showCancelButton: true, confirmButtonText: 'Añadir',
+        preConfirm: () => ({ url: document.getElementById('swal-url').value, tag: document.getElementById('swal-tag').value })
       });
-
       if (formValues && formValues.url) {
         const fullUrl = formValues.url.startsWith('http') ? formValues.url : `https://${formValues.url}`;
         carpetas[i].links.push({ url: fullUrl, tag: formValues.tag || "" });
@@ -528,53 +507,25 @@
     };
 
     window.eliminarCarpeta = async function(i) {
-      const result = await LinkAlert.fire({
-        title: '¿Eliminar colección?',
-        text: "Esta acción no se puede deshacer",
-        icon: 'error',
-        showCancelButton: true,
-        confirmButtonColor: '#ef4444',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-      });
-
-      if (result.isConfirmed) { 
-        carpetas.splice(i, 1); 
-        guardarYRenderizar(); 
-      }
+      const result = await LinkAlert.fire({ title: '¿Eliminar colección?', text: "Esta acción no se puede deshacer", icon: 'error', showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar' });
+      if (result.isConfirmed) { carpetas.splice(i, 1); guardarYRenderizar(); }
     };
 
-    window.eliminarEnlace = function(fi, li) {
-      carpetas[fi].links.splice(li, 1);
-      guardarYRenderizar();
-    };
+    window.eliminarEnlace = function(fi, li) { carpetas[fi].links.splice(li, 1); guardarYRenderizar(); };
 
     async function guardarYRenderizar() {
       localStorage.setItem('carpetas', JSON.stringify(carpetas));
       renderCarpetas();
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session) {
-        await supabaseClient.from('linkapp_folders').upsert({
-          user_id: session.user.id,
-          content: carpetas,
-          updated_at: new Date()
-        });
+        await supabaseClient.from('linkapp_folders').upsert({ user_id: session.user.id, content: carpetas, updated_at: new Date() });
       }
     }
 
-    // --- SISTEMA DE COMPARTIR MEJORADO ---
     window.abrirCompartir = function(index, tipo) {
       const plan = localStorage.getItem('userPlan') || 'free';
       if (tipo === 'qr' && plan !== 'pro') {
-        LinkAlert.fire({
-          icon: 'lock',
-          title: 'Función PRO',
-          text: 'El Código QR es exclusivo para usuarios PRO.',
-          confirmButtonText: 'Saber más',
-          showCancelButton: true,
-        }).then((res) => {
-          if(res.isConfirmed) window.location.href = 'suscripcion.html';
-        });
+        LinkAlert.fire({ icon: 'lock', title: 'Función PRO', text: 'El Código QR es exclusivo para usuarios PRO.', confirmButtonText: 'Saber más', showCancelButton: true }).then((res) => { if(res.isConfirmed) window.location.href = 'suscripcion.html'; });
         return;
       }
       const carpeta = carpetas[index];
@@ -582,54 +533,24 @@
       const base64 = btoa(unescape(encodeURIComponent(dataStr)));
       enlacePublico = `${window.location.origin}${window.location.pathname.replace('funcion.html', 'view.html')}?data=${encodeURIComponent(base64)}`;
       textoCompartir = `Checkea mi carpeta "${carpeta.nombre}" en LinkApp: ${enlacePublico}`;
-      
-      const qrBox = document.getElementById("qrcode");
-      qrBox.innerHTML = "";
-      if (tipo === 'qr') {
-        document.getElementById("qrContainer").classList.remove("hidden");
-        new QRCode(qrBox, { text: enlacePublico, width: 180, height: 180 });
-      } else {
-        document.getElementById("qrContainer").classList.add("hidden");
-      }
+      const qrBox = document.getElementById("qrcode"); qrBox.innerHTML = "";
+      if (tipo === 'qr') { document.getElementById("qrContainer").classList.remove("hidden"); new QRCode(qrBox, { text: enlacePublico, width: 180, height: 180 }); }
+      else { document.getElementById("qrContainer").classList.add("hidden"); }
       document.getElementById("shareModal").classList.remove("hidden");
     };
 
     window.cerrarShare = () => document.getElementById("shareModal").classList.add("hidden");
-    
-    window.copyShare = () => { 
-      navigator.clipboard.writeText(enlacePublico); 
-      LinkAlert.fire({
-        icon: 'success',
-        title: '¡Copiado!',
-        text: 'Enlace listo para pegar 🚀',
-        timer: 1500,
-        showConfirmButton: false
-      });
-    };
-
+    window.copyShare = () => { navigator.clipboard.writeText(enlacePublico); LinkAlert.fire({ icon: 'success', title: '¡Copiado!', text: 'Enlace listo para pegar 🚀', timer: 1500, showConfirmButton: false }); };
     window.shareWhatsApp = () => window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`);
-    
-    window.shareFacebook = () => {
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(enlacePublico)}`, '_blank');
-    };
-
-    window.shareX = () => {
-      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(textoCompartir)}`, '_blank');
-    };
-
-    window.shareInstagram = () => {
-      navigator.clipboard.writeText(enlacePublico);
-      LinkAlert.fire({
-        title: 'Pégalo en Instagram',
-        text: 'Instagram no permite links directos externos. ¡Copiamos el enlace por ti! Puedes pegarlo en tu Bio o Stories. 📸',
-        icon: 'info'
-      });
-    };
+    window.shareFacebook = () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(enlacePublico)}`, '_blank');
+    window.shareX = () => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(textoCompartir)}`, '_blank');
+    window.shareInstagram = () => { navigator.clipboard.writeText(enlacePublico); LinkAlert.fire({ title: 'Pégalo en Instagram', text: 'Instagram no permite links directos externos. ¡Copiamos el enlace por ti! Puedes pegarlo en tu Bio o Stories. 📸', icon: 'info' }); };
 
     function actualizarInterfazUsuario() {
       const nick = localStorage.getItem('userNickname') || 'Usuario';
       document.getElementById('userNicknameDisplay').textContent = nick;
       document.getElementById('userNicknameMenu').textContent = nick;
+      document.getElementById('mobileUserNick').textContent = nick;
       const avatar = localStorage.getItem('userAvatar');
       if (avatar && avatar !== 'null') {
         const el = document.getElementById('userAvatarDisplay');
@@ -646,16 +567,7 @@
 
     window.importarDatos = (e) => {
       const reader = new FileReader();
-      reader.onload = (ev) => { 
-        carpetas = JSON.parse(ev.target.result); 
-        guardarYRenderizar(); 
-        LinkAlert.fire({
-          icon: 'success',
-          title: 'Datos Restaurados',
-          timer: 1500,
-          showConfirmButton: false
-        });
-      };
+      reader.onload = (ev) => { carpetas = JSON.parse(ev.target.result); guardarYRenderizar(); LinkAlert.fire({ icon: 'success', title: 'Datos Restaurados', timer: 1500, showConfirmButton: false }); };
       reader.readAsText(e.target.files[0]);
     };
 
