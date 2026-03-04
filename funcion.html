@@ -530,21 +530,53 @@
     }
 
     window.abrirCompartir = function(index, tipo) {
-      const plan = localStorage.getItem('userPlan') || 'free';
-      if (tipo === 'qr' && plan !== 'pro') {
-        LinkAlert.fire({ icon: 'lock', title: 'Función PRO', text: 'El Código QR es exclusivo para usuarios PRO.', confirmButtonText: 'Saber más', showCancelButton: true }).then((res) => { if(res.isConfirmed) window.location.href = 'suscripcion.html'; });
-        return;
-      }
-      const carpeta = carpetas[index];
-      const dataStr = JSON.stringify({ n: carpeta.nombre, u: localStorage.getItem('userNickname'), l: carpeta.links, id: localStorage.getItem('supabaseUserId') });
-      const base64 = btoa(unescape(encodeURIComponent(dataStr)));
-      enlacePublico = `${window.location.origin}${window.location.pathname.replace('funcion.html', 'view.html')}?data=${encodeURIComponent(base64)}`;
-      textoCompartir = `Checkea mi carpeta "${carpeta.nombre}" en LinkApp: ${enlacePublico}`;
-      const qrBox = document.getElementById("qrcode"); qrBox.innerHTML = "";
-      if (tipo === 'qr') { document.getElementById("qrContainer").classList.remove("hidden"); new QRCode(qrBox, { text: enlacePublico, width: 180, height: 180 }); }
-      else { document.getElementById("qrContainer").classList.add("hidden"); }
-      document.getElementById("shareModal").classList.remove("hidden");
-    };
+  const plan = localStorage.getItem('userPlan') || 'free';
+  
+  if (tipo === 'qr' && plan !== 'pro') {
+    LinkAlert.fire({ 
+      icon: 'lock', 
+      title: 'Función PRO', 
+      text: 'El Código QR es exclusivo para usuarios PRO.', 
+      confirmButtonText: 'Saber más', 
+      showCancelButton: true 
+    }).then((res) => { if(res.isConfirmed) window.location.href = 'suscripcion.html'; });
+    return;
+  }
+
+  const carpeta = carpetas[index];
+  // Simplificamos la data para que el QR no sea tan denso
+  const dataStr = JSON.stringify({ 
+    id: localStorage.getItem('supabaseUserId'),
+    fIndex: index 
+  });
+  
+  const base64 = btoa(unescape(encodeURIComponent(dataStr)));
+  enlacePublico = `${window.location.origin}${window.location.pathname.replace('funcion.html', 'view.html')}?data=${encodeURIComponent(base64)}`;
+  textoCompartir = `Checkea mi carpeta "${carpeta.nombre}" en LinkApp: ${enlacePublico}`;
+
+  const qrBox = document.getElementById("qrcode");
+  qrBox.innerHTML = ""; // Limpiar
+  
+  if (tipo === 'qr') {
+    document.getElementById("qrContainer").classList.remove("hidden");
+    document.getElementById("shareModal").classList.remove("hidden");
+    
+    // Generar QR con un ligero delay para asegurar que el DOM sea visible
+    setTimeout(() => {
+      new QRCode(qrBox, {
+        text: enlacePublico,
+        width: 200,
+        height: 200,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
+    }, 100);
+  } else {
+    document.getElementById("qrContainer").classList.add("hidden");
+    document.getElementById("shareModal").classList.remove("hidden");
+  }
+};
 
     window.cerrarShare = () => document.getElementById("shareModal").classList.add("hidden");
     window.copyShare = () => { navigator.clipboard.writeText(enlacePublico); LinkAlert.fire({ icon: 'success', title: '¡Copiado!', text: 'Enlace listo para pegar 🚀', timer: 1500, showConfirmButton: false }); };
