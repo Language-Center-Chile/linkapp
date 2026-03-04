@@ -78,7 +78,7 @@
       <div id="ownerAvatarBox" class="relative mb-6">
            <img id="ownerAvatar" src="" class="avatar-view hidden">
            <div id="ownerFallback" class="avatar-view bg-surface flex items-center justify-center text-blue font-black text-4xl uppercase">?</div>
-           <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-blue text-black text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">PRO</div>
+           
       </div>
       
       <h2 id="ownerDisplay" class="text-2xl font-black text-white mb-2 tracking-tight">@usuario</h2>
@@ -121,59 +121,87 @@
       }
 
       try {
-        // Decodificación segura
         const decodedData = decodeURIComponent(escape(atob(dataEncoded)));
         const data = JSON.parse(decodedData);
 
-        // Mapeo corregido (n=nombre, u=usuario, l=links, id=userId)
-        document.getElementById('folderTitle').textContent = data.n || "Sin nombre";
-        document.getElementById('ownerDisplay').textContent = `@${data.u || 'usuario'}`;
-        document.getElementById('linkCount').textContent = `${(data.l || []).length} ENLACES DISPONIBLES`;
+        let folderToRender = null;
+        let ownerName = data.u || 'usuario';
 
-        // Cargar Avatar desde Supabase usando el ID enviado
-        if (data.id) {
+        // LÓGICA DE CARGA INTELIGENTE
+        // Si data tiene 'fIndex' y 'id', buscamos en la base de datos (Optimizado para QR)
+        if (data.id && typeof data.fIndex !== 'undefined') {
+          const { data: folderData } = await _supabase
+            .from('linkapp_folders')
+            .select('content')
+            .eq('user_id', data.id)
+            .single();
+          
+          if (folderData && folderData.content) {
+            folderToRender = folderData.content[data.fIndex];
+          }
+
+          // Obtener perfil (nickname y avatar)
           const { data: profile } = await _supabase
             .from('profiles')
-            .select('avatar_url')
+            .select('nickname, avatar_url')
             .eq('id', data.id)
             .single();
 
-          if (profile && profile.avatar_url) {
-            const img = document.getElementById('ownerAvatar');
-            img.src = profile.avatar_url;
-            img.classList.remove('hidden');
-            document.getElementById('ownerFallback').classList.add('hidden');
-          } else {
-            document.getElementById('ownerFallback').textContent = data.u.charAt(0).toUpperCase();
+          if (profile) {
+            ownerName = profile.nickname || ownerName;
+            if (profile.avatar_url) {
+              const img = document.getElementById('ownerAvatar');
+              img.src = profile.avatar_url;
+              img.classList.remove('hidden');
+              document.getElementById('ownerFallback').classList.add('hidden');
+            }
           }
         } else {
-          document.getElementById('ownerFallback').textContent = data.u.charAt(0).toUpperCase();
+          // Si es el método antiguo (JSON completo en URL)
+          folderToRender = { nombre: data.n, links: data.l };
+          // Intentar cargar avatar por ID si existe
+          if (data.id) {
+            const { data: profile } = await _supabase.from('profiles').select('avatar_url').eq('id', data.id).single();
+            if (profile?.avatar_url) {
+              const img = document.getElementById('ownerAvatar');
+              img.src = profile.avatar_url;
+              img.classList.remove('hidden');
+              document.getElementById('ownerFallback').classList.add('hidden');
+            }
+          }
         }
 
-        // Renderizar Links
-        const container = document.getElementById('linksContainer');
-        if (!data.l || data.l.length === 0) {
-          container.innerHTML = `<p class="text-center text-muted py-10">No hay enlaces en esta colección.</p>`;
-        } else {
-          container.innerHTML = data.l.map(link => {
-            const url = link.url;
-            const tag = link.tag || '';
-            const displayUrl = url.replace(/^https?:\/\//, '').split('/')[0];
-            
-            return `
-              <a href="${url}" target="_blank" class="link-card flex items-center justify-between p-5 bg-surface/60 border border-border rounded-2xl group w-full text-left">
-                <div class="overflow-hidden">
-                  <h3 class="text-md font-bold text-white group-hover:text-blue transition-colors truncate">${tag || displayUrl}</h3>
-                  <p class="text-[10px] text-muted truncate opacity-60">${displayUrl}</p>
-                </div>
-                <div class="flex-shrink-0 ml-4">
-                  <div class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 group-hover:bg-blue/20 transition-all">
-                    <span class="text-blue text-sm group-hover:translate-x-0.5 transition-transform">→</span>
+        // RENDERIZADO FINAL
+        if (folderToRender) {
+          document.getElementById('folderTitle').textContent = folderToRender.nombre || "Colección";
+          document.getElementById('ownerDisplay').textContent = `@${ownerName}`;
+          document.getElementById('linkCount').textContent = `${(folderToRender.links || []).length} ENLACES DISPONIBLES`;
+
+          const container = document.getElementById('linksContainer');
+          if (!folderToRender.links || folderToRender.links.length === 0) {
+            container.innerHTML = `<p class="text-center text-muted py-10">No hay enlaces en esta colección.</p>`;
+          } else {
+            container.innerHTML = folderToRender.links.map(link => {
+              const url = link.url;
+              const displayUrl = url.replace(/^https?:\/\//, '').split('/')[0];
+              return `
+                <a href="${url}" target="_blank" class="link-card flex items-center justify-between p-5 bg-surface/60 border border-border rounded-2xl group w-full text-left">
+                  <div class="overflow-hidden">
+                    <h3 class="text-md font-bold text-white group-hover:text-blue transition-colors truncate">${link.tag || displayUrl}</h3>
+                    <p class="text-[10px] text-muted truncate opacity-60">${displayUrl}</p>
                   </div>
-                </div>
-              </a>`;
-          }).join('');
+                  <div class="flex-shrink-0 ml-4">
+                    <div class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 group-hover:bg-blue/20 transition-all">
+                      <span class="text-blue text-sm group-hover:translate-x-0.5 transition-transform">→</span>
+                    </div>
+                  </div>
+                </a>`;
+            }).join('');
+          }
+        } else {
+          document.getElementById('folderTitle').textContent = "Carpeta no encontrada";
         }
+
       } catch (e) {
         console.error("Error:", e);
         document.getElementById('folderTitle').textContent = "Error de carga";
